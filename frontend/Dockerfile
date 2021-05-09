@@ -5,4 +5,7 @@ COPY . /app
 
 EXPOSE 3000
 
-CMD ["yarn", "dev"]
+RUN yarn install
+RUN yarn build
+
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]

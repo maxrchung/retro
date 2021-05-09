@@ -3,3 +3,5 @@ local: true
 
 # Host path to volume into local environment
 hostPath: "/Users/maxchung/retro/frontend"
+
+nodeEnv: development
