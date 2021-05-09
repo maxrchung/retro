@@ -1,6 +1,7 @@
 {
-  "name": "retro",
+  "name": "retro-frontend",
   "version": "0.1.0",
+  "description": "A retrospective tool made with some cool stuff",
   "private": true,
   "scripts": {
     "dev": "next dev",

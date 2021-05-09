@@ -1,7 +1,7 @@
 FROM node
 
-WORKDIR /frontend
-COPY . /frontend
+WORKDIR /backend
+COPY . /backend
 
 EXPOSE 3000
 

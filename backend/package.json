@@ -1,0 +1,12 @@
+{
+  "name": "retro-backend",
+  "version": "0.1.0",
+  "description": "A retrospective tool made with some cool stuff",
+  "private": true,
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.26.0",
+    "typescript": "^4.2.4"
+  }
+}
