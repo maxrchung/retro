@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maxrchung-retro
+  labels:
+    app: maxrchung-retro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maxrchung-retro
+  template:
+    metadata:
+      labels:
+        app: maxrchung-retro
+    spec:
+      containers:
+      - name: maxrchung
+        image: maxrchung/maxrchung-retro
+        ports:
+        - containerPort: 3000
+{{- if .Values.local }}
+        volumeMounts:
+        - mountPath: /app
+          name: maxrchung-retro
+      volumes:
+        - name: maxrchung-retro
+          hostPath:
+            path: {{ .Values.hostPath }}
+            type: Directory
+{{- end }}

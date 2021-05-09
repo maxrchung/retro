@@ -1,0 +1,5 @@
+# Indicates if deploy is for local (true) or cloud (false) environment
+local: true
+
+# Host path to volume into local environment
+hostPath: "/Users/maxchung/retro/frontend"
