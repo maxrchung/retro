@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: maxrchung-retro
+  name: retro
 spec:
   selector:
-    app: maxrchung-retro
+    app: retro
   ports:
   - port: 80
     targetPort: 3000
