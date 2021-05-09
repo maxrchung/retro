@@ -3,10 +3,19 @@
   "version": "0.1.0",
   "description": "A retrospective tool made with some cool stuff",
   "private": true,
+  "scripts": {
+    "start": "nodemon"
+  },
   "devDependencies": {
+    "@types/ws": "^7.4.2",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "eslint": "^7.26.0",
     "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "ws": "^7.4.5"
   }
 }
