@@ -1,11 +1,14 @@
 import WebSocket from 'ws'
+import { v4 as uuidv4 } from 'uuid'
+
 
 const server = new WebSocket.Server({ port: 3010 })
 
 const columns = [
-  "Column1",
-  "Column2",
-  "Column3"
+  { uuid: uuidv4(), name: "Column1" },
+  { uuid: uuidv4(), name: "Column2" },
+  { uuid: uuidv4(), name: "Column3" },
+  { uuid: uuidv4(), name: "Column4" }
 ]
 
 server.on('connection', ws => {
