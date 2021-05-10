@@ -1,8 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import retroReducer from './retroSlice';
+import { configureStore } from '@reduxjs/toolkit'
+import retroReducer from './retroSlice'
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     retro: retroReducer
   }
 })
+
+export default store

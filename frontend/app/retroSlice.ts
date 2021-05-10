@@ -1,11 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 export const retroSlice = createSlice({
   name: 'counter',
   initialState: {
-    value: 0
+    value: 0,
+    columns: []
   },
   reducers: {
+    getAllColumns: (state, action) => {
+      console.log(action);
+      state.columns = action.payload
+    },
     increment: state => {
       state.value += 1
     },
@@ -16,8 +21,7 @@ export const retroSlice = createSlice({
       state.value += action.payload
     }
   }
-});
+})
 
-export const { increment, decrement, incrementByAmount } = retroSlice.actions;
-
-export default retroSlice.reducer;
+export const { getAllColumns, increment, decrement, incrementByAmount } = retroSlice.actions
+export default retroSlice.reducer

@@ -1,15 +1,20 @@
-import Head from 'next/head';
-import React, { useRef, useEffect } from 'react';
+import Head from 'next/head'
+import React, { useRef, useEffect } from 'react'
+import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
+import { getAllColumns } from '../app/retroSlice'  
 
 export default function Home(): JSX.Element {
-  const socket = useRef(null);
+  const dispatch = useDispatch()
+  const socket = useRef(null)
+  const columns = useSelector((state: RootStateOrAny) => state.retro.columns)
+  console.log("Hi, I received columns: " + columns)
 
   useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:3010");
+    socket.current = new WebSocket("ws://localhost:3010")
     socket.current.onmessage = message => {
-      console.log(message.data);
-    };
-  }, []);
+      dispatch(getAllColumns(message.data))
+    }
+  }, [])
 
   return (
     <div className="container">

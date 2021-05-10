@@ -1,6 +1,6 @@
-import WebSocket from 'ws';
+import WebSocket from 'ws'
 
-const server = new WebSocket.Server({ port: 3010 });
+const server = new WebSocket.Server({ port: 3010 })
 
 const columns = [
   "Column1",
@@ -9,6 +9,6 @@ const columns = [
 ]
 
 server.on('connection', ws => {
-  ws.on('message', message => console.log('received: %s', message));
-  ws.send(JSON.stringify(columns));
-});
+  ws.on('message', message => console.log('received: %s', message))
+  ws.send(JSON.stringify(columns))
+})
