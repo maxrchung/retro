@@ -4,7 +4,8 @@
   "description": "A retrospective tool made with some cool stuff",
   "private": true,
   "scripts": {
-    "start": "nodemon"
+    "dev": "nodemon",
+    "start": "ts-node ./src/server.ts"
   },
   "dependencies": {
     "@types/ws": "^7.4.2",
