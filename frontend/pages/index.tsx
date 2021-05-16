@@ -7,7 +7,6 @@ export default function Home(): JSX.Element {
   const dispatch = useDispatch()
   const socket = useRef(null)
   const columns = useSelector((state: RootStateOrAny) => state.retro.columns)
-  console.log(columns);
 
   useEffect(() => {
     socket.current = new WebSocket("ws://localhost:3010")
@@ -27,17 +26,21 @@ export default function Home(): JSX.Element {
         + Column
       </button>
 
-      {columns.map(column =>
-        <>
+      <div className="flex w-screen">
+        {columns.map(column =>
           <div key={column.uuid}>
-            {column.name}
-          </div>
+              <div>
+                {column.name}
+              </div>
 
-          <button className="border-2 border-black p-2">
-            + Comment
-          </button>
-        </>
-      )}
+              {column.comments.map(comment => <div key={comment.uuid}>{comment.value}</div>)}
+
+              <button className="border-2 border-black p-2">
+                + Comment
+              </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
