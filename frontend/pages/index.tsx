@@ -22,10 +22,6 @@ export default function Home(): JSX.Element {
         <meta name="description" content="A retro tool made with some cool stuff" />
       </Head>
 
-      <button className="border-2 border-black p-2">
-        + Column
-      </button>
-
       <div className="flex w-screen">
         {columns.map(column =>
           <div key={column.uuid}>
@@ -35,11 +31,21 @@ export default function Home(): JSX.Element {
 
               {column.comments.map(comment => <div key={comment.uuid}>{comment.value}</div>)}
 
+              <textarea className="border-2 border-black" />
+
               <button className="border-2 border-black p-2">
                 + Comment
               </button>
           </div>
         )}
+
+        <div>
+          <input className="border-2 border-black" />
+
+          <button className="border-2 border-black p-2">
+            + Column
+          </button>
+        </div>
       </div>
     </div>
   )
