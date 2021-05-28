@@ -1,14 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const retroSlice = createSlice({
-  name: 'counter',
+  name: 'retro',
   initialState: {
     value: 0,
     columns: []
   },
   reducers: {
+    addComment: (state, action) => {
+      const columnIndex = state.columns.findIndex(
+        columns => columns.uuid == action.payload.uuid
+      );
+      state.columns[columnIndex] = action.payload.column;
+    },
     getAllColumns: (state, action) => {
-      console.log(action);
       state.columns = action.payload
     },
     increment: state => {
@@ -23,5 +28,12 @@ export const retroSlice = createSlice({
   }
 })
 
-export const { getAllColumns, increment, decrement, incrementByAmount } = retroSlice.actions
+export const {
+  getAllColumns,
+  addComment,
+  increment,
+  decrement,
+  incrementByAmount
+} = retroSlice.actions
+
 export default retroSlice.reducer
