@@ -8,10 +8,11 @@ export const retroSlice = createSlice({
   },
   reducers: {
     addComment: (state, action) => {
-      const columnIndex = state.columns.findIndex(
+      console.log(action)
+      const index = state.columns.findIndex(
         columns => columns.uuid == action.payload.uuid
       );
-      state.columns[columnIndex] = action.payload.column;
+      state.columns[index] = action.payload;
     },
     getAllColumns: (state, action) => {
       state.columns = action.payload

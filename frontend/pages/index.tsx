@@ -9,7 +9,7 @@ export default function Home(): JSX.Element {
   const columns = useSelector((state: RootStateOrAny) => state.retro.columns)
 
   useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:3010")
+    socket.current = new WebSocket('ws://localhost:3010')
     socket.current.onmessage = message => {
       dispatch(JSON.parse(message.data))
     }
@@ -17,9 +17,9 @@ export default function Home(): JSX.Element {
 
   const handleAddComment = (e, uuid) => {
     socket.current.send(JSON.stringify({
-      type: addComment.name,
+      type: 'addComment',
       uuid,
-      value: "Hello"
+      value: 'Hello'
     }));
   }
 
