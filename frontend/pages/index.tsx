@@ -1,19 +1,27 @@
 import Head from 'next/head'
 import React, { useRef, useEffect } from 'react'
 import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
-import { getAllColumns } from '../app/retroSlice'  
+import { addComment } from '../app/retroSlice'  
 
 export default function Home(): JSX.Element {
   const dispatch = useDispatch()
-  const socket = useRef(null)
+  const socket = useRef<WebSocket>(null)
   const columns = useSelector((state: RootStateOrAny) => state.retro.columns)
 
   useEffect(() => {
     socket.current = new WebSocket("ws://localhost:3010")
     socket.current.onmessage = message => {
-      dispatch(getAllColumns(JSON.parse(message.data)))
+      dispatch(JSON.parse(message.data))
     }
   }, [])
+
+  const handleAddComment = (e, uuid) => {
+    socket.current.send(JSON.stringify({
+      type: addComment.name,
+      uuid,
+      value: "Hello"
+    }));
+  }
 
   return (
     <div className="container">
@@ -31,16 +39,19 @@ export default function Home(): JSX.Element {
 
               {column.comments.map(comment => <div key={comment.uuid}>{comment.value}</div>)}
 
-              <textarea className="border-2 border-black" />
+              <textarea className="block border-2 border-black" />
 
-              <button className="border-2 border-black p-2">
+              <button
+                className="border-2 border-black p-2"
+                onClick={e => handleAddComment(e, column.uuid)}
+              >
                 + Comment
               </button>
           </div>
         )}
 
         <div>
-          <input className="border-2 border-black" />
+          <input className="block border-2 border-black" />
 
           <button className="border-2 border-black p-2">
             + Column
