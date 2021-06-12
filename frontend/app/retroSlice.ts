@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Column } from 'backend/types'
+import { Column } from 'types'
 
 interface RetroState {
   columns: Column[]
