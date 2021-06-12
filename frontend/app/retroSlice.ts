@@ -1,18 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Column } from 'backend/types'
 
 interface RetroState {
   columns: Column[]
-}
-
-interface Column {
-  uuid: string,
-  name: string,
-  comments: Comment[]
-}
-
-interface Comment {
-  uuid: string,
-  value: string
 }
 
 const initialState: RetroState = {
