@@ -1,21 +1,19 @@
 import Head from 'next/head'
 import React, { useRef, useEffect } from 'react'
-import { RootStateOrAny, useSelector, useDispatch } from 'react-redux'
-import { addComment } from '../app/retroSlice'  
+import { useAppDispatch, useAppSelector } from '../app/hooks'
 
 export default function Home(): JSX.Element {
-  const dispatch = useDispatch()
-  const socket = useRef<WebSocket>(null)
-  const columns = useSelector((state: RootStateOrAny) => state.retro.columns)
+  const dispatch = useAppDispatch()
+  const socket = useRef<WebSocket>(new WebSocket('ws://localhost:3010'))
+  const columns = useAppSelector(state => state.retro.columns)
 
   useEffect(() => {
-    socket.current = new WebSocket('ws://localhost:3010')
     socket.current.onmessage = message => {
       dispatch(JSON.parse(message.data))
     }
   }, [])
 
-  const handleAddComment = (e, uuid) => {
+  const handleAddComment = (uuid:string) => {
     socket.current.send(JSON.stringify({
       type: 'addComment',
       uuid,
@@ -43,7 +41,7 @@ export default function Home(): JSX.Element {
 
               <button
                 className="border-2 border-black p-2"
-                onClick={e => handleAddComment(e, column.uuid)}
+                onClick={() => handleAddComment(column.uuid)}
               >
                 + Comment
               </button>
