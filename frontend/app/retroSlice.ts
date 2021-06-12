@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 interface RetroState {
-  value: number,
   columns: Column[]
 }
 
@@ -17,7 +16,6 @@ interface Comment {
 }
 
 const initialState: RetroState = {
-  value: 0,
   columns: []
 }
 
@@ -35,24 +33,12 @@ export const retroSlice = createSlice({
     getAllColumns: (state, action) => {
       state.columns = action.payload
     },
-    increment: state => {
-      state.value += 1
-    },
-    decrement: state => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
-    }
   }
 })
 
 export const {
   getAllColumns,
-  addComment,
-  increment,
-  decrement,
-  incrementByAmount
+  addComment
 } = retroSlice.actions
 
 export default retroSlice.reducer
