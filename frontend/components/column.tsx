@@ -5,7 +5,6 @@ import Comment from 'components/comment'
 
 export default function Column(props: Types.Column): JSX.Element {
   const [comment, setComment] = useState('')
-
   const sendRequest = useContext(SocketContext)
 
   const handleAddComment = () => {
