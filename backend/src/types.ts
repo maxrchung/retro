@@ -9,9 +9,14 @@ export interface Comment {
   value: string
 }
 
-export type Request = AddCommentRequest
+export interface Request {
+  type: string,
+  payload: RequestPayload
+}
 
-export interface AddCommentRequest {
+export type RequestPayload = AddCommentRequestPayload
+
+export interface AddCommentRequest extends Request {
   type: 'retro/addComment',
   payload: AddCommentRequestPayload
 }
@@ -21,9 +26,14 @@ export interface AddCommentRequestPayload {
   value: string
 }
 
-export type Response = AddCommentResponse | GetAllColumnsResponse
+export interface Response {
+  type: string,
+  payload: ResponsePayload
+}
 
-export interface AddCommentResponse {
+export type ResponsePayload = AddCommentResponsePayload | GetAllColumnsResponsePayload
+
+export interface AddCommentResponse extends Response {
   type: 'retro/addComment',
   payload: AddCommentResponsePayload
 }
@@ -32,7 +42,7 @@ export interface AddCommentResponsePayload {
   column: Column
 }
 
-export interface GetAllColumnsResponse {
+export interface GetAllColumnsResponse extends Response  {
   type: 'retro/getAllColumns',
   payload: GetAllColumnsResponsePayload
 }
