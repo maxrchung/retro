@@ -16,7 +16,7 @@ export const retroSlice = createSlice({
     addComment: (state, action) => {
       console.log(action)
       const index = state.columns.findIndex(
-        columns => columns.uuid == action.payload.uuid
+        columns => columns.id == action.payload.uuid
       );
       state.columns[index] = action.payload;
     },
