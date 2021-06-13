@@ -2,9 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import retroReducer from './retroSlice'
 
 const store = configureStore({
-  reducer: {
-    retro: retroReducer
-  }
+  reducer: retroReducer
 })
 
 export default store
