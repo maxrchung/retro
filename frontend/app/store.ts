@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import retroReducer from './retroSlice'
+import retroReducer from 'app/retroSlice'
 
 const store = configureStore({
   reducer: retroReducer

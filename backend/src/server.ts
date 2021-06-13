@@ -1,6 +1,6 @@
 import WebSocket from 'ws'
 import { v4 as uuid } from 'uuid'
-import * as Types from './types'
+import * as Types from 'src/types'
 
 const server = new WebSocket.Server({ port: 3010 })
 

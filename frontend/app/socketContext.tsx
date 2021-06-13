@@ -1,7 +1,7 @@
 // This some wacko stuff https://www.pluralsight.com/guides/using-web-sockets-in-your-reactredux-app
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch } from './hooks'
+import { useAppDispatch } from 'app/hooks'
 import * as Types from 'backend/types'
 
 interface SendRequest {
