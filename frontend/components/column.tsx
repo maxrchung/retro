@@ -1,11 +1,18 @@
-import React from 'react'
-import { useAppDispatch, useAppSelector } from '../app/hooks'
+import React, { useContext } from 'react'
 import * as Types from 'backend/types'
+import { SocketContext } from 'app/socketContext';
 
 export default function Column(props: Types.Column): JSX.Element {
-  const dispatch = useAppDispatch()
+  const sendRequest = useContext(SocketContext);
 
-  const handleAddComment = () => {}
+  const handleAddComment = () =>
+    sendRequest({
+      type: 'retro/addComment',
+      payload: {
+        columnId: props.id,
+        value: 'Hello'
+      }
+    })
 
   return (
     <div key={props.id}>
