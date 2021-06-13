@@ -12,7 +12,11 @@ export interface Comment {
 export type Request = AddCommentRequest
 
 export interface AddCommentRequest {
-  type: 'addComment',
+  type: 'retro/addComment',
+  payload: AddCommentRequestPayload
+}
+
+export interface AddCommentRequestPayload {
   columnId: string,
   value: string
 }
@@ -20,11 +24,19 @@ export interface AddCommentRequest {
 export type Response = AddCommentResponse | GetAllColumnsResponse
 
 export interface AddCommentResponse {
-  type: 'addComment',
+  type: 'retro/addComment',
+  payload: AddCommentResponsePayload
+}
+
+export interface AddCommentResponsePayload {
   column: Column
 }
 
 export interface GetAllColumnsResponse {
-  type: 'getAllColumns',
+  type: 'retro/getAllColumns',
+  payload: GetAllColumnsResponsePayload
+}
+
+export interface GetAllColumnsResponsePayload {
   columns: Column[]
 }
