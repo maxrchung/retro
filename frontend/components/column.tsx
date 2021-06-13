@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
+import Comment from 'components/comment'
 
 export default function Column(props: Types.Column): JSX.Element {
   const [comment, setComment] = useState('')
@@ -19,12 +20,17 @@ export default function Column(props: Types.Column): JSX.Element {
   }
 
   return (
-    <div key={props.id}>
+    <div>
       <div>
         {props.name}
       </div>
 
-      {props.comments.map(comment => <div key={comment.id}>{comment.value}</div>)}
+      {props.comments.map(comment =>
+        <Comment 
+          key={comment.id}
+          {...comment}
+        />
+      )}
 
       <textarea
         className="block border-2 border-black"
