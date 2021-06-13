@@ -14,17 +14,19 @@ const columns: Types.Column[] = [
   { id: uuid(), name: 'Column4', comments: [] }
 ]
 
-const handleRequest = (webSocket: WebSocket, request: Types.Request) => {
+const handleRequest = (socket: WebSocket, request: Types.Request) => {
   switch (request.type) {
-    case 'addComment': {
-      const index = columns.findIndex(column => column.id == request.columnId)
+    case 'retro/addComment': {
+      const index = columns.findIndex(column => column.id == request.payload.columnId)
       columns[index].comments.push({
         id: uuid(),
-        value: request.value
+        value: request.payload.value
       })
-      sendResponse(webSocket, {
-        type: 'addComment',
-        column: columns[index]
+      sendResponse(socket, {
+        type: 'retro/addComment',
+        payload: {
+          column: columns[index]
+        }
       })
       break
     }
@@ -34,18 +36,19 @@ const handleRequest = (webSocket: WebSocket, request: Types.Request) => {
   }
 }
 
-const sendResponse = (webSocket: WebSocket, response: Types.Response) =>
-  webSocket.send(JSON.stringify(response))
+const sendResponse = (socket: WebSocket, response: Types.Response) =>
+  socket.send(JSON.stringify(response))
 
-server.on('connection', webSocket => {
-  webSocket.on('message', message => {
+server.on('connection', socket => {
+  socket.on('message', message => {
     console.log(`received: ${message}`)
     const request = JSON.parse(message.toString())
-    handleRequest(webSocket, request)
+    handleRequest(socket, request)
   })
-
-  sendResponse(webSocket, {
-    type: 'getAllColumns',
-    columns
+  sendResponse(socket, {
+    type: 'retro/getAllColumns',
+    payload: {
+      columns
+    }
   })
 })
