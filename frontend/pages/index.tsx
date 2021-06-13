@@ -1,30 +1,11 @@
 import Head from 'next/head'
-import React, { useRef, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../app/hooks'
-import * as Types from 'backend/types'
+import React, { useContext } from 'react'
+import { useAppSelector } from '../app/hooks'
+import { SocketContext } from '../app/socketContext'
 
 export default function Home(): JSX.Element {
-  const dispatch = useAppDispatch()
-  // Can't initialize WebSocket here because WebSocket is client only
-  const socket = useRef<WebSocket|null>()
   const columns = useAppSelector(state => state.columns)
-
-  useEffect(() => {
-    socket.current = new WebSocket('ws://localhost:3010')
-    socket.current.onmessage = (message: MessageEvent<string>) =>
-      handleResponse(JSON.parse(message.data))
-  }, [])
-
-  const handleResponse = (response: Types.Response) => {
-    console.log(`received: ${response}`)
-    dispatch(response)
-  }
-
-  const sendRequest = (request: Types.Request) => {
-    if (socket.current) {
-      socket.current.send(JSON.stringify(request))
-    }
-  }
+  const sendRequest = useContext(SocketContext);
 
   const handleAddComment = (columnId: string) =>
     sendRequest({
@@ -39,7 +20,7 @@ export default function Home(): JSX.Element {
     <div className="container">
       <Head>
         <title>Retro</title>
-        <meta name="description" content="A retro tool made with some cool stuff" />
+        <meta name="description" content="A retrospective tool made with some cool stuff" />
       </Head>
 
       <div className="flex w-screen">

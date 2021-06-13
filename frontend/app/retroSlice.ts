@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import * as Types from 'backend/types'
 
 interface RetroState {
-  columns: Types.Column[]
+  columns: Types.Column[],
+  socket: WebSocket | null
 }
 
 const initialState: RetroState = {
-  columns: []
+  columns: [],
+  socket: null
 }
 
 export const retroSlice = createSlice({
@@ -26,8 +28,8 @@ export const retroSlice = createSlice({
 })
 
 export const {
+  addComment,
   getAllColumns,
-  addComment
 } = retroSlice.actions
 
 export default retroSlice.reducer
