@@ -19,7 +19,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "types": [ "../backend/src/types" ]
+      "backend/types": [ "../backend/src/types" ]
     }
   },
   "include": [
