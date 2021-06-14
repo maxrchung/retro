@@ -3,7 +3,8 @@ import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
 import { PlusIcon, XIcon } from '@heroicons/react/outline'
-import IconButton from './iconButton'
+import IconButton from 'components/iconButton'
+import Card from 'components/card'
 
 export default function Column(props: Types.Column): JSX.Element {
   const [comment, setComment] = useState('')
@@ -32,16 +33,14 @@ export default function Column(props: Types.Column): JSX.Element {
 
   return (
     <div className="w-80 p-5">
-      <div className="p-2 min-w-0 flex justify-between items-center">
-        <div className="p-1 min-w-0">
-          {props.name}
-        </div>
-        <div className="p-1">
+      <Card
+        content={props.name}
+        buttons={
           <IconButton onClick={() => handleRemoveColumn()}>
             <XIcon/>  
           </IconButton>
-        </div>
-      </div>
+        }
+      />
 
       {props.comments.map(comment =>
         <Comment 
@@ -50,19 +49,21 @@ export default function Column(props: Types.Column): JSX.Element {
         />
       )}
 
-      <div className="flex justify-between items-center">
-        <textarea
-          className="block border-2 border-black"
-          onChange={e => setComment(e.target.value)}
-          value={comment}
-        />
-        <div>
+
+      <Card
+        content={
+          <textarea
+            className="block border-2 border-gray-700 block w-100"
+            onChange={e => setComment(e.target.value)}
+            value={comment}
+          />
+        }
+        buttons={
           <IconButton onClick={() => handleAddComment()}>
             <PlusIcon />
           </IconButton>
-        </div>
-      </div>
-      
+        }
+      />
     </div>
   )
 }

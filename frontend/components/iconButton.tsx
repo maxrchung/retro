@@ -1,5 +1,3 @@
-// This some wacko stuff https://www.pluralsight.com/guides/using-web-sockets-in-your-reactredux-app
-
 import React from 'react'
 
 interface IconButtonProps {

@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import * as Types from 'backend/types'
 import { XIcon } from '@heroicons/react/outline'
 import { SocketContext } from 'app/socketContext'
-import IconButton from './iconButton'
+import IconButton from 'components/iconButton'
+import Card from 'components/card'
 
 export default function Comment(props: Types.Comment): JSX.Element {
   const sendRequest = useContext(SocketContext)
@@ -17,16 +18,15 @@ export default function Comment(props: Types.Comment): JSX.Element {
   }
 
   return (
-    <div className="p-2 my-3 bg-gray-100 rounded flex justify-between items-center">
-      {/* wat https://stackoverflow.com/a/40612184/13183186 */}
-      <div className="p-1 min-w-0">
-        {props.value}
-      </div>
-      <div className="p-1">
-        <IconButton onClick={() => handleRemoveComment()}>
-          <XIcon/>  
-        </IconButton>
-      </div>
+    <div className="my-3 bg-gray-100 rounded">
+      <Card
+        content={props.value}
+        buttons={
+          <IconButton onClick={() => handleRemoveComment()}>
+            <XIcon/>  
+          </IconButton>
+        }
+      />
     </div>
   )
 }
