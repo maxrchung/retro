@@ -56,7 +56,7 @@ export interface RemoveColumnRequest extends ReduxAction {
 }
 
 export interface RemoveColumnRequestPayload {
-  column: string
+  columnId: string
 }
 
 export interface RemoveCommentRequest extends ReduxAction {

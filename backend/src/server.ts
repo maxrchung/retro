@@ -28,12 +28,7 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
         name: request.payload.name,
         comments: []
       })
-      sendResponse(socket, {
-        type: 'retro/getAllColumns',
-        payload: {
-          columns
-        }
-      })
+      sendAllColumns(socket)
       break
     }
     case 'retro/addComment': {
@@ -43,23 +38,19 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
       }
       const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
       columns[columnIndex].comments.push(comment)
-      sendResponse(socket, {
-        type: 'retro/getColumn',
-        payload: {
-          column: columns[columnIndex]
-        }
-      })
+      sendColumn(socket, columnIndex)
+      break
+    }
+    case 'retro/removeColumn': {
+      const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
+      columns.splice(columnIndex, 1)
+      sendAllColumns(socket)
       break
     }
     case 'retro/removeComment': {
       const [columnIndex, commentIndex] = findComment(request.payload.commentId)
       columns[columnIndex].comments.splice(commentIndex, 1)
-      sendResponse(socket, {
-        type: 'retro/getColumn',
-        payload: {
-          column: columns[columnIndex]
-        }
-      })
+      sendColumn(socket, columnIndex)
       break
     }
     default: {
@@ -71,16 +62,27 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
 const sendResponse = (socket: WebSocket, response: Types.Response) =>
   socket.send(JSON.stringify(response))
 
-server.on('connection', socket => {
-  socket.on('message', message => {
-    console.log(`received: ${message}`)
-    const request = JSON.parse(message.toString())
-    handleRequest(socket, request)
+const sendColumn = (socket: WebSocket, columnIndex:number) =>
+  sendResponse(socket, {
+    type: 'retro/getColumn',
+    payload: {
+      column: columns[columnIndex]
+    }
   })
+
+const sendAllColumns = (socket: WebSocket) =>
   sendResponse(socket, {
     type: 'retro/getAllColumns',
     payload: {
       columns
     }
   })
+
+server.on('connection', socket => {
+  socket.on('message', message => {
+    console.log(`received: ${message}`)
+    const request = JSON.parse(message.toString())
+    handleRequest(socket, request)
+  })
+  sendAllColumns(socket)
 })
