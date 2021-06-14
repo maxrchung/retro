@@ -10,7 +10,7 @@ interface IconButtonProps {
 export default function IconButton(props: IconButtonProps): JSX.Element {
   return (
     <button
-      className="h-5 w-5 rounded border border-gray-900 text-gray-900 focus:border-gray-500 focus:text-gray-500 hover:border-gray-500 hover:text-gray-500"
+      className="h-5 w-5 rounded border-2 border-gray-700 text-gray-700 focus:border-gray-400 focus:text-gray-400 hover:border-gray-400 hover:text-gray-400"
       onClick={props.onClick}
     >
       {props.children}
