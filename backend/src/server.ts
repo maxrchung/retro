@@ -11,12 +11,17 @@ const columns: Types.Column[] = [
   { id: uuid(), name: 'Column4', comments: [] }
 ]
 
-// Comment ID to column ID lookup
-interface CommentColumnLookup {
-  [key: string]: string
-}
 
-const commentLookup: CommentColumnLookup = {}
+const findComment = (commentId: string): [columnIndex: number, commentIndex: number] => {
+  for (let i = 0; i < columns.length; ++i) {
+    for (let j = 0; j < columns[i].comments.length; ++j) {
+      if (columns[i].comments[j].id === commentId) {
+        return [i, j]
+      }
+    }
+  }
+  return [-1, -1]
+}
 
 const handleRequest = (socket: WebSocket, request: Types.Request) => {
   switch (request.type) {
@@ -27,7 +32,6 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
       }
       const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
       columns[columnIndex].comments.push(comment)
-      commentLookup[comment.id] = columns[columnIndex].id
       sendResponse(socket, {
         type: 'retro/getComment',
         payload: {
@@ -37,11 +41,8 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
       break
     }
     case 'retro/removeComment': {
-      const columnId = commentLookup[request.payload.commentId]
-      const columnIndex = columns.findIndex(column => column.id == columnId)
-      const commentIndex = columns[columnIndex].comments.findIndex(comment => comment.id == request.payload.commentId)
+      const [columnIndex, commentIndex] = findComment(request.payload.commentId)
       columns[columnIndex].comments.splice(commentIndex, 1)
-      delete commentLookup[request.payload.commentId]
       sendResponse(socket, {
         type: 'retro/getComment',
         payload: {
