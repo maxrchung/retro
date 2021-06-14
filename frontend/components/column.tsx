@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
-import { TrashIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/outline'
 
 export default function Column(props: Types.Column): JSX.Element {
   const [comment, setComment] = useState('')
@@ -30,15 +30,19 @@ export default function Column(props: Types.Column): JSX.Element {
   }
 
   return (
-    <div>
-      <div>
-        {props.name}
-        <button
-          className="h-5 w-5"
-          onClick={() => handleRemoveColumn()}
-        >
-          <TrashIcon/>
-        </button>
+    <div className="w-80 p-5">
+      <div className="p-2 min-w-0 flex justify-between">
+        <div className="p-1 min-w-0 break-words">
+          {props.name}
+        </div>
+        <div className="p-1">
+          <button
+            className="h-5 w-5"
+            onClick={() => handleRemoveColumn()}
+          >
+            <XIcon/>
+          </button>
+        </div>
       </div>
 
       {props.comments.map(comment =>

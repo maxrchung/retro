@@ -20,7 +20,7 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <div className="container">
+    <div className="container text-gray-900">
       <Head>
         <title>Retro</title>
         <meta name="description" content="A retrospective tool made with some cool stuff" />
