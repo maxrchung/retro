@@ -9,14 +9,20 @@ export interface Comment {
   value: string
 }
 
-export interface Request {
+export interface ReduxAction {
   type: string,
-  payload: RequestPayload
+  payload: RequestPayload | ResponsePayload
 }
 
-export type RequestPayload = AddCommentRequestPayload
+export type Request =
+  AddCommentRequest |
+  RemoveCommentRequest
 
-export interface AddCommentRequest extends Request {
+export type RequestPayload =
+  AddCommentRequestPayload |
+  RemoveCommentRequestPayload
+
+export interface AddCommentRequest extends ReduxAction {
   type: 'retro/addComment',
   payload: AddCommentRequestPayload
 }
@@ -26,23 +32,33 @@ export interface AddCommentRequestPayload {
   value: string
 }
 
-export interface Response {
-  type: string,
-  payload: ResponsePayload
+export interface RemoveCommentRequest extends ReduxAction {
+  type: 'retro/removeComment',
+  payload: RemoveCommentRequestPayload
 }
 
-export type ResponsePayload = AddCommentResponsePayload | GetAllColumnsResponsePayload
-
-export interface AddCommentResponse extends Response {
-  type: 'retro/addComment',
-  payload: AddCommentResponsePayload
+export interface RemoveCommentRequestPayload {
+  commentId: string
 }
 
-export interface AddCommentResponsePayload {
+export type Response =
+  GetCommentResponse |
+  GetAllColumnsResponse
+
+export type ResponsePayload =
+  GetCommentResponsePayload |
+  GetAllColumnsResponsePayload
+
+export interface GetCommentResponse extends ReduxAction {
+  type: 'retro/getComment',
+  payload: GetCommentResponsePayload
+}
+
+export interface GetCommentResponsePayload {
   column: Column
 }
 
-export interface GetAllColumnsResponse extends Response  {
+export interface GetAllColumnsResponse extends ReduxAction {
   type: 'retro/getAllColumns',
   payload: GetAllColumnsResponsePayload
 }

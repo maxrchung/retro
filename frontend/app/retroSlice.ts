@@ -15,7 +15,7 @@ export const retroSlice = createSlice({
   name: 'retro',
   initialState,
   reducers: {
-    addComment: (state, action: PayloadAction<Types.AddCommentResponsePayload>) => {
+    getComment: (state, action: PayloadAction<Types.GetCommentResponsePayload>) => {
       const index = state.columns.findIndex(
         columns => columns.id == action.payload.column.id
       )
@@ -28,7 +28,7 @@ export const retroSlice = createSlice({
 })
 
 export const {
-  addComment,
+  getComment,
   getAllColumns,
 } = retroSlice.actions
 
