@@ -15,12 +15,25 @@ export interface ReduxAction {
 }
 
 export type Request =
+  AddColumnRequest |
   AddCommentRequest |
+  RemoveColumnRequest |
   RemoveCommentRequest
 
 export type RequestPayload =
+  AddColumnRequestPayload |
   AddCommentRequestPayload |
+  RemoveColumnRequestPayload |
   RemoveCommentRequestPayload
+
+export interface AddColumnRequest extends ReduxAction {
+  type: 'retro/addColumn',
+  payload: AddColumnRequestPayload
+}
+
+export interface AddColumnRequestPayload {
+  name: string
+}
 
 export interface AddCommentRequest extends ReduxAction {
   type: 'retro/addComment',
@@ -30,6 +43,20 @@ export interface AddCommentRequest extends ReduxAction {
 export interface AddCommentRequestPayload {
   columnId: string,
   value: string
+}
+
+export interface AddCommentRequestPayload {
+  columnId: string,
+  value: string
+}
+
+export interface RemoveColumnRequest extends ReduxAction {
+  type: 'retro/removeColumn',
+  payload: RemoveColumnRequestPayload
+}
+
+export interface RemoveColumnRequestPayload {
+  column: string
 }
 
 export interface RemoveCommentRequest extends ReduxAction {
@@ -42,19 +69,19 @@ export interface RemoveCommentRequestPayload {
 }
 
 export type Response =
-  GetCommentResponse |
+  GetColumnResponse |
   GetAllColumnsResponse
 
 export type ResponsePayload =
-  GetCommentResponsePayload |
+  GetColumnResponsePayload |
   GetAllColumnsResponsePayload
 
-export interface GetCommentResponse extends ReduxAction {
-  type: 'retro/getComment',
-  payload: GetCommentResponsePayload
+export interface GetColumnResponse extends ReduxAction {
+  type: 'retro/getColumn',
+  payload: GetColumnResponsePayload
 }
 
-export interface GetCommentResponsePayload {
+export interface GetColumnResponsePayload {
   column: Column
 }
 

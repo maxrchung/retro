@@ -6,11 +6,8 @@ const server = new WebSocket.Server({ port: 3010 })
 
 const columns: Types.Column[] = [
   { id: uuid(), name: 'Column1', comments: [] },
-  { id: uuid(), name: 'Column2', comments: [] },
-  { id: uuid(), name: 'Column3', comments: [] },
-  { id: uuid(), name: 'Column4', comments: [] }
+  { id: uuid(), name: 'Column2', comments: [] }
 ]
-
 
 const findComment = (commentId: string): [columnIndex: number, commentIndex: number] => {
   for (let i = 0; i < columns.length; ++i) {
@@ -25,6 +22,20 @@ const findComment = (commentId: string): [columnIndex: number, commentIndex: num
 
 const handleRequest = (socket: WebSocket, request: Types.Request) => {
   switch (request.type) {
+    case 'retro/addColumn': {
+      columns.push({
+        id: uuid(),
+        name: request.payload.name,
+        comments: []
+      })
+      sendResponse(socket, {
+        type: 'retro/getAllColumns',
+        payload: {
+          columns
+        }
+      })
+      break
+    }
     case 'retro/addComment': {
       const comment = {
         id: uuid(),
@@ -33,7 +44,7 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
       const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
       columns[columnIndex].comments.push(comment)
       sendResponse(socket, {
-        type: 'retro/getComment',
+        type: 'retro/getColumn',
         payload: {
           column: columns[columnIndex]
         }
@@ -44,7 +55,7 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
       const [columnIndex, commentIndex] = findComment(request.payload.commentId)
       columns[columnIndex].comments.splice(commentIndex, 1)
       sendResponse(socket, {
-        type: 'retro/getComment',
+        type: 'retro/getColumn',
         payload: {
           column: columns[columnIndex]
         }

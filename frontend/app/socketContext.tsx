@@ -29,8 +29,8 @@ export default function SocketContextProvider(props: ContextProps): JSX.Element 
   }, [])
 
   const handleResponse = (message: MessageEvent<string>): void => {
+    console.log(`received: ${message.data}`)
     const response = JSON.parse(message.data)
-    console.log(`received: ${response}`)
     dispatch(response)
   }
 
