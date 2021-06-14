@@ -3,6 +3,7 @@ import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
 import { XIcon } from '@heroicons/react/outline'
+import IconButton from './iconButton'
 
 export default function Column(props: Types.Column): JSX.Element {
   const [comment, setComment] = useState('')
@@ -31,17 +32,14 @@ export default function Column(props: Types.Column): JSX.Element {
 
   return (
     <div className="w-80 p-5">
-      <div className="p-2 min-w-0 flex justify-between">
+      <div className="p-2 min-w-0 flex justify-between items-center">
         <div className="p-1 min-w-0 break-words">
           {props.name}
         </div>
         <div className="p-1">
-          <button
-            className="h-5 w-5"
-            onClick={() => handleRemoveColumn()}
-          >
-            <XIcon/>
-          </button>
+          <IconButton onClick={() => handleRemoveColumn()}>
+            <XIcon/>  
+          </IconButton>
         </div>
       </div>
 
