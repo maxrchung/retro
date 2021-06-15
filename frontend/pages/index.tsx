@@ -46,7 +46,7 @@ export default function Home(): JSX.Element {
           <Card
             content={
               <input
-                className="p-2 w-full rounded border-2 border-pink-400 focus:outline-none focus:border-pink-300 hover:border-pink-300"
+                className="p-2 w-full rounded border-2 border-pink-500 focus:outline-none focus:border-pink-300 hover:border-pink-300"
                 onChange={e => setColumnName(e.target.value)}
                 value={columnName}
               />

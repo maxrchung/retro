@@ -63,7 +63,7 @@ export default function Column(props: ColumnProps): JSX.Element {
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
             <textarea
-              className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-pink-400 focus:border-pink-300 hover:border-pink-300 resize-none"
+              className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-pink-500 focus:border-pink-300 hover:border-pink-300 resize-none"
               onChange={e => setComment(e.target.value)}
               cols={0}
               rows={3}
