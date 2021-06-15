@@ -41,12 +41,12 @@ export default function Home(): JSX.Element {
 
         <div className={isEven
           ? "w-80 p-5"
-          : "w-80 p-5"
+          : "w-80 p-5 bg-blue-50"
         }>
           <Card
             content={
               <input
-                className="p-2 w-full rounded border-2 border-gray-700 focus:outline-none focus:border-gray-400 hover:border-gray-400"
+                className="p-2 w-full rounded border-2 border-pink-400 focus:outline-none focus:border-pink-300 hover:border-pink-300"
                 onChange={e => setColumnName(e.target.value)}
                 value={columnName}
               />
