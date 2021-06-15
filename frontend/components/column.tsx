@@ -6,7 +6,11 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
 
-export default function Column(props: Types.Column): JSX.Element {
+interface ColumnProps extends Types.Column {
+  index: number
+}
+
+export default function Column(props: ColumnProps): JSX.Element {
   const [comment, setComment] = useState('')
   const sendRequest = useContext(SocketContext)
 
@@ -31,8 +35,12 @@ export default function Column(props: Types.Column): JSX.Element {
     setComment('')
   }
 
+  const isEven = props.index % 2 == 0
   return (
-    <div className="w-80 p-5">
+    <div className={isEven 
+      ? "flex flex-col w-80 p-5"
+      : "flex flex-col w-80 p-5 bg-gray-100"
+    }>
       <Card
         content={props.name}
         buttons={
@@ -45,6 +53,7 @@ export default function Column(props: Types.Column): JSX.Element {
       {props.comments.map(comment =>
         <Comment 
           key={comment.id}
+          index={props.index}
           {...comment}
         />
       )}
@@ -54,7 +63,7 @@ export default function Column(props: Types.Column): JSX.Element {
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
             <textarea
-              className="-ml-3 p-3 flex-1 rounded outline-none border-2 border-gray-700 focus:border-gray-400 hover:border-gray-400 resize-none"
+              className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-gray-700 focus:border-gray-400 hover:border-gray-400 resize-none"
               onChange={e => setComment(e.target.value)}
               cols={0}
               rows={3}

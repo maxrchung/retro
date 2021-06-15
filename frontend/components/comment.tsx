@@ -5,7 +5,11 @@ import { SocketContext } from 'app/socketContext'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
 
-export default function Comment(props: Types.Comment): JSX.Element {
+interface CommentProps extends Types.Comment {
+  index: number
+}
+
+export default function Comment(props: CommentProps): JSX.Element {
   const sendRequest = useContext(SocketContext)
 
   const handleRemoveComment = () => {
@@ -17,8 +21,12 @@ export default function Comment(props: Types.Comment): JSX.Element {
     })
   }
 
+  const isEven = props.index % 2 == 0
   return (
-    <div className="my-3 bg-gray-100 rounded">
+    <div className={isEven 
+      ? "my-2 bg-gray-100 rounded"
+      : "my-2 bg-white rounded"
+    }>
       <Card
         content={props.value}
         buttons={

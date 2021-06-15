@@ -22,6 +22,7 @@ export default function Home(): JSX.Element {
     setColumnName('')
   }
 
+  const isEven = columns.length % 2 == 0;
   return (
     <div className="container break-words text-gray-700 text-base">
       <Head>
@@ -30,18 +31,22 @@ export default function Home(): JSX.Element {
       </Head>
 
       <div className="flex w-max overflow-x-auto">
-        {columns.map(column =>
+        {columns.map((column, index) =>
           <Column
             key={column.id}
+            index={index}
             {...column}
           />
         )}
 
-        <div className="w-80 p-5">
+        <div className={isEven
+          ? "w-80 p-5"
+          : "w-80 p-5"
+        }>
           <Card
             content={
               <input
-                className="p-2 w-full rounded border-2 border-gray-700 outline-none focus:border-gray-400 hover:border-gray-400"
+                className="p-2 w-full rounded border-2 border-gray-700 focus:outline-none focus:border-gray-400 hover:border-gray-400"
                 onChange={e => setColumnName(e.target.value)}
                 value={columnName}
               />
