@@ -49,14 +49,18 @@ export default function Column(props: Types.Column): JSX.Element {
         />
       )}
 
-
       <Card
         content={
-          <textarea
-            className="block border-2 border-gray-700 block w-100"
-            onChange={e => setComment(e.target.value)}
-            value={comment}
-          />
+          // Ok https://stackoverflow.com/a/64556831/13183186
+          <div className="flex">
+            <textarea
+              className="-ml-2 p-2 rounded border-2 border-gray-700 flex-1 resize-none"
+              onChange={e => setComment(e.target.value)}
+              cols={0}
+              rows={2}
+              value={comment}
+            />
+          </div>
         }
         buttons={
           <IconButton onClick={() => handleAddComment()}>

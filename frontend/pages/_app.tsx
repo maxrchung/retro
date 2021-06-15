@@ -12,6 +12,5 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
         <Component {...pageProps} />
       </SocketContextProvider>
     </Provider>
-
   )
 }
