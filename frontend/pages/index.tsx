@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
         <meta name="description" content="A retrospective tool made with some cool stuff" />
       </Head>
 
-      <div className="flex w-max overflow-x-auto">
+      <div className="flex min-h-screen w-max overflow-x-auto">
         {columns.map((column, index) =>
           <Column
             key={column.id}
@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
 
         <div className={isEven
           ? "w-80 p-5"
-          : "w-80 p-5 bg-blue-50"
+          : "w-80 p-5 bg-blue-100"
         }>
           <Card
             content={

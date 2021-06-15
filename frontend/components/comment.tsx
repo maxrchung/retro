@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import * as Types from 'backend/types'
-import { XIcon } from '@heroicons/react/outline'
+import { MinusSmIcon } from '@heroicons/react/outline'
 import { SocketContext } from 'app/socketContext'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
@@ -24,14 +24,14 @@ export default function Comment(props: CommentProps): JSX.Element {
   const isEven = props.index % 2 == 0
   return (
     <div className={isEven 
-      ? "my-2 bg-blue-50 rounded"
+      ? "my-2 bg-blue-100 rounded"
       : "my-2 bg-white rounded"
     }>
       <Card
         content={props.value}
         buttons={
           <IconButton onClick={() => handleRemoveComment()}>
-            <XIcon/>  
+            <MinusSmIcon/>  
           </IconButton>
         }
       />

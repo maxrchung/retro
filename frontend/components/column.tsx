@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
-import { PlusIcon, TrashIcon } from '@heroicons/react/outline'
+import { PlusIcon, XIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
 
@@ -39,13 +39,13 @@ export default function Column(props: ColumnProps): JSX.Element {
   return (
     <div className={isEven 
       ? "flex flex-col w-80 p-5"
-      : "flex flex-col w-80 p-5 bg-blue-50"
+      : "flex flex-col w-80 p-5 bg-blue-100"
     }>
       <Card
         content={props.name}
         buttons={
           <IconButton onClick={() => handleRemoveColumn()}>
-            <TrashIcon/>  
+            <XIcon/>  
           </IconButton>
         }
       />
