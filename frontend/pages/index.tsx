@@ -23,7 +23,7 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <div className="container break-words text-gray-700">
+    <div className="container break-words text-gray-700 text-base">
       <Head>
         <title>Retro</title>
         <meta name="description" content="A retrospective tool made with some cool stuff" />

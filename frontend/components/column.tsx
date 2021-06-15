@@ -54,10 +54,10 @@ export default function Column(props: Types.Column): JSX.Element {
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
             <textarea
-              className="-ml-2 p-2 rounded border-2 border-gray-700 flex-1 resize-none"
+              className="-ml-3 p-3 rounded border-2 border-gray-700 flex-1 resize-none"
               onChange={e => setComment(e.target.value)}
               cols={0}
-              rows={2}
+              rows={3}
               value={comment}
             />
           </div>
