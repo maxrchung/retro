@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import * as Types from 'backend/types'
 import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
-import { PlusIcon, XIcon } from '@heroicons/react/outline'
+import { PlusIcon, TrashIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
 
@@ -37,7 +37,7 @@ export default function Column(props: Types.Column): JSX.Element {
         content={props.name}
         buttons={
           <IconButton onClick={() => handleRemoveColumn()}>
-            <XIcon/>  
+            <TrashIcon/>  
           </IconButton>
         }
       />
@@ -54,7 +54,7 @@ export default function Column(props: Types.Column): JSX.Element {
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
             <textarea
-              className="-ml-3 p-3 rounded border-2 border-gray-700 flex-1 resize-none"
+              className="-ml-3 p-3 flex-1 rounded outline-none border-2 border-gray-700 focus:border-gray-400 hover:border-gray-400 resize-none"
               onChange={e => setComment(e.target.value)}
               cols={0}
               rows={3}
