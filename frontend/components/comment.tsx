@@ -24,7 +24,7 @@ export default function Comment(props: CommentProps): JSX.Element {
   const isEven = props.index % 2 == 0
   return (
     <div className={isEven 
-      ? "my-2 bg-blue-100 rounded"
+      ? "my-2 bg-gray-100 rounded"
       : "my-2 bg-white rounded"
     }>
       <Card

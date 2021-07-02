@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
 
         <div className={isEven
           ? "w-80 p-5"
-          : "w-80 p-5 bg-blue-100"
+          : "w-80 p-5 bg-gray-100"
         }>
           <Card
             content={

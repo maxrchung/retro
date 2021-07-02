@@ -39,7 +39,7 @@ export default function Column(props: ColumnProps): JSX.Element {
   return (
     <div className={isEven 
       ? "flex flex-col w-80 p-5"
-      : "flex flex-col w-80 p-5 bg-blue-100"
+      : "flex flex-col w-80 p-5 bg-gray-100"
     }>
       <Card
         content={props.name}
