@@ -5,6 +5,7 @@ import Comment from 'components/comment'
 import { PlusIcon, XIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
+import Header from 'components/header'
 
 interface ColumnProps extends Types.Column {
   index: number
@@ -41,14 +42,16 @@ export default function Column(props: ColumnProps): JSX.Element {
       ? "flex flex-col w-80 p-5"
       : "flex flex-col w-80 p-5 bg-gray-100"
     }>
-      <Card
-        content={props.name}
-        buttons={
-          <IconButton onClick={() => handleRemoveColumn()}>
-            <XIcon/>  
-          </IconButton>
-        }
-      />
+      <Header>
+        <Card
+          content={props.name}
+          buttons={
+            <IconButton onClick={() => handleRemoveColumn()}>
+              <XIcon/>  
+            </IconButton>
+          }
+        />
+      </Header>
 
       {props.comments.map(comment =>
         <Comment 

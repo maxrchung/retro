@@ -6,6 +6,7 @@ import { SocketContext } from 'app/socketContext'
 import Card from 'components/card'
 import IconButton from 'components/iconButton'
 import { PlusIcon } from '@heroicons/react/outline'
+import Header from 'components/header'
 
 export default function Home(): JSX.Element {
   const [columnName, setColumnName] = useState('')
@@ -43,22 +44,24 @@ export default function Home(): JSX.Element {
           ? "w-80 p-5"
           : "w-80 p-5 bg-gray-100"
         }>
-          <Card
-            content={
-              <input
-                className="p-2 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
-                onChange={e => setColumnName(e.target.value)}
-                value={columnName}
-              />
-            }
-            buttons={
-              <IconButton onClick={() => handleAddColumn()}>
-                <PlusIcon />
-              </IconButton>
-            }
-          />
+          <Header>
+            <Card
+              content={
+                <input
+                  className="p-2 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                  onChange={e => setColumnName(e.target.value)}
+                  value={columnName}
+                />
+              }
+              buttons={
+                <IconButton onClick={() => handleAddColumn()}>
+                  <PlusIcon />
+                </IconButton>
+              }
+            />
+          </Header>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
