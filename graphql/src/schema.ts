@@ -22,6 +22,7 @@ const schema = gql`
   }
 
   type Subscription {
+    retroUpdated(id: ID!): Retro!
   }
 `
 
