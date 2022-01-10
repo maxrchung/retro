@@ -1,0 +1,6 @@
+schema: src/schema.ts
+generates:
+  src/schema-types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
