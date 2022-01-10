@@ -9,7 +9,9 @@ const columns: Types.Column[] = [
   { id: uuid(), name: 'Column2', comments: [] }
 ]
 
-const findComment = (commentId: string): [columnIndex: number, commentIndex: number] => {
+const findComment = (
+  commentId: string
+): [columnIndex: number, commentIndex: number] => {
   for (let i = 0; i < columns.length; ++i) {
     for (let j = 0; j < columns[i].comments.length; ++j) {
       if (columns[i].comments[j].id === commentId) {
@@ -36,13 +38,17 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
         id: uuid(),
         value: request.payload.value
       }
-      const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
+      const columnIndex = columns.findIndex(
+        (column) => column.id == request.payload.columnId
+      )
       columns[columnIndex].comments.push(comment)
       sendColumn(socket, columnIndex)
       break
     }
     case 'retro/removeColumn': {
-      const columnIndex = columns.findIndex(column => column.id == request.payload.columnId)
+      const columnIndex = columns.findIndex(
+        (column) => column.id == request.payload.columnId
+      )
       columns.splice(columnIndex, 1)
       sendAllColumns(socket)
       break
@@ -62,7 +68,7 @@ const handleRequest = (socket: WebSocket, request: Types.Request) => {
 const sendResponse = (socket: WebSocket, response: Types.Response) =>
   socket.send(JSON.stringify(response))
 
-const sendColumn = (socket: WebSocket, columnIndex:number) =>
+const sendColumn = (socket: WebSocket, columnIndex: number) =>
   sendResponse(socket, {
     type: 'retro/getColumn',
     payload: {
@@ -78,8 +84,8 @@ const sendAllColumns = (socket: WebSocket) =>
     }
   })
 
-server.on('connection', socket => {
-  socket.on('message', message => {
+server.on('connection', (socket) => {
+  socket.on('message', (message) => {
     console.log(`received: ${message}`)
     const request = JSON.parse(message.toString())
     handleRequest(socket, request)
