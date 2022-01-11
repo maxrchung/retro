@@ -8,10 +8,10 @@ module.exports = {
       colors: {
         blue: colors.cyan
       }
-    },
+    }
   },
   variants: {
-    extend: {},
+    extend: {}
   },
-  plugins: [],
+  plugins: []
 }

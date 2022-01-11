@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IconButtonProps {
-  children: React.ReactNode,
+  children: React.ReactNode
   onClick: React.MouseEventHandler
 }
 
@@ -16,6 +16,5 @@ export default function IconButton(props: IconButtonProps): JSX.Element {
         {props.children}
       </button>
     </div>
-    
   )
 }

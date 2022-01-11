@@ -16,7 +16,9 @@ const SocketContext = React.createContext<SendRequest>(() => undefined)
 
 export { SocketContext }
 
-export default function SocketContextProvider(props: ContextProps): JSX.Element {
+export default function SocketContextProvider(
+  props: ContextProps
+): JSX.Element {
   // Can't initialize WebSocket here because WebSocket is client only
   const [socket, setSocket] = useState<WebSocket | null>(null)
   const dispatch = useAppDispatch()
@@ -42,7 +44,7 @@ export default function SocketContextProvider(props: ContextProps): JSX.Element 
 
   return (
     <SocketContext.Provider value={sendRequest}>
-        {props.children}
+      {props.children}
     </SocketContext.Provider>
   )
 }

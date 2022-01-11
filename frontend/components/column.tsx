@@ -30,7 +30,7 @@ export default function Column(props: ColumnProps): JSX.Element {
     sendRequest({
       type: 'retro/removeColumn',
       payload: {
-        columnId: props.id,
+        columnId: props.id
       }
     })
     setComment('')
@@ -38,28 +38,25 @@ export default function Column(props: ColumnProps): JSX.Element {
 
   const isEven = props.index % 2 == 0
   return (
-    <div className={isEven 
-      ? "flex flex-col w-80 p-5"
-      : "flex flex-col w-80 p-5 bg-gray-100"
-    }>
+    <div
+      className={
+        isEven ? 'flex flex-col w-80 p-5' : 'flex flex-col w-80 p-5 bg-gray-100'
+      }
+    >
       <Header>
         <Card
           content={props.name}
           buttons={
             <IconButton onClick={() => handleRemoveColumn()}>
-              <XIcon/>  
+              <XIcon />
             </IconButton>
           }
         />
       </Header>
 
-      {props.comments.map(comment =>
-        <Comment 
-          key={comment.id}
-          index={props.index}
-          {...comment}
-        />
-      )}
+      {props.comments.map((comment) => (
+        <Comment key={comment.id} index={props.index} {...comment} />
+      ))}
 
       <Card
         content={
@@ -67,7 +64,7 @@ export default function Column(props: ColumnProps): JSX.Element {
           <div className="flex">
             <textarea
               className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-              onChange={e => setComment(e.target.value)}
+              onChange={(e) => setComment(e.target.value)}
               cols={0}
               rows={3}
               value={comment}
