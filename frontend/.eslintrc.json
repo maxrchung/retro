@@ -1,5 +1,6 @@
 {
   "env": {
+    "amd": true,
     "node": true
   },
   "root": true,
@@ -9,5 +10,10 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended"
-  ]
+  ],
+  "settings": {
+    "react": {
+      "version": "detect" // React version. "detect" automatically picks the version you have installed.
+    }
+  }
 }
