@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import retroReducer from 'app/retroSlice'
+import { reducer } from 'app/retroSlice'
 
-const store = configureStore({
-  reducer: retroReducer
+export const store = configureStore({
+  reducer
 })
-
-export default store
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

@@ -1,38 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import * as Types from 'backend/types'
+import { Retro } from 'backend/types'
 
 interface RetroState {
-  columns: Types.Column[]
-  socket: WebSocket | null
+  retro: Retro
 }
 
 const initialState: RetroState = {
-  columns: [],
-  socket: null
+  retro: {
+    id: '',
+    columns: []
+  }
 }
 
 export const retroSlice = createSlice({
   name: 'retro',
   initialState,
   reducers: {
-    getColumn: (
-      state,
-      action: PayloadAction<Types.GetColumnResponsePayload>
-    ) => {
-      const index = state.columns.findIndex(
-        (columns) => columns.id == action.payload.column.id
-      )
-      state.columns[index] = action.payload.column
-    },
-    getAllColumns: (
-      state,
-      action: PayloadAction<Types.GetAllColumnsResponsePayload>
-    ) => {
-      state.columns = action.payload.columns
+    setRetro: (state, action: PayloadAction<Retro>) => {
+      state.retro = action.payload
     }
   }
 })
 
-export const { getColumn, getAllColumns } = retroSlice.actions
+export const actions = retroSlice.actions
 
-export default retroSlice.reducer
+export const reducer = retroSlice.reducer
