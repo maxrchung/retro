@@ -1,11 +1,22 @@
-import { PubSub, withFilter } from 'apollo-server'
+import { withFilter } from 'apollo-server'
 import { Resolvers, Retro } from './schema-types'
 import { v4 as uuid } from 'uuid'
 import { Context } from './context'
 
 const retro: Retro = {
-  id: 'test',
-  columns: []
+  id: 'test-id',
+  columns: [
+    {
+      id: 'column-id',
+      name: 'column-name',
+      posts: [
+        {
+          id: 'post-id',
+          content: 'content'
+        }
+      ]
+    }
+  ]
 }
 
 const publish = (context: Context, retro: Retro): Retro => {
