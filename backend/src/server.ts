@@ -1,4 +1,4 @@
-import { ApolloServer, PubSub, withFilter } from 'apollo-server'
+import { ApolloServer, PubSub } from 'apollo-server'
 import { schema } from './schema'
 import { resolvers } from './resolvers'
 

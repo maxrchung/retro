@@ -37,7 +37,7 @@ const resolvers: Resolvers<Context> = {
     }
   },
   Query: {
-    retro: (parent, args) => retro
+    retro: () => retro
   },
   Mutation: {
     createColumn: (parent, args, context) => {

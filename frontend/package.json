@@ -4,10 +4,11 @@
   "description": "A retrospective tool made with some cool stuff",
   "private": true,
   "scripts": {
+    "prettier": "prettier --write .",
+    "eslint": "eslint .",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "prettier": "prettier --write ."
+    "start": "next start"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",

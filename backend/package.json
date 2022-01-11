@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "codegen": "graphql-codegen",
-    "lint": "eslint .",
     "prettier": "prettier --write .",
+    "eslint": "eslint .",
+    "codegen": "graphql-codegen",
     "dev": "nodemon",
     "start": "ts-node src/server.ts"
   },
