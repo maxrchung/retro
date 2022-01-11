@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import * as Types from 'backend/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
-import { SocketContext } from 'app/socketContext'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'
 

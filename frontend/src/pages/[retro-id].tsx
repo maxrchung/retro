@@ -1,8 +1,7 @@
 import Column from 'components/column'
 import Head from 'next/head'
 import React, { useContext, useState } from 'react'
-import { useAppSelector } from 'app/hooks'
-import { SocketContext } from 'app/socketContext'
+import { useAppSelector } from '../state/hooks'
 import Card from 'components/card'
 import IconButton from 'components/iconButton'
 import { PlusIcon } from '@heroicons/react/outline'
@@ -10,7 +9,7 @@ import Header from 'components/header'
 
 export default function Home(): JSX.Element {
   const [columnName, setColumnName] = useState('')
-  const columns = useAppSelector((state) => state.columns)
+  const columns = useAppSelector((state) => state.retro.columns)
   const sendRequest = useContext(SocketContext)
 
   const handleAddColumn = () => {

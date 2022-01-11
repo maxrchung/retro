@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { reducer } from 'app/retroSlice'
+import { reducer } from 'state/retroSlice'
 
 export const store = configureStore({
   reducer

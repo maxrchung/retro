@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import * as Types from 'backend/types'
-import { SocketContext } from 'app/socketContext'
 import Comment from 'components/comment'
 import { PlusIcon, XIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
