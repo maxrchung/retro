@@ -12,6 +12,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@apollo/client": "^3",
     "@reduxjs/toolkit": "^1.5.1",
     "@types/react": "^17.0.5",
     "@types/redux": "^3.6.0",
