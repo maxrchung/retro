@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "prettier": "prettier --write .",
-    "eslint": "eslint .",
+    "eslint": "eslint . --max-warnings 0",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"

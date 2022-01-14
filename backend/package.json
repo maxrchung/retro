@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prettier": "prettier --write .",
-    "eslint": "eslint .",
+    "eslint": "eslint . --max-warnings 0",
     "codegen": "graphql-codegen",
     "dev": "nodemon",
     "start": "ts-node src/server.ts"

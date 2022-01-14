@@ -33,7 +33,7 @@ const resolvers: Resolvers<Context> = {
         (parent, args, context) =>
           context.pubsub.asyncIterator('retro-updated'),
         (payload, variables) => payload.id === variables.id
-      ) as any
+      ) as never
     }
   },
   Query: {
