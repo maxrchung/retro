@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "baseUrl": "src",
     "paths": {
-      "backend/types": ["../backend/src/schema-types"]
+      "backend/types": ["../backend/src/graphql-types"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

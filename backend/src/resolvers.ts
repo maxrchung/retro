@@ -1,5 +1,5 @@
 import { withFilter } from 'apollo-server'
-import { Resolvers, Retro } from './schema-types'
+import { Resolvers, Retro } from './graphql-types'
 import { v4 as uuid } from 'uuid'
 import { Context } from './context'
 
@@ -37,7 +37,7 @@ const resolvers: Resolvers<Context> = {
     }
   },
   Query: {
-    retro: () => retro
+    getRetro: () => retro
   },
   Mutation: {
     createColumn: (parent, args, context) => {
@@ -59,10 +59,10 @@ const resolvers: Resolvers<Context> = {
       retro.columns[columnIndex].posts.push(post)
       return publish(context, retro)
     },
-    updateColumnName: (parent, args, context) => {
+    updateColumn: (parent, args, context) => {
       return publish(context, retro)
     },
-    updatePostContent: (parent, args, context) => {
+    updatePost: (parent, args, context) => {
       return publish(context, retro)
     },
     removeColumn: (parent, args, context) => {

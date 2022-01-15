@@ -18,15 +18,15 @@ const schema = gql`
   }
 
   type Query {
-    retro(id: ID!): Retro!
+    getRetro(id: ID!): Retro!
   }
 
   type Mutation {
     createColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Retro!
 
-    updateColumnName(retroId: ID!, columnId: ID!, columnName: String!): Retro!
-    updatePostContent(
+    updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
+    updatePost(
       retroId: ID!
       columnId: ID!
       postId: ID!
