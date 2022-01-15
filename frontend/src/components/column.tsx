@@ -37,11 +37,7 @@ export default function Column(props: ColumnProps): JSX.Element {
 
   const isEven = props.index % 2 == 0
   return (
-    <div
-      className={
-        isEven ? 'flex flex-col w-80 p-5' : 'flex flex-col w-80 p-5 bg-gray-100'
-      }
-    >
+    <div className={isEven ? 'flex flex-col w-80 p-5' : 'flex flex-col w-80 p-5 bg-gray-100'}>
       <Header>
         <Card
           content={props.name}
@@ -61,13 +57,7 @@ export default function Column(props: ColumnProps): JSX.Element {
         content={
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
-            <textarea
-              className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-              onChange={(e) => setComment(e.target.value)}
-              cols={0}
-              rows={3}
-              value={comment}
-            />
+            <textarea className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none" onChange={(e) => setComment(e.target.value)} cols={0} rows={3} value={comment} />
           </div>
         }
         buttons={

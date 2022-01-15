@@ -26,11 +26,7 @@ const GET_RETRO = gql`
 
 const CREATE_COLUMN = gql`
   mutation CreateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-    createColumn(
-      retroId: $retroId
-      columnId: $columnId
-      columnName: $columnName
-    ) {
+    createColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName) {
       ...RetroFragment
     }
   }
@@ -38,11 +34,7 @@ const CREATE_COLUMN = gql`
 
 const CREATE_POST = gql`
   mutation CreatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
-    createPost(
-      retroId: $retroId
-      columnId: $columnId
-      postContent: $postContent
-    ) {
+    createPost(retroId: $retroId, columnId: $columnId, postContent: $postContent) {
       ...RetroFragment
     }
   }
@@ -50,11 +42,7 @@ const CREATE_POST = gql`
 
 const UPDATE_COLUMN = gql`
   mutation updateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-    updateColumn(
-      retroId: $retroId
-      columnId: $columnId
-      columnName: $columnName
-    ) {
+    updateColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName) {
       ...RetroFragment
     }
   }
@@ -62,11 +50,7 @@ const UPDATE_COLUMN = gql`
 
 const UPDATE_POST = gql`
   mutation updatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
-    createPost(
-      retroId: $retroId
-      columnId: $columnId
-      postContent: $postContent
-    ) {
+    createPost(retroId: $retroId, columnId: $columnId, postContent: $postContent) {
       ...RetroFragment
     }
   }

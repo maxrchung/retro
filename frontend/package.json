@@ -6,7 +6,6 @@
   "scripts": {
     "prettier": "prettier --write .",
     "eslint": "eslint . --max-warnings 0",
-    "codegen": "apollo codegen:generate --localSchemaFile=src/schema.ts --target=typescript --tagName=gql",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
@@ -20,7 +19,6 @@
     "@types/redux": "^3.6.0",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
-    "apollo": "^2.33.9",
     "autoprefixer": "^10.2.5",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
