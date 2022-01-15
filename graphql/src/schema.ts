@@ -26,7 +26,12 @@ const schema = gql`
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Retro!
 
     updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
-    updatePost(retroId: ID!, columnId: ID!, postId: ID!, postContent: String!): Retro!
+    updatePost(
+      retroId: ID!
+      columnId: ID!
+      postId: ID!
+      postContent: String!
+    ): Retro!
 
     removeColumn(retroId: ID!, columnId: ID!): Retro!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Retro!

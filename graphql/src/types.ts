@@ -286,11 +286,29 @@ export type UpdateColumnMutation = { __typename?: 'Mutation', updateColumn: { __
 export type UpdatePostMutationVariables = Exact<{
   retroId: Scalars['ID'];
   columnId: Scalars['ID'];
+  postId: Scalars['ID'];
   postContent: Scalars['String'];
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+
+export type RemoveColumnMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  columnId: Scalars['ID'];
+}>;
+
+
+export type RemoveColumnMutation = { __typename?: 'Mutation', removeColumn: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+
+export type RemovePostMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  columnId: Scalars['ID'];
+  postId: Scalars['ID'];
+}>;
+
+
+export type RemovePostMutation = { __typename?: 'Mutation', removePost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
 
 export const RetroFragmentFragmentDoc = gql`
     fragment RetroFragment on Retro {
@@ -411,7 +429,7 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const UpdateColumnDocument = gql`
-    mutation updateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
+    mutation UpdateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
   updateColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName) {
     ...RetroFragment
   }
@@ -446,8 +464,13 @@ export type UpdateColumnMutationHookResult = ReturnType<typeof useUpdateColumnMu
 export type UpdateColumnMutationResult = Apollo.MutationResult<UpdateColumnMutation>;
 export type UpdateColumnMutationOptions = Apollo.BaseMutationOptions<UpdateColumnMutation, UpdateColumnMutationVariables>;
 export const UpdatePostDocument = gql`
-    mutation updatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
-  createPost(retroId: $retroId, columnId: $columnId, postContent: $postContent) {
+    mutation UpdatePost($retroId: ID!, $columnId: ID!, $postId: ID!, $postContent: String!) {
+  updatePost(
+    retroId: $retroId
+    columnId: $columnId
+    postId: $postId
+    postContent: $postContent
+  ) {
     ...RetroFragment
   }
 }
@@ -469,6 +492,7 @@ export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, U
  *   variables: {
  *      retroId: // value for 'retroId'
  *      columnId: // value for 'columnId'
+ *      postId: // value for 'postId'
  *      postContent: // value for 'postContent'
  *   },
  * });
@@ -480,3 +504,72 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const RemoveColumnDocument = gql`
+    mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
+  removeColumn(retroId: $retroId, columnId: $columnId) {
+    ...RetroFragment
+  }
+}
+    ${RetroFragmentFragmentDoc}`;
+export type RemoveColumnMutationFn = Apollo.MutationFunction<RemoveColumnMutation, RemoveColumnMutationVariables>;
+
+/**
+ * __useRemoveColumnMutation__
+ *
+ * To run a mutation, you first call `useRemoveColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeColumnMutation, { data, loading, error }] = useRemoveColumnMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      columnId: // value for 'columnId'
+ *   },
+ * });
+ */
+export function useRemoveColumnMutation(baseOptions?: Apollo.MutationHookOptions<RemoveColumnMutation, RemoveColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveColumnMutation, RemoveColumnMutationVariables>(RemoveColumnDocument, options);
+      }
+export type RemoveColumnMutationHookResult = ReturnType<typeof useRemoveColumnMutation>;
+export type RemoveColumnMutationResult = Apollo.MutationResult<RemoveColumnMutation>;
+export type RemoveColumnMutationOptions = Apollo.BaseMutationOptions<RemoveColumnMutation, RemoveColumnMutationVariables>;
+export const RemovePostDocument = gql`
+    mutation RemovePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
+  removePost(retroId: $retroId, columnId: $columnId, postId: $postId) {
+    ...RetroFragment
+  }
+}
+    ${RetroFragmentFragmentDoc}`;
+export type RemovePostMutationFn = Apollo.MutationFunction<RemovePostMutation, RemovePostMutationVariables>;
+
+/**
+ * __useRemovePostMutation__
+ *
+ * To run a mutation, you first call `useRemovePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePostMutation, { data, loading, error }] = useRemovePostMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      columnId: // value for 'columnId'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useRemovePostMutation(baseOptions?: Apollo.MutationHookOptions<RemovePostMutation, RemovePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemovePostMutation, RemovePostMutationVariables>(RemovePostDocument, options);
+      }
+export type RemovePostMutationHookResult = ReturnType<typeof useRemovePostMutation>;
+export type RemovePostMutationResult = Apollo.MutationResult<RemovePostMutation>;
+export type RemovePostMutationOptions = Apollo.BaseMutationOptions<RemovePostMutation, RemovePostMutationVariables>;

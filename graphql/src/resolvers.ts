@@ -30,7 +30,8 @@ const resolvers: Resolvers<Context> = {
       // Casting to any because there's an issue with subscription resolver type
       // https://github.com/dotansimha/graphql-code-generator/issues/7197
       subscribe: withFilter(
-        (parent, args, context) => context.pubsub.asyncIterator('retro-updated'),
+        (parent, args, context) =>
+          context.pubsub.asyncIterator('retro-updated'),
         (payload, variables) => payload.id === variables.id
       ) as never
     }
@@ -52,7 +53,9 @@ const resolvers: Resolvers<Context> = {
         id: uuid(),
         content: args.postContent
       }
-      const columnIndex = retro.columns.findIndex((column) => column.id == args.columnId)
+      const columnIndex = retro.columns.findIndex(
+        (column) => column.id == args.columnId
+      )
       retro.columns[columnIndex].posts.push(post)
       return publish(context, retro)
     },
@@ -63,7 +66,9 @@ const resolvers: Resolvers<Context> = {
       return publish(context, retro)
     },
     removeColumn: (parent, args, context) => {
-      const columnIndex = retro.columns.findIndex((column) => column.id == args.columnId)
+      const columnIndex = retro.columns.findIndex(
+        (column) => column.id == args.columnId
+      )
       retro.columns.splice(columnIndex, 1)
       return publish(context, retro)
     },

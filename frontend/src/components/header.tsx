@@ -5,5 +5,7 @@ interface HeaderProps {
 }
 
 export default function Header(props: HeaderProps): JSX.Element {
-  return <div className="flex flex-col justify-center h-20">{props.children}</div>
+  return (
+    <div className="flex flex-col justify-center h-20">{props.children}</div>
+  )
 }
