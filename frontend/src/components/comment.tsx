@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import * as Types from 'backend/types'
+import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/iconButton'
 import Card from 'components/card'

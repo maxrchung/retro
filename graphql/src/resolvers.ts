@@ -1,5 +1,5 @@
 import { withFilter } from 'apollo-server'
-import { Resolvers, Retro } from './graphql-types'
+import { Resolvers, Retro } from './types'
 import { v4 as uuid } from 'uuid'
 import { Context } from './context'
 

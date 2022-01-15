@@ -1,5 +1,5 @@
 import { ApolloServer, PubSub } from 'apollo-server'
-import { schema } from './graphql-schema'
+import { schema } from './schema'
 import { resolvers } from './resolvers'
 
 const server = new ApolloServer({
