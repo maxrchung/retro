@@ -11,12 +11,12 @@ const client = new ApolloClient({
 })
 
 // https://nextjs.org/docs/advanced-features/custom-app
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
-  return (
-    <ApolloProvider client={client}>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-    </ApolloProvider>
-  )
-}
+const App = ({ Component, pageProps }: AppProps): JSX.Element => (
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  </ApolloProvider>
+)
+
+export default App

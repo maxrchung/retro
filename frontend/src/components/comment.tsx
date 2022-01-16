@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
-import IconButton from 'components/iconButton'
-import Card from 'components/card'
+import IconButton from 'components/IconButton'
+import Card from 'components/Card'
 
 interface CommentProps extends Types.Comment {
   index: number

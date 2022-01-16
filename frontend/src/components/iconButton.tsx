@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IconButtonProps {
-  children: React.ReactNode
+  children: JSX.Element
   onClick: React.MouseEventHandler
 }
 

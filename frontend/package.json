@@ -10,7 +10,6 @@
     "build": "next build",
     "start": "next start"
   },
-  "type": "module",
   "dependencies": {
     "@apollo/client": "^3",
     "@heroicons/react": "^1.0.1",

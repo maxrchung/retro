@@ -326,10 +326,18 @@ export const RetroFragmentFragmentDoc = gql`
 export const GetRetroDocument = gql`
     query GetRetro($id: ID!) {
   getRetro(id: $id) {
-    ...RetroFragment
+    id
+    columns {
+      id
+      name
+      posts {
+        id
+        content
+      }
+    }
   }
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 
 /**
  * __useGetRetroQuery__

@@ -1,11 +1,11 @@
 import React from 'react'
 
-interface FrameProps {
-  content: React.ReactNode
-  buttons: React.ReactNode
+interface CardProps {
+  content: JSX.Element
+  buttons: JSX.Element
 }
 
-export default function Card(props: FrameProps): JSX.Element {
+export default function Card(props: CardProps): JSX.Element {
   return (
     <div className="p-2 min-w-0 flex justify-between items-center">
       {/* wat https://stackoverflow.com/a/40612184/13183186 */}

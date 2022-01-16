@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface HeaderProps {
-  children: React.ReactNode
+  children: JSX.Element
 }
 
 export default function Header(props: HeaderProps): JSX.Element {

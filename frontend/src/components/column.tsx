@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
 import * as Types from 'graphql/types'
-import Comment from 'components/comment'
+import Comment from 'components/Comment'
 import { PlusIcon, XIcon } from '@heroicons/react/outline'
-import IconButton from 'components/iconButton'
-import Card from 'components/card'
-import Header from 'components/header'
+import IconButton from 'components/IconButton'
+import Card from 'components/Card'
+import Header from 'components/Header'
 
 interface ColumnProps extends Types.Column {
   index: number

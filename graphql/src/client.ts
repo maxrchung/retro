@@ -2,13 +2,28 @@
 
 import { gql, useQuery } from '@apollo/client'
 import {
+  CreateColumnMutation,
+  CreateColumnMutationVariables,
+  CreatePostMutation,
+  CreatePostMutationVariables,
+  GetRetroQuery,
+  GetRetroQueryResult,
+  GetRetroQueryVariables,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
   MutationUpdateColumnArgs,
   MutationUpdatePostArgs,
-  QueryGetRetroArgs
+  QueryGetRetroArgs,
+  RemoveColumnMutation,
+  RemoveColumnMutationVariables,
+  RemovePostMutation,
+  RemovePostMutationVariables,
+  UpdateColumnMutation,
+  UpdateColumnMutationVariables,
+  UpdatePostMutation,
+  UpdatePostMutationVariables
 } from './types'
 
 gql`
@@ -28,7 +43,15 @@ gql`
 const GET_RETRO = gql`
   query GetRetro($id: ID!) {
     getRetro(id: $id) {
-      ...RetroFragment
+      id
+      columns {
+        id
+        name
+        posts {
+          id
+          content
+        }
+      }
     }
   }
 `
@@ -103,39 +126,37 @@ const REMOVE_POST = gql`
   }
 `
 
-const useGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
-  useQuery<QueryGetRetroArgs>(GET_RETRO, { variables: getRetroArgs })
+export const useGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
+  useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
+    variables: getRetroArgs
+  })
 
-const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>
-  useQuery<MutationCreateColumnArgs>(CREATE_COLUMN, {
+export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>
+  useQuery<CreateColumnMutation, CreateColumnMutationVariables>(CREATE_COLUMN, {
     variables: createColumnArgs
   })
 
-const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
-  useQuery<MutationCreatePostArgs>(CREATE_POST, { variables: createPostArgs })
+export const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
+  useQuery<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
+    variables: createPostArgs
+  })
 
-const useUpdateColumn = (updateColumnArgs: MutationUpdateColumnArgs) =>
-  useQuery<MutationUpdateColumnArgs>(UPDATE_COLUMN, {
+export const useUpdateColumn = (updateColumnArgs: MutationUpdateColumnArgs) =>
+  useQuery<UpdateColumnMutation, UpdateColumnMutationVariables>(UPDATE_COLUMN, {
     variables: updateColumnArgs
   })
 
-const useUpdatePost = (updatePostArgs: MutationUpdatePostArgs) =>
-  useQuery<MutationUpdatePostArgs>(UPDATE_POST, { variables: updatePostArgs })
+export const useUpdatePost = (updatePostArgs: MutationUpdatePostArgs) =>
+  useQuery<UpdatePostMutation, UpdatePostMutationVariables>(UPDATE_POST, {
+    variables: updatePostArgs
+  })
 
-const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>
-  useQuery<MutationRemoveColumnArgs>(REMOVE_COLUMN, {
+export const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>
+  useQuery<RemoveColumnMutation, RemoveColumnMutationVariables>(REMOVE_COLUMN, {
     variables: removeColumnArgs
   })
 
-const useRemovePost = (removePostArgs: MutationRemovePostArgs) =>
-  useQuery<MutationRemovePostArgs>(REMOVE_POST, { variables: removePostArgs })
-
-export {
-  useGetRetro,
-  useCreateColumn,
-  useCreatePost,
-  useUpdateColumn,
-  useUpdatePost,
-  useRemoveColumn,
-  useRemovePost
-}
+export const useRemovePost = (removePostArgs: MutationRemovePostArgs) =>
+  useQuery<RemovePostMutation, RemovePostMutationVariables>(REMOVE_POST, {
+    variables: removePostArgs
+  })

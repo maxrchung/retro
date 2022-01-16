@@ -24,7 +24,7 @@ const publish = (context: Context, retro: Retro): Retro => {
   return retro
 }
 
-const resolvers: Resolvers<Context> = {
+export const resolvers: Resolvers<Context> = {
   Subscription: {
     retroUpdated: {
       // Casting to any because there's an issue with subscription resolver type
@@ -77,5 +77,3 @@ const resolvers: Resolvers<Context> = {
     }
   }
 }
-
-export { resolvers }

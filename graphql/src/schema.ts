@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server'
 
-const schema = gql`
+export const schema = gql`
   type Retro {
     id: ID!
     columns: [Column!]!
@@ -41,5 +41,3 @@ const schema = gql`
     retroUpdated(id: ID!): Retro!
   }
 `
-
-export { schema }

@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "baseUrl": "src",
     "paths": {
-      "graphql/types": ["../graphql/src/types"]
+      "graphql/client": ["../../graphql/src/client"],
+      "graphql/types": ["../../graphql/src/types"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
