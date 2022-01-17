@@ -3,10 +3,13 @@ import { PlusIcon, XIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import Header from 'components/Header'
-import { Column } from 'graphql/types'
-import { useCreatePost, useRemoveColumn } from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
 import Post from 'components/Post'
+import {
+  useCreatePost,
+  useRemoveColumn
+} from '@maxrchung/retro-graphql/src/client'
+import { Column } from '@maxrchung/retro-graphql/src/types'
 
 interface ColumnProps {
   column: Column

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Retro } from 'graphql/types'
+import { Retro } from '@maxrchung/retro-graphql/src/types'
 
 interface RetroState {
   retro: Retro
