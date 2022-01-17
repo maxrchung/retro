@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server'
 
-export const schema = gql`
+const schema = gql`
   type Retro {
     id: ID!
     columns: [Column!]!
@@ -22,7 +22,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    createColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
+    createColumn(retroId: ID!, columnName: String!): Retro!
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Retro!
 
     updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
@@ -38,6 +38,8 @@ export const schema = gql`
   }
 
   type Subscription {
-    retroUpdated(id: ID!): Retro!
+    retroUpdated(retroId: ID!): Retro!
   }
 `
+
+export default schema

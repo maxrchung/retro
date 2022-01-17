@@ -36,7 +36,6 @@ export type Mutation = {
 
 
 export type MutationCreateColumnArgs = {
-  columnId: Scalars['ID'];
   columnName: Scalars['String'];
   retroId: Scalars['ID'];
 };
@@ -105,7 +104,7 @@ export type Subscription = {
 
 
 export type SubscriptionRetroUpdatedArgs = {
-  id: Scalars['ID'];
+  retroId: Scalars['ID'];
 };
 
 
@@ -209,7 +208,7 @@ export type ColumnResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnId' | 'columnName' | 'retroId'>>;
+  createColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
   removeColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
   removePost?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
@@ -234,7 +233,7 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  retroUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "retroUpdated", ParentType, ContextType, RequireFields<SubscriptionRetroUpdatedArgs, 'id'>>;
+  retroUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "retroUpdated", ParentType, ContextType, RequireFields<SubscriptionRetroUpdatedArgs, 'retroId'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -249,6 +248,13 @@ export type Resolvers<ContextType = any> = {
 
 export type RetroFragmentFragment = { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> };
 
+export type RetroUpdatedSubscriptionVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type RetroUpdatedSubscription = { __typename?: 'Subscription', retroUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+
 export type GetRetroQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -258,7 +264,6 @@ export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Re
 
 export type CreateColumnMutationVariables = Exact<{
   retroId: Scalars['ID'];
-  columnId: Scalars['ID'];
   columnName: Scalars['String'];
 }>;
 
@@ -323,21 +328,43 @@ export const RetroFragmentFragmentDoc = gql`
   }
 }
     `;
+export const RetroUpdatedDocument = gql`
+    subscription RetroUpdated($retroId: ID!) {
+  retroUpdated(retroId: $retroId) {
+    ...RetroFragment
+  }
+}
+    ${RetroFragmentFragmentDoc}`;
+
+/**
+ * __useRetroUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useRetroUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useRetroUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRetroUpdatedSubscription({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useRetroUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>(RetroUpdatedDocument, options);
+      }
+export type RetroUpdatedSubscriptionHookResult = ReturnType<typeof useRetroUpdatedSubscription>;
+export type RetroUpdatedSubscriptionResult = Apollo.SubscriptionResult<RetroUpdatedSubscription>;
 export const GetRetroDocument = gql`
     query GetRetro($id: ID!) {
   getRetro(id: $id) {
-    id
-    columns {
-      id
-      name
-      posts {
-        id
-        content
-      }
-    }
+    ...RetroFragment
   }
 }
-    `;
+    ${RetroFragmentFragmentDoc}`;
 
 /**
  * __useGetRetroQuery__
@@ -367,8 +394,8 @@ export type GetRetroQueryHookResult = ReturnType<typeof useGetRetroQuery>;
 export type GetRetroLazyQueryHookResult = ReturnType<typeof useGetRetroLazyQuery>;
 export type GetRetroQueryResult = Apollo.QueryResult<GetRetroQuery, GetRetroQueryVariables>;
 export const CreateColumnDocument = gql`
-    mutation CreateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-  createColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName) {
+    mutation CreateColumn($retroId: ID!, $columnName: String!) {
+  createColumn(retroId: $retroId, columnName: $columnName) {
     ...RetroFragment
   }
 }
@@ -389,7 +416,6 @@ export type CreateColumnMutationFn = Apollo.MutationFunction<CreateColumnMutatio
  * const [createColumnMutation, { data, loading, error }] = useCreateColumnMutation({
  *   variables: {
  *      retroId: // value for 'retroId'
- *      columnId: // value for 'columnId'
  *      columnName: // value for 'columnName'
  *   },
  * });

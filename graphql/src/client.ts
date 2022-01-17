@@ -1,13 +1,12 @@
 // https://www.apollographql.com/docs/react/api/react/hooks/
 
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
   CreateColumnMutation,
   CreateColumnMutationVariables,
   CreatePostMutation,
   CreatePostMutationVariables,
   GetRetroQuery,
-  GetRetroQueryResult,
   GetRetroQueryVariables,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
@@ -20,6 +19,9 @@ import {
   RemoveColumnMutationVariables,
   RemovePostMutation,
   RemovePostMutationVariables,
+  RetroUpdatedSubscription,
+  RetroUpdatedSubscriptionVariables,
+  SubscriptionRetroUpdatedArgs,
   UpdateColumnMutation,
   UpdateColumnMutationVariables,
   UpdatePostMutation,
@@ -40,29 +42,25 @@ gql`
   }
 `
 
+const RETRO_UPDATED = gql`
+  subscription RetroUpdated($retroId: ID!) {
+    retroUpdated(retroId: $retroId) {
+      ...RetroFragment
+    }
+  }
+`
+
 const GET_RETRO = gql`
   query GetRetro($id: ID!) {
     getRetro(id: $id) {
-      id
-      columns {
-        id
-        name
-        posts {
-          id
-          content
-        }
-      }
+      ...RetroFragment
     }
   }
 `
 
 const CREATE_COLUMN = gql`
-  mutation CreateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-    createColumn(
-      retroId: $retroId
-      columnId: $columnId
-      columnName: $columnName
-    ) {
+  mutation CreateColumn($retroId: ID!, $columnName: String!) {
+    createColumn(retroId: $retroId, columnName: $columnName) {
       ...RetroFragment
     }
   }
@@ -126,37 +124,56 @@ const REMOVE_POST = gql`
   }
 `
 
+export const useRetroUpdated = (
+  retroUpdatedArgs: SubscriptionRetroUpdatedArgs
+) =>
+  useSubscription<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>(
+    RETRO_UPDATED,
+    {
+      variables: retroUpdatedArgs
+    }
+  )
+
 export const useGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
   useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
     variables: getRetroArgs
   })
 
 export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>
-  useQuery<CreateColumnMutation, CreateColumnMutationVariables>(CREATE_COLUMN, {
-    variables: createColumnArgs
-  })
+  useMutation<CreateColumnMutation, CreateColumnMutationVariables>(
+    CREATE_COLUMN,
+    {
+      variables: createColumnArgs
+    }
+  )
 
 export const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
-  useQuery<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
+  useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
     variables: createPostArgs
   })
 
 export const useUpdateColumn = (updateColumnArgs: MutationUpdateColumnArgs) =>
-  useQuery<UpdateColumnMutation, UpdateColumnMutationVariables>(UPDATE_COLUMN, {
-    variables: updateColumnArgs
-  })
+  useMutation<UpdateColumnMutation, UpdateColumnMutationVariables>(
+    UPDATE_COLUMN,
+    {
+      variables: updateColumnArgs
+    }
+  )
 
 export const useUpdatePost = (updatePostArgs: MutationUpdatePostArgs) =>
-  useQuery<UpdatePostMutation, UpdatePostMutationVariables>(UPDATE_POST, {
+  useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UPDATE_POST, {
     variables: updatePostArgs
   })
 
 export const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>
-  useQuery<RemoveColumnMutation, RemoveColumnMutationVariables>(REMOVE_COLUMN, {
-    variables: removeColumnArgs
-  })
+  useMutation<RemoveColumnMutation, RemoveColumnMutationVariables>(
+    REMOVE_COLUMN,
+    {
+      variables: removeColumnArgs
+    }
+  )
 
 export const useRemovePost = (removePostArgs: MutationRemovePostArgs) =>
-  useQuery<RemovePostMutation, RemovePostMutationVariables>(REMOVE_POST, {
+  useMutation<RemovePostMutation, RemovePostMutationVariables>(REMOVE_POST, {
     variables: removePostArgs
   })

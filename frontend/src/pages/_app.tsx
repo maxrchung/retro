@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
-import { store } from 'state/store'
+import store from 'state/store'
 import React from 'react'
 import 'tailwindcss/tailwind.css'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'

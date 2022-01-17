@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "description": "A retrospective tool made with some cool stuff",
+  "description": "A retrospective tool",
   "private": true,
   "scripts": {
     "prettier": "prettier --write .",

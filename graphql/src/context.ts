@@ -1,5 +1,5 @@
 import { PubSub } from 'apollo-server'
 
-export interface Context {
+export default interface Context {
   pubsub: PubSub
 }

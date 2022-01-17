@@ -1,41 +1,37 @@
-import React, { useContext, useState } from 'react'
-import * as Types from 'graphql/types'
-import Comment from 'components/Comment'
+import React, { useState } from 'react'
 import { PlusIcon, XIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import Header from 'components/Header'
+import { Column } from 'graphql/types'
+import { useCreatePost, useRemoveColumn } from 'graphql/client'
+import { useAppSelector } from 'state/hooks'
+import Post from 'components/Post'
 
-interface ColumnProps extends Types.Column {
+interface ColumnProps {
+  column: Column
   index: number
 }
 
 export default function Column(props: ColumnProps): JSX.Element {
-  const [comment, setComment] = useState('')
-  const sendRequest = useContext(SocketContext)
+  const { column, index } = props
+  const { id: columnId, name, posts } = column
 
-  const handleAddComment = () => {
-    sendRequest({
-      type: 'retro/addComment',
-      payload: {
-        columnId: props.id,
-        value: comment
-      }
-    })
-    setComment('')
-  }
+  const { id: retroId } = useAppSelector((state) => state.retro)
+  const [post, setPost] = useState('')
 
-  const handleRemoveColumn = () => {
-    sendRequest({
-      type: 'retro/removeColumn',
-      payload: {
-        columnId: props.id
-      }
-    })
-    setComment('')
-  }
+  const [removeColumn] = useRemoveColumn({
+    retroId,
+    columnId
+  })
 
-  const isEven = props.index % 2 == 0
+  const [createPost] = useCreatePost({
+    retroId,
+    columnId,
+    postContent: post
+  })
+
+  const isEven = index % 2 == 0
   return (
     <div
       className={
@@ -44,17 +40,17 @@ export default function Column(props: ColumnProps): JSX.Element {
     >
       <Header>
         <Card
-          content={props.name}
+          content={<>{name}</>}
           buttons={
-            <IconButton onClick={() => handleRemoveColumn()}>
+            <IconButton onClick={() => removeColumn()}>
               <XIcon />
             </IconButton>
           }
         />
       </Header>
 
-      {props.comments.map((comment) => (
-        <Comment key={comment.id} index={props.index} {...comment} />
+      {posts.map((post, index) => (
+        <Post key={post.id} column={column} post={post} index={index} />
       ))}
 
       <Card
@@ -63,15 +59,15 @@ export default function Column(props: ColumnProps): JSX.Element {
           <div className="flex">
             <textarea
               className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-              onChange={(e) => setComment(e.target.value)}
+              onChange={(e) => setPost(e.target.value)}
               cols={0}
               rows={3}
-              value={comment}
+              value={post}
             />
           </div>
         }
         buttons={
-          <IconButton onClick={() => handleAddComment()}>
+          <IconButton onClick={() => createPost()}>
             <PlusIcon />
           </IconButton>
         }
