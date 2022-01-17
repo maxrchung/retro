@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@maxrchung/retro-frontend",
   "version": "0.1.0",
   "description": "A retrospective tool",
   "private": true,

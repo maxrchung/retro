@@ -7,16 +7,16 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://localhost:4000/'
 })
 
 // https://nextjs.org/docs/advanced-features/custom-app
-const App = ({ Component, pageProps }: AppProps): JSX.Element => (
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
-  </ApolloProvider>
-)
-
-export default App
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
+  return (
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </ApolloProvider>
+  )
+}

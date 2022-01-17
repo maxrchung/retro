@@ -6,7 +6,7 @@ import Card from 'components/Card'
 import IconButton from 'components/IconButton'
 import { PlusIcon } from '@heroicons/react/outline'
 import Header from 'components/Header'
-import { useCreateColumn } from 'graphql/client'
+import { useCreateColumn } from '@maxrchung/retro-graphql/src/client'
 
 export default function Retro(): JSX.Element {
   const [columnName, setColumnName] = useState('')
