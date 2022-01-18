@@ -5,7 +5,6 @@ import {
   Resolvers,
   Retro
 } from './types'
-import { v4 as uuid } from 'uuid'
 import Context from './context'
 import { uid } from 'uid'
 
