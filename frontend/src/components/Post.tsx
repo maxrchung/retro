@@ -1,14 +1,14 @@
 import React from 'react'
-import { Column, Post } from '@maxrchung/retro-graphql/src/types'
+import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
-import { useRemovePost } from '@maxrchung/retro-graphql/src/client'
+import { useRemovePost } from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
 
 interface PostProps {
-  column: Column
-  post: Post
+  column: Types.Column
+  post: Types.Post
   index: number
 }
 

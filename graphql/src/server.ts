@@ -10,4 +10,9 @@ const server = new ApolloServer({
   }
 })
 
-server.listen().then(({ url }) => console.log(`Server is running on ${url}`))
+server.installSubscriptionHandlers
+
+server.listen().then(({ url, subscriptionsUrl }) => {
+  console.log(`Server is running on ${url}`)
+  console.log(`Server is running on ${subscriptionsUrl}`)
+})

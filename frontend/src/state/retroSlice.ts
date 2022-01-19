@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Retro } from '@maxrchung/retro-graphql/src/types'
+import * as Types from 'graphql/types'
 
 interface RetroState {
-  retro: Retro
+  retro: Types.Retro
 }
 
 const initialState: RetroState = {
@@ -16,7 +16,7 @@ export const retroSlice = createSlice({
   name: 'retro',
   initialState,
   reducers: {
-    setRetro: (state, action: PayloadAction<Retro>) => {
+    setRetro: (state, action: PayloadAction<Types.Retro>) => {
       state.retro = action.payload
     }
   }

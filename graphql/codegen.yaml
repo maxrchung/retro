@@ -1,5 +1,5 @@
 schema: src/schema.ts
-documents: src/client.ts
+documents: ../frontend/src/graphql/client.ts
 generates:
   src/types.ts:
     plugins:

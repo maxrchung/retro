@@ -7,6 +7,8 @@
     "prettier": "prettier --write .",
     "eslint": "eslint . --max-warnings 0",
     "codegen": "graphql-codegen",
+    "build": "tsc",
+    "watch": "tsc -w",
     "dev": "nodemon",
     "start": "ts-node src/server.ts"
   },

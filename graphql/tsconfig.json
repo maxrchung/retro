@@ -2,7 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "strict": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "outDir": "dist"
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

@@ -5,14 +5,11 @@ import Card from 'components/Card'
 import Header from 'components/Header'
 import { useAppSelector } from 'state/hooks'
 import Post from 'components/Post'
-import {
-  useCreatePost,
-  useRemoveColumn
-} from '@maxrchung/retro-graphql/src/client'
-import { Column } from '@maxrchung/retro-graphql/src/types'
+import { useCreatePost, useRemoveColumn } from 'graphql/client'
+import * as Types from 'graphql/types'
 
 interface ColumnProps {
-  column: Column
+  column: Types.Column
   index: number
 }
 

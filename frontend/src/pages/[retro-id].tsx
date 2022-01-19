@@ -2,7 +2,7 @@ import { useAppDispatch } from '../state/hooks'
 import React from 'react'
 import Retro from 'components/Retro'
 import { actions } from 'state/retroSlice'
-import { useRetroUpdated } from '@maxrchung/retro-graphql/src/client'
+import { useRetroUpdated } from 'graphql/client'
 
 export default function Home(): JSX.Element {
   const { loading, error, data } = useRetroUpdated({

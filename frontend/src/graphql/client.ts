@@ -1,4 +1,4 @@
-// https://www.apollographql.com/docs/react/api/react/hooks/
+// Moving this to the frontend because otherwise backend will need a reference to react for @apollo/client
 
 import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
@@ -26,7 +26,7 @@ import {
   UpdateColumnMutationVariables,
   UpdatePostMutation,
   UpdatePostMutationVariables
-} from './types'
+} from 'graphql/types'
 
 gql`
   fragment RetroFragment on Retro {
