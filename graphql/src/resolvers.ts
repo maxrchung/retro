@@ -1,12 +1,11 @@
-import { withFilter } from 'apollo-server'
+import { PubSub, withFilter } from 'apollo-server'
 import {
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   Resolvers,
   Retro
 } from './types'
-import Context from './context'
-import { uid } from 'uid'
+import { uid } from 'uid/secure'
 
 const retro: Retro = {
   id: 'test-id',
@@ -38,39 +37,39 @@ const generateUid = (array: WithId[]) => {
   return id
 }
 
-const publish = (context: Context, retro: Retro): Retro => {
-  context.pubsub.publish('retro-updated', retro)
+const pubsub = new PubSub()
+
+const publish = (retro: Retro): Retro => {
+  pubsub.publish('retro-updated', { retroUpdated: retro })
+  console.log(retro)
   return retro
 }
 
 // Casting to never because there's an issue with subscription resolver type
 // https://github.com/dotansimha/graphql-code-generator/issues/7197
 const subscribe = withFilter(
-  (parent, args, context) => context.pubsub.asyncIterator('retro-updated'),
-  (payload, variables) => payload.id === variables.id
+  () => pubsub.asyncIterator('retro-updated'),
+  (payload, variables) => {
+    console.log('payload', payload)
+    console.log('variables', variables)
+    payload.retroUpdated.id === variables.id
+    return true
+  }
 ) as never
 
 const getRetro = () => retro
 
-const createColumn = (
-  parent: unknown,
-  args: MutationCreateColumnArgs,
-  context: Context
-) => {
+const createColumn = (parent: unknown, args: MutationCreateColumnArgs) => {
   const id = generateUid(retro.columns)
   retro.columns.push({
     id,
     name: args.columnName,
     posts: []
   })
-  return publish(context, retro)
+  return publish(retro)
 }
 
-const createPost = (
-  parent: unknown,
-  args: MutationCreatePostArgs,
-  context: Context
-) => {
+const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
   const column = retro.columns.find((column) => column.id == args.columnId)
   if (!column) {
     throw new Error(`Column with ID ${args.columnId} could not be found`)
@@ -81,10 +80,10 @@ const createPost = (
     content: args.postContent
   }
   column.posts.push(post)
-  return publish(context, retro)
+  return publish(retro)
 }
 
-const resolvers: Resolvers<Context> = {
+const resolvers: Resolvers = {
   Subscription: {
     retroUpdated: {
       subscribe
@@ -96,21 +95,21 @@ const resolvers: Resolvers<Context> = {
   Mutation: {
     createColumn,
     createPost,
-    updateColumn: (parent, args, context) => {
-      return publish(context, retro)
+    updateColumn: (parent, args) => {
+      return publish(retro)
     },
-    updatePost: (parent, args, context) => {
-      return publish(context, retro)
+    updatePost: (parent, args) => {
+      return publish(retro)
     },
-    removeColumn: (parent, args, context) => {
+    removeColumn: (parent, args) => {
       const columnIndex = retro.columns.findIndex(
         (column) => column.id == args.columnId
       )
       retro.columns.splice(columnIndex, 1)
-      return publish(context, retro)
+      return publish(retro)
     },
-    removePost: (parent, args, context) => {
-      return publish(context, retro)
+    removePost: (parent, args) => {
+      return publish(retro)
     }
   }
 }

@@ -1,13 +1,18 @@
-import { ApolloServer, PubSub } from 'apollo-server'
+import { ApolloServer } from 'apollo-server'
 import schema from './schema'
 import resolvers from './resolvers'
 
 const server = new ApolloServer({
   typeDefs: schema,
-  resolvers,
-  context: {
-    pubsub: new PubSub()
-  }
+  subscriptions: {
+    onConnect: (connectionParams, webSocket, context) => {
+      console.log('Connected!')
+    },
+    onDisconnect: (webSocket, context) => {
+      console.log('Disconnected!')
+    }
+  },
+  resolvers
 })
 
 server.installSubscriptionHandlers

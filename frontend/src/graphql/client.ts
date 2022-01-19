@@ -28,7 +28,7 @@ import {
   UpdatePostMutationVariables
 } from 'graphql/types'
 
-gql`
+const RETRO_FRAGMENT = gql`
   fragment RetroFragment on Retro {
     id
     columns {
@@ -43,14 +43,16 @@ gql`
 `
 
 const RETRO_UPDATED = gql`
-  subscription RetroUpdated($retroId: ID!) {
-    retroUpdated(retroId: $retroId) {
+  ${RETRO_FRAGMENT}
+  subscription RetroUpdated($id: ID!) {
+    retroUpdated(id: $id) {
       ...RetroFragment
     }
   }
 `
 
 const GET_RETRO = gql`
+  ${RETRO_FRAGMENT}
   query GetRetro($id: ID!) {
     getRetro(id: $id) {
       ...RetroFragment
@@ -59,6 +61,7 @@ const GET_RETRO = gql`
 `
 
 const CREATE_COLUMN = gql`
+  ${RETRO_FRAGMENT}
   mutation CreateColumn($retroId: ID!, $columnName: String!) {
     createColumn(retroId: $retroId, columnName: $columnName) {
       ...RetroFragment
@@ -67,6 +70,7 @@ const CREATE_COLUMN = gql`
 `
 
 const CREATE_POST = gql`
+  ${RETRO_FRAGMENT}
   mutation CreatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
     createPost(
       retroId: $retroId
@@ -79,6 +83,7 @@ const CREATE_POST = gql`
 `
 
 const UPDATE_COLUMN = gql`
+  ${RETRO_FRAGMENT}
   mutation UpdateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
     updateColumn(
       retroId: $retroId
@@ -91,6 +96,7 @@ const UPDATE_COLUMN = gql`
 `
 
 const UPDATE_POST = gql`
+  ${RETRO_FRAGMENT}
   mutation UpdatePost(
     $retroId: ID!
     $columnId: ID!
@@ -109,6 +115,7 @@ const UPDATE_POST = gql`
 `
 
 const REMOVE_COLUMN = gql`
+  ${RETRO_FRAGMENT}
   mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
     removeColumn(retroId: $retroId, columnId: $columnId) {
       ...RetroFragment
@@ -117,6 +124,7 @@ const REMOVE_COLUMN = gql`
 `
 
 const REMOVE_POST = gql`
+  ${RETRO_FRAGMENT}
   mutation RemovePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
     removePost(retroId: $retroId, columnId: $columnId, postId: $postId) {
       ...RetroFragment

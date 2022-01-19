@@ -104,7 +104,7 @@ export type Subscription = {
 
 
 export type SubscriptionRetroUpdatedArgs = {
-  retroId: Scalars['ID'];
+  id: Scalars['ID'];
 };
 
 
@@ -233,7 +233,7 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  retroUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "retroUpdated", ParentType, ContextType, RequireFields<SubscriptionRetroUpdatedArgs, 'retroId'>>;
+  retroUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "retroUpdated", ParentType, ContextType, RequireFields<SubscriptionRetroUpdatedArgs, 'id'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -249,7 +249,7 @@ export type Resolvers<ContextType = any> = {
 export type RetroFragmentFragment = { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> };
 
 export type RetroUpdatedSubscriptionVariables = Exact<{
-  retroId: Scalars['ID'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -329,8 +329,8 @@ export const RetroFragmentFragmentDoc = gql`
 }
     `;
 export const RetroUpdatedDocument = gql`
-    subscription RetroUpdated($retroId: ID!) {
-  retroUpdated(retroId: $retroId) {
+    subscription RetroUpdated($id: ID!) {
+  retroUpdated(id: $id) {
     ...RetroFragment
   }
 }
@@ -348,7 +348,7 @@ export const RetroUpdatedDocument = gql`
  * @example
  * const { data, loading, error } = useRetroUpdatedSubscription({
  *   variables: {
- *      retroId: // value for 'retroId'
+ *      id: // value for 'id'
  *   },
  * });
  */

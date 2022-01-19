@@ -38,7 +38,7 @@ const schema = gql`
   }
 
   type Subscription {
-    retroUpdated(retroId: ID!): Retro!
+    retroUpdated(id: ID!): Retro!
   }
 `
 
