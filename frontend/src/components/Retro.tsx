@@ -1,4 +1,4 @@
-import Column from './Column'
+import Column from 'components/Column'
 import Head from 'next/head'
 import React, { useState } from 'react'
 import { useAppSelector } from '../state/hooks'
