@@ -12,6 +12,8 @@ import {
 } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000'
@@ -51,9 +53,11 @@ const client = new ApolloClient({
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ApolloProvider client={client}>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
+      <DndProvider backend={HTML5Backend}>
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </DndProvider>
     </ApolloProvider>
   )
 }
