@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../state/hooks'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Retro from 'components/Retro'
 import { actions } from 'state/retroSlice'
 import { useGetRetro, useRetroUpdated } from 'graphql/client'
@@ -24,6 +24,18 @@ export default function Home(): JSX.Element {
     id: retroId
   })
 
+  useEffect(() => {
+    if (dataGet) {
+      dispatch(actions.setRetro(dataGet.getRetro))
+    }
+  }, [dataGet])
+
+  useEffect(() => {
+    if (dataUpdate) {
+      dispatch(actions.setRetro(dataUpdate.retroUpdated))
+    }
+  }, [dataUpdate])
+
   if (loading) {
     return <>Loading...</>
   }
@@ -34,12 +46,6 @@ export default function Home(): JSX.Element {
 
   if (!dataGet) {
     return <>Failed to load retro</>
-  }
-
-  dispatch(actions.setRetro(dataGet.getRetro))
-
-  if (dataUpdate) {
-    dispatch(actions.setRetro(dataUpdate.retroUpdated))
   }
 
   return <Retro />
