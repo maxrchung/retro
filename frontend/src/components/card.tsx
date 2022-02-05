@@ -17,19 +17,16 @@ export default function Card(props: CardProps): JSX.Element {
     })
   }))
 
-  const [{ canDrop, isOver }, dropRef] = useDrop(() => ({
+  const [{ isOver }, dropRef] = useDrop(() => ({
     accept: ItemTypes.Card,
-    hover: (item, monitor) => {
-      console.log('hovered on card')
-    },
-    drop: (item, monitor) => {
-      console.log('dropped on card')
-    },
+    hover: (item, monitor) => {},
+    drop: (item, monitor) => {},
     collect: (monitor) => ({
-      canDrop: monitor.canDrop(),
       isOver: monitor.isOver()
     })
   }))
+
+  console.log('isOver', isOver)
 
   return (
     <div
@@ -38,9 +35,10 @@ export default function Card(props: CardProps): JSX.Element {
         dropRef(ref)
       }}
       className={classNames(
-        'p-2 min-w-0 flex justify-between items-center cursor-grab',
+        'border-4 border-transparent p-2 min-w-0 flex justify-between items-center cursor-grab',
         {
-          'opacity-50 cursor-grabbing': isDragging
+          'opacity-50 cursor-grabbing': isDragging,
+          'border-blue-500': isOver
         }
       )}
     >
