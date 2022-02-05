@@ -5,6 +5,9 @@ import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import { useRemovePost } from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
+import { useDrag, useDrop } from 'react-dnd'
+import { ItemTypes } from './ItemTypes'
+import classNames from 'classnames'
 
 interface PostProps {
   column: Types.Column
@@ -13,10 +16,9 @@ interface PostProps {
 }
 
 export default function Post(props: PostProps): JSX.Element {
-  const { column, post, index } = props
+  const { column, post } = props
   const { id: columnId } = column
   const { id: postId, content } = post
-
   const { id: retroId } = useAppSelector((state) => state.retro)
 
   const [removeComment] = useRemovePost({
@@ -25,10 +27,38 @@ export default function Post(props: PostProps): JSX.Element {
     postId
   })
 
-  const isEven = index % 2 == 0
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: ItemTypes.Post,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    })
+  }))
+
+  const [{ isOver }, dropRef] = useDrop(() => ({
+    accept: ItemTypes.Post,
+    hover: (item, monitor) => {},
+    drop: (item, monitor) => {},
+    collect: (monitor) => ({
+      isOver: monitor.isOver()
+    })
+  }))
+
+  console.log(isOver)
+
   return (
     <div
-      className={isEven ? 'my-2 bg-gray-100 rounded' : 'my-2 bg-white rounded'}
+      ref={(ref) => {
+        dragRef(ref)
+        dropRef(ref)
+      }}
+      className={classNames(
+        'border-2 hover:border-blue-500 cursor-grab my-2 bg-gray-100 rounded',
+        {
+          'opacity-50 cursor-grabbing': isDragging,
+          'border-blue-500': isOver,
+          'border-transparent': !isOver
+        }
+      )}
     >
       <Card
         content={<>{content}</>}

@@ -14,7 +14,7 @@ interface ColumnProps {
 }
 
 export default function Column(props: ColumnProps): JSX.Element {
-  const { column, index } = props
+  const { column } = props
   const { id: columnId, name, posts } = column
 
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -31,13 +31,8 @@ export default function Column(props: ColumnProps): JSX.Element {
     postContent: post
   })
 
-  const isEven = index % 2 == 0
   return (
-    <div
-      className={
-        isEven ? 'flex flex-col w-80 p-5' : 'flex flex-col w-80 p-5 bg-gray-100'
-      }
-    >
+    <div className={'flex flex-col w-80 p-5'}>
       <Header>
         <Card
           content={<>{name}</>}

@@ -1,5 +1,5 @@
 enum ItemTypes {
-  Card = 'Card'
+  Post = 'Post'
 }
 
 export { ItemTypes }
