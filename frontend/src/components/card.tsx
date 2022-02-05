@@ -35,10 +35,10 @@ export default function Card(props: CardProps): JSX.Element {
         dropRef(ref)
       }}
       className={classNames(
-        'border-4 border-transparent p-2 min-w-0 flex justify-between items-center cursor-grab',
+        'border-transparent p-2 min-w-0 flex justify-between items-center cursor-grab',
         {
           'opacity-50 cursor-grabbing': isDragging,
-          'border-blue-500': isOver
+          'border-4 border-blue-500': isOver
         }
       )}
     >
