@@ -18,25 +18,33 @@ const schema = gql`
   }
 
   type Query {
-    getRetro(id: ID!): Retro!
+    getRetro(retroId: ID!): Retro!
   }
 
   type Mutation {
     createColumn(retroId: ID!, columnName: String!): Boolean!
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Boolean!
-    updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Boolean!
-    updatePost(
+    updateColumnName(retroId: ID!, columnId: ID!, columnName: String!): Boolean!
+    updatePostContent(
       retroId: ID!
       columnId: ID!
       postId: ID!
       postContent: String!
+    ): Boolean!
+    moveColumn(retroId: ID!, oldColumnId: ID!, newColumnId: ID!): Boolean!
+    movePost(
+      retroId: ID!
+      oldColumnId: ID!
+      oldPostId: ID!
+      newColumnId: ID!
+      newPostId: ID!
     ): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
   }
 
   type Subscription {
-    retroUpdated(id: ID!): Retro!
+    retroUpdated(retroId: ID!): Retro!
   }
 `
 

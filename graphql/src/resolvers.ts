@@ -2,8 +2,13 @@ import { PubSub, withFilter } from 'apollo-server'
 import {
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationMoveColumnArgs,
+  MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
+  MutationUpdateColumnNameArgs,
+  MutationUpdatePostArgs,
+  MutationUpdatePostContentArgs,
   Resolvers,
   Retro
 } from './types'
@@ -36,7 +41,7 @@ const publish = (retro: Retro): boolean => {
 // https://github.com/dotansimha/graphql-code-generator/issues/7197
 const subscribe = withFilter(
   () => pubsub.asyncIterator('retro-updated'),
-  (payload, variables) => payload.retroUpdated.id === variables.id
+  (payload, variables) => payload.retroUpdated.retroId === variables.retroId
 ) as never
 
 const getRetro = () => retro
@@ -52,7 +57,7 @@ const createColumn = (parent: unknown, args: MutationCreateColumnArgs) => {
 }
 
 const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
-  const column = retro.columns.find((column) => column.id == args.columnId)
+  const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
     return false
   }
@@ -65,14 +70,90 @@ const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
   return publish(retro)
 }
 
-const removeColumn = (parent: unknown, args: MutationRemoveColumnArgs) => {
-  const postIndex = retro.columns.findIndex(
-    (column) => column.id === args.columnId
-  )
-  if (postIndex < 0) {
+const updateColumnName = (
+  parent: unknown,
+  args: MutationUpdateColumnNameArgs
+) => {
+  const column = retro.columns.find((column) => column.id === args.columnId)
+  if (!column) {
     return false
   }
-  retro.columns.splice(postIndex, 1)
+  column.name = args.columnName
+  return publish(retro)
+}
+
+const updatePostContent = (
+  parent: unknown,
+  args: MutationUpdatePostContentArgs
+) => {
+  const column = retro.columns.find((column) => column.id === args.columnId)
+  if (!column) {
+    return false
+  }
+  const post = column.posts.find((post) => post.id === args.postId)
+  if (!post) {
+    return false
+  }
+  post.content = args.postId
+  return publish(retro)
+}
+
+const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
+  const oldColumnIndex = retro.columns.findIndex(
+    (column) => column.id === args.oldColumnId
+  )
+  if (oldColumnIndex < 0) {
+    return false
+  }
+  const oldColumn = retro.columns.splice(oldColumnIndex, 1)[0]
+  const newColumnIndex = retro.columns.findIndex(
+    (column) => column.id === args.newColumnId
+  )
+  if (newColumnIndex < 0) {
+    return false
+  }
+  retro.columns.splice(newColumnIndex, 0, oldColumn)
+  return publish(retro)
+}
+
+const movePost = (parent: unknown, args: MutationMovePostArgs) => {
+  const oldColumn = retro.columns.find(
+    (column) => column.id === args.oldColumnId
+  )
+  if (!oldColumn) {
+    return false
+  }
+  const oldPostIndex = oldColumn.posts.findIndex(
+    (post) => post.id === args.oldPostId
+  )
+  if (oldPostIndex < 0) {
+    return false
+  }
+  const oldPost = oldColumn.posts.splice(oldPostIndex, 1)[0]
+  const newColumn = retro.columns.find(
+    (column) => column.id === args.newColumnId
+  )
+  if (!newColumn) {
+    return false
+  }
+  const newPostIndex = newColumn.posts.findIndex(
+    (post) => post.id === args.newPostId
+  )
+  if (newPostIndex < 0) {
+    return false
+  }
+  newColumn.posts.splice(newPostIndex, 0, oldPost)
+  return publish(retro)
+}
+
+const removeColumn = (parent: unknown, args: MutationRemoveColumnArgs) => {
+  const columnIndex = retro.columns.findIndex(
+    (column) => column.id === args.columnId
+  )
+  if (columnIndex < 0) {
+    return false
+  }
+  retro.columns.splice(columnIndex, 1)
   return publish(retro)
 }
 
@@ -101,12 +182,10 @@ const resolvers: Resolvers = {
   Mutation: {
     createColumn,
     createPost,
-    updateColumn: (parent, args) => {
-      return publish(retro)
-    },
-    updatePost: (parent, args) => {
-      return publish(retro)
-    },
+    updateColumnName,
+    updatePostContent,
+    moveColumn,
+    movePost,
     removeColumn,
     removePost
   }

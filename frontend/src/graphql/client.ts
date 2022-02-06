@@ -8,12 +8,18 @@ import {
   CreatePostMutationVariables,
   GetRetroQuery,
   GetRetroQueryVariables,
+  MoveColumnMutation,
+  MoveColumnMutationVariables,
+  MovePostMutation,
+  MovePostMutationVariables,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationMoveColumnArgs,
+  MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
-  MutationUpdateColumnArgs,
-  MutationUpdatePostArgs,
+  MutationUpdateColumnNameArgs,
+  MutationUpdatePostContentArgs,
   QueryGetRetroArgs,
   RemoveColumnMutation,
   RemoveColumnMutationVariables,
@@ -22,10 +28,10 @@ import {
   RetroUpdatedSubscription,
   RetroUpdatedSubscriptionVariables,
   SubscriptionRetroUpdatedArgs,
-  UpdateColumnMutation,
-  UpdateColumnMutationVariables,
-  UpdatePostMutation,
-  UpdatePostMutationVariables
+  UpdateColumnNameMutation,
+  UpdateColumnNameMutationVariables,
+  UpdatePostContentMutation,
+  UpdatePostContentMutationVariables
 } from 'graphql/types'
 
 const RETRO_FRAGMENT = gql`
@@ -44,8 +50,8 @@ const RETRO_FRAGMENT = gql`
 
 const RETRO_UPDATED = gql`
   ${RETRO_FRAGMENT}
-  subscription RetroUpdated($id: ID!) {
-    retroUpdated(id: $id) {
+  subscription RetroUpdated($retroId: ID!) {
+    retroUpdated(retroId: $retroId) {
       ...RetroFragment
     }
   }
@@ -53,8 +59,8 @@ const RETRO_UPDATED = gql`
 
 const GET_RETRO = gql`
   ${RETRO_FRAGMENT}
-  query GetRetro($id: ID!) {
-    getRetro(id: $id) {
+  query GetRetro($retroId: ID!) {
+    getRetro(retroId: $retroId) {
       ...RetroFragment
     }
   }
@@ -76,9 +82,13 @@ const CREATE_POST = gql`
   }
 `
 
-const UPDATE_COLUMN = gql`
-  mutation UpdateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-    updateColumn(
+const UPDATE_COLUMN_NAME = gql`
+  mutation UpdateColumnName(
+    $retroId: ID!
+    $columnId: ID!
+    $columnName: String!
+  ) {
+    updateColumnName(
       retroId: $retroId
       columnId: $columnId
       columnName: $columnName
@@ -86,18 +96,46 @@ const UPDATE_COLUMN = gql`
   }
 `
 
-const UPDATE_POST = gql`
-  mutation UpdatePost(
+const UPDATE_POST_CONTENT = gql`
+  mutation UpdatePostContent(
     $retroId: ID!
     $columnId: ID!
     $postId: ID!
     $postContent: String!
   ) {
-    updatePost(
+    updatePostContent(
       retroId: $retroId
       columnId: $columnId
       postId: $postId
       postContent: $postContent
+    )
+  }
+`
+
+const MOVE_COLUMN = gql`
+  mutation MoveColumn($retroId: ID!, $oldColumnId: ID!, $newColumnId: ID!) {
+    moveColumn(
+      retroId: $retroId
+      oldColumnId: $oldColumnId
+      newColumnId: $newColumnId
+    )
+  }
+`
+
+const MOVE_POST = gql`
+  mutation MovePost(
+    $retroId: ID!
+    $oldColumnId: ID!
+    $oldPostId: ID!
+    $newColumnId: ID!
+    $newPostId: ID!
+  ) {
+    movePost(
+      retroId: $retroId
+      oldColumnId: $oldColumnId
+      oldPostId: $oldPostId
+      newColumnId: $newColumnId
+      newPostId: $newPostId
     )
   }
 `
@@ -142,17 +180,34 @@ export const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
     variables: createPostArgs
   })
 
-export const useUpdateColumn = (updateColumnArgs: MutationUpdateColumnArgs) =>
-  useMutation<UpdateColumnMutation, UpdateColumnMutationVariables>(
-    UPDATE_COLUMN,
+export const useUpdateColumnName = (
+  updateColumnNameArgs: MutationUpdateColumnNameArgs
+) =>
+  useMutation<UpdateColumnNameMutation, UpdateColumnNameMutationVariables>(
+    UPDATE_COLUMN_NAME,
     {
-      variables: updateColumnArgs
+      variables: updateColumnNameArgs
     }
   )
 
-export const useUpdatePost = (updatePostArgs: MutationUpdatePostArgs) =>
-  useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UPDATE_POST, {
-    variables: updatePostArgs
+export const useUpdatePostContent = (
+  updatePostContentArgs: MutationUpdatePostContentArgs
+) =>
+  useMutation<UpdatePostContentMutation, UpdatePostContentMutationVariables>(
+    UPDATE_POST_CONTENT,
+    {
+      variables: updatePostContentArgs
+    }
+  )
+
+export const useMoveColumn = (moveColumnArgs: MutationMoveColumnArgs) =>
+  useMutation<MoveColumnMutation, MoveColumnMutationVariables>(MOVE_COLUMN, {
+    variables: moveColumnArgs
+  })
+
+export const useMovePost = (movePostArgs: MutationMovePostArgs) =>
+  useMutation<MovePostMutation, MovePostMutationVariables>(MOVE_POST, {
+    variables: movePostArgs
   })
 
 export const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>
