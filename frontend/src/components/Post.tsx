@@ -21,7 +21,7 @@ export default function Post(props: PostProps): JSX.Element {
   const { id: postId, content } = post
   const { id: retroId } = useAppSelector((state) => state.retro)
 
-  const [removeComment] = useRemovePost({
+  const [removePost] = useRemovePost({
     retroId,
     columnId,
     postId
@@ -63,7 +63,7 @@ export default function Post(props: PostProps): JSX.Element {
       <Card
         content={<>{content}</>}
         buttons={
-          <IconButton onClick={() => removeComment()}>
+          <IconButton onClick={() => removePost()}>
             <MinusSmIcon />
           </IconButton>
         }

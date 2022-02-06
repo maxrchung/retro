@@ -26,12 +26,12 @@ export type Column = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createColumn: Retro;
-  createPost: Retro;
-  removeColumn: Retro;
-  removePost: Retro;
-  updateColumn: Retro;
-  updatePost: Retro;
+  createColumn: Scalars['Boolean'];
+  createPost: Scalars['Boolean'];
+  removeColumn: Scalars['Boolean'];
+  removePost: Scalars['Boolean'];
+  updateColumn: Scalars['Boolean'];
+  updatePost: Scalars['Boolean'];
 };
 
 
@@ -208,12 +208,12 @@ export type ColumnResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
-  createPost?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
-  removeColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
-  removePost?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
-  updateColumn?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationUpdateColumnArgs, 'columnId' | 'columnName' | 'retroId'>>;
-  updatePost?: Resolver<ResolversTypes['Retro'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
+  createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
+  createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
+  removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
+  removePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
+  updateColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnArgs, 'columnId' | 'columnName' | 'retroId'>>;
+  updatePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -268,7 +268,7 @@ export type CreateColumnMutationVariables = Exact<{
 }>;
 
 
-export type CreateColumnMutation = { __typename?: 'Mutation', createColumn: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type CreateColumnMutation = { __typename?: 'Mutation', createColumn: boolean };
 
 export type CreatePostMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -277,7 +277,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: boolean };
 
 export type UpdateColumnMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -286,7 +286,7 @@ export type UpdateColumnMutationVariables = Exact<{
 }>;
 
 
-export type UpdateColumnMutation = { __typename?: 'Mutation', updateColumn: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type UpdateColumnMutation = { __typename?: 'Mutation', updateColumn: boolean };
 
 export type UpdatePostMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -296,7 +296,7 @@ export type UpdatePostMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: boolean };
 
 export type RemoveColumnMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -304,7 +304,7 @@ export type RemoveColumnMutationVariables = Exact<{
 }>;
 
 
-export type RemoveColumnMutation = { __typename?: 'Mutation', removeColumn: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type RemoveColumnMutation = { __typename?: 'Mutation', removeColumn: boolean };
 
 export type RemovePostMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -313,7 +313,7 @@ export type RemovePostMutationVariables = Exact<{
 }>;
 
 
-export type RemovePostMutation = { __typename?: 'Mutation', removePost: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type RemovePostMutation = { __typename?: 'Mutation', removePost: boolean };
 
 export const RetroFragmentFragmentDoc = gql`
     fragment RetroFragment on Retro {
@@ -395,11 +395,9 @@ export type GetRetroLazyQueryHookResult = ReturnType<typeof useGetRetroLazyQuery
 export type GetRetroQueryResult = Apollo.QueryResult<GetRetroQuery, GetRetroQueryVariables>;
 export const CreateColumnDocument = gql`
     mutation CreateColumn($retroId: ID!, $columnName: String!) {
-  createColumn(retroId: $retroId, columnName: $columnName) {
-    ...RetroFragment
-  }
+  createColumn(retroId: $retroId, columnName: $columnName)
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type CreateColumnMutationFn = Apollo.MutationFunction<CreateColumnMutation, CreateColumnMutationVariables>;
 
 /**
@@ -429,11 +427,9 @@ export type CreateColumnMutationResult = Apollo.MutationResult<CreateColumnMutat
 export type CreateColumnMutationOptions = Apollo.BaseMutationOptions<CreateColumnMutation, CreateColumnMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
-  createPost(retroId: $retroId, columnId: $columnId, postContent: $postContent) {
-    ...RetroFragment
-  }
+  createPost(retroId: $retroId, columnId: $columnId, postContent: $postContent)
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
 
 /**
@@ -464,11 +460,9 @@ export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const UpdateColumnDocument = gql`
     mutation UpdateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
-  updateColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName) {
-    ...RetroFragment
-  }
+  updateColumn(retroId: $retroId, columnId: $columnId, columnName: $columnName)
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type UpdateColumnMutationFn = Apollo.MutationFunction<UpdateColumnMutation, UpdateColumnMutationVariables>;
 
 /**
@@ -504,11 +498,9 @@ export const UpdatePostDocument = gql`
     columnId: $columnId
     postId: $postId
     postContent: $postContent
-  ) {
-    ...RetroFragment
-  }
+  )
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
 
 /**
@@ -540,11 +532,9 @@ export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const RemoveColumnDocument = gql`
     mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
-  removeColumn(retroId: $retroId, columnId: $columnId) {
-    ...RetroFragment
-  }
+  removeColumn(retroId: $retroId, columnId: $columnId)
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type RemoveColumnMutationFn = Apollo.MutationFunction<RemoveColumnMutation, RemoveColumnMutationVariables>;
 
 /**
@@ -574,11 +564,9 @@ export type RemoveColumnMutationResult = Apollo.MutationResult<RemoveColumnMutat
 export type RemoveColumnMutationOptions = Apollo.BaseMutationOptions<RemoveColumnMutation, RemoveColumnMutationVariables>;
 export const RemovePostDocument = gql`
     mutation RemovePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
-  removePost(retroId: $retroId, columnId: $columnId, postId: $postId) {
-    ...RetroFragment
-  }
+  removePost(retroId: $retroId, columnId: $columnId, postId: $postId)
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 export type RemovePostMutationFn = Apollo.MutationFunction<RemovePostMutation, RemovePostMutationVariables>;
 
 /**

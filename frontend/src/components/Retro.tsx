@@ -16,7 +16,6 @@ export default function Retro(): JSX.Element {
     columnName
   })
 
-  const isEven = columns.length % 2 == 0
   return (
     <div className="container break-words text-gray-700 text-base">
       <Head>
@@ -29,7 +28,7 @@ export default function Retro(): JSX.Element {
           <Column key={column.id} column={column} index={index} />
         ))}
 
-        <div className={isEven ? 'w-80 p-5' : 'w-80 p-5 bg-gray-100'}>
+        <div className={'w-80 p-5'}>
           <Header>
             <Card
               content={

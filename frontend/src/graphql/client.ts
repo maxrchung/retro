@@ -61,42 +61,32 @@ const GET_RETRO = gql`
 `
 
 const CREATE_COLUMN = gql`
-  ${RETRO_FRAGMENT}
   mutation CreateColumn($retroId: ID!, $columnName: String!) {
-    createColumn(retroId: $retroId, columnName: $columnName) {
-      ...RetroFragment
-    }
+    createColumn(retroId: $retroId, columnName: $columnName)
   }
 `
 
 const CREATE_POST = gql`
-  ${RETRO_FRAGMENT}
   mutation CreatePost($retroId: ID!, $columnId: ID!, $postContent: String!) {
     createPost(
       retroId: $retroId
       columnId: $columnId
       postContent: $postContent
-    ) {
-      ...RetroFragment
-    }
+    )
   }
 `
 
 const UPDATE_COLUMN = gql`
-  ${RETRO_FRAGMENT}
   mutation UpdateColumn($retroId: ID!, $columnId: ID!, $columnName: String!) {
     updateColumn(
       retroId: $retroId
       columnId: $columnId
       columnName: $columnName
-    ) {
-      ...RetroFragment
-    }
+    )
   }
 `
 
 const UPDATE_POST = gql`
-  ${RETRO_FRAGMENT}
   mutation UpdatePost(
     $retroId: ID!
     $columnId: ID!
@@ -108,27 +98,19 @@ const UPDATE_POST = gql`
       columnId: $columnId
       postId: $postId
       postContent: $postContent
-    ) {
-      ...RetroFragment
-    }
+    )
   }
 `
 
 const REMOVE_COLUMN = gql`
-  ${RETRO_FRAGMENT}
   mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
-    removeColumn(retroId: $retroId, columnId: $columnId) {
-      ...RetroFragment
-    }
+    removeColumn(retroId: $retroId, columnId: $columnId)
   }
 `
 
 const REMOVE_POST = gql`
-  ${RETRO_FRAGMENT}
   mutation RemovePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
-    removePost(retroId: $retroId, columnId: $columnId, postId: $postId) {
-      ...RetroFragment
-    }
+    removePost(retroId: $retroId, columnId: $columnId, postId: $postId)
   }
 `
 

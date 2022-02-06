@@ -22,19 +22,17 @@ const schema = gql`
   }
 
   type Mutation {
-    createColumn(retroId: ID!, columnName: String!): Retro!
-    createPost(retroId: ID!, columnId: ID!, postContent: String!): Retro!
-
-    updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Retro!
+    createColumn(retroId: ID!, columnName: String!): Boolean!
+    createPost(retroId: ID!, columnId: ID!, postContent: String!): Boolean!
+    updateColumn(retroId: ID!, columnId: ID!, columnName: String!): Boolean!
     updatePost(
       retroId: ID!
       columnId: ID!
       postId: ID!
       postContent: String!
-    ): Retro!
-
-    removeColumn(retroId: ID!, columnId: ID!): Retro!
-    removePost(retroId: ID!, columnId: ID!, postId: ID!): Retro!
+    ): Boolean!
+    removeColumn(retroId: ID!, columnId: ID!): Boolean!
+    removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
   }
 
   type Subscription {
