@@ -12,17 +12,8 @@ export default function Home(): JSX.Element {
 
   const dispatch = useAppDispatch()
 
-  const {
-    loading,
-    error,
-    data: dataGet
-  } = useGetRetro({
-    id: retroId
-  })
-
-  const { data: dataUpdate } = useRetroUpdated({
-    id: retroId
-  })
+  const { loading, error, data: dataGet } = useGetRetro({ retroId })
+  const { data: dataUpdate } = useRetroUpdated({ retroId })
 
   useEffect(() => {
     if (dataGet) {

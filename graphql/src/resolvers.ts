@@ -7,7 +7,6 @@ import {
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
   MutationUpdateColumnNameArgs,
-  MutationUpdatePostArgs,
   MutationUpdatePostContentArgs,
   Resolvers,
   Retro
@@ -41,7 +40,7 @@ const publish = (retro: Retro): boolean => {
 // https://github.com/dotansimha/graphql-code-generator/issues/7197
 const subscribe = withFilter(
   () => pubsub.asyncIterator('retro-updated'),
-  (payload, variables) => payload.retroUpdated.retroId === variables.retroId
+  (payload, variables) => payload.retroUpdated.id === variables.retroId
 ) as never
 
 const getRetro = () => retro

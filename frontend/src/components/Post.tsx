@@ -37,13 +37,13 @@ export default function Post(props: PostProps): JSX.Element {
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: ItemTypes.Post,
     hover: (item, monitor) => {},
-    drop: (item, monitor) => {},
+    drop: (item, monitor) => {
+      console.log('item', item)
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver()
     })
   }))
-
-  console.log(isOver)
 
   return (
     <div
