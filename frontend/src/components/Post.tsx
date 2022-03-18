@@ -29,6 +29,7 @@ export default function Post(props: PostProps): JSX.Element {
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: ItemTypes.Post,
+    item: { postId },
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
