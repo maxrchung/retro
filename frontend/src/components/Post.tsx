@@ -3,7 +3,7 @@ import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
-import { useRemovePost } from 'graphql/client'
+import { useMovePost, useRemovePost } from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
@@ -27,9 +27,11 @@ export default function Post(props: PostProps): JSX.Element {
     postId
   })
 
+  const [movePost] = useMovePost()
+
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: ItemTypes.Post,
-    item: { postId },
+    item: { postId, columnId },
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
@@ -40,6 +42,15 @@ export default function Post(props: PostProps): JSX.Element {
     hover: (item, monitor) => {},
     drop: (item, monitor) => {
       console.log('item', item)
+      movePost({
+        variables: {
+          newColumnId: columnId,
+          newPostId: postId,
+          oldColumnId: item.columnId,
+          oldPostId: item.postId,
+          retroId
+        }
+      })
     },
     collect: (monitor) => ({
       isOver: monitor.isOver()

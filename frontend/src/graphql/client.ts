@@ -205,7 +205,7 @@ export const useMoveColumn = (moveColumnArgs: MutationMoveColumnArgs) =>
     variables: moveColumnArgs
   })
 
-export const useMovePost = (movePostArgs: MutationMovePostArgs) =>
+export const useMovePost = (movePostArgs?: MutationMovePostArgs) =>
   useMutation<MovePostMutation, MovePostMutationVariables>(MOVE_POST, {
     variables: movePostArgs
   })
