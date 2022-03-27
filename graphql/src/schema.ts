@@ -31,13 +31,13 @@ const schema = gql`
       postId: ID!
       postContent: String!
     ): Boolean!
-    moveColumn(retroId: ID!, oldColumnId: ID!, newColumnId: ID!): Boolean!
+    moveColumn(retroId: ID!, oldColumnId: ID!, newColumnIndex: Int!): Boolean!
     movePost(
       retroId: ID!
       oldColumnId: ID!
       oldPostId: ID!
       newColumnId: ID!
-      newPostId: ID!
+      newPostIndex: Int!
     ): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!

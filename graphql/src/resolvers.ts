@@ -105,13 +105,10 @@ const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
     return false
   }
   const oldColumn = retro.columns.splice(oldColumnIndex, 1)[0]
-  const newColumnIndex = retro.columns.findIndex(
-    (column) => column.id === args.newColumnId
-  )
-  if (newColumnIndex < 0) {
+  if (args.newColumnIndex < 0) {
     return false
   }
-  retro.columns.splice(newColumnIndex, 0, oldColumn)
+  retro.columns.splice(args.newColumnIndex, 0, oldColumn)
   return publish(retro)
 }
 
@@ -135,13 +132,10 @@ const movePost = (parent: unknown, args: MutationMovePostArgs) => {
   if (!newColumn) {
     return false
   }
-  const newPostIndex = newColumn.posts.findIndex(
-    (post) => post.id === args.newPostId
-  )
-  if (newPostIndex < 0) {
+  if (args.newPostIndex < 0) {
     return false
   }
-  newColumn.posts.splice(newPostIndex, 0, oldPost)
+  newColumn.posts.splice(args.newPostIndex, 0, oldPost)
   return publish(retro)
 }
 

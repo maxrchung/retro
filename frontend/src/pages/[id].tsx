@@ -2,7 +2,7 @@ import { useAppDispatch } from '../state/hooks'
 import React, { useEffect } from 'react'
 import Retro from 'components/Retro'
 import { actions } from 'state/retroSlice'
-import { useGetRetro, useRetroUpdated } from 'graphql/client'
+import { useGetRetro, useLazyGetRetro, useRetroUpdated } from 'graphql/client'
 import { useRouter } from 'next/router'
 
 export default function Home(): JSX.Element {
@@ -12,7 +12,18 @@ export default function Home(): JSX.Element {
 
   const dispatch = useAppDispatch()
 
-  const { loading, error, data: dataGet } = useGetRetro({ retroId })
+  // Because data updates reset the cache, we want to ensure we call the initial
+  // GetRetro only once
+  // https://stackoverflow.com/a/60801406/13183186
+  const [skip, setSkip] = React.useState(false)
+  const { loading, error, data: dataGet } = useGetRetro({ retroId }, skip)
+  useEffect(() => {
+    // check whether data exists
+    if (!loading && dataGet) {
+      setSkip(true)
+    }
+  }, [dataGet, loading])
+
   const { data: dataUpdate } = useRetroUpdated({ retroId })
 
   useEffect(() => {
@@ -27,16 +38,8 @@ export default function Home(): JSX.Element {
     }
   }, [dataUpdate])
 
-  if (loading) {
-    return <>Loading...</>
-  }
-
   if (error) {
     return <>{`Failed to load retro: ${error.message}`}</>
-  }
-
-  if (!dataGet) {
-    return <>Failed to load retro</>
   }
 
   return <Retro />

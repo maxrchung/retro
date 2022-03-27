@@ -1,6 +1,12 @@
 // Moving this to the frontend because otherwise backend will need a reference to react for @apollo/client
 
-import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
+import {
+  gql,
+  useLazyQuery,
+  useMutation,
+  useQuery,
+  useSubscription
+} from '@apollo/client'
 import {
   CreateColumnMutation,
   CreateColumnMutationVariables,
@@ -31,7 +37,8 @@ import {
   UpdateColumnNameMutation,
   UpdateColumnNameMutationVariables,
   UpdatePostContentMutation,
-  UpdatePostContentMutationVariables
+  UpdatePostContentMutationVariables,
+  useGetRetroQuery
 } from 'graphql/types'
 
 const RETRO_FRAGMENT = gql`
@@ -113,11 +120,11 @@ const UPDATE_POST_CONTENT = gql`
 `
 
 const MOVE_COLUMN = gql`
-  mutation MoveColumn($retroId: ID!, $oldColumnId: ID!, $newColumnId: ID!) {
+  mutation MoveColumn($retroId: ID!, $oldColumnId: ID!, $newColumnIndex: Int!) {
     moveColumn(
       retroId: $retroId
       oldColumnId: $oldColumnId
-      newColumnId: $newColumnId
+      newColumnIndex: $newColumnIndex
     )
   }
 `
@@ -128,14 +135,14 @@ const MOVE_POST = gql`
     $oldColumnId: ID!
     $oldPostId: ID!
     $newColumnId: ID!
-    $newPostId: ID!
+    $newPostIndex: Int!
   ) {
     movePost(
       retroId: $retroId
       oldColumnId: $oldColumnId
       oldPostId: $oldPostId
       newColumnId: $newColumnId
-      newPostId: $newPostId
+      newPostIndex: $newPostIndex
     )
   }
 `
@@ -162,8 +169,14 @@ export const useRetroUpdated = (
     }
   )
 
-export const useGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
+export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
   useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
+    variables: getRetroArgs,
+    skip
+  })
+
+export const useLazyGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
+  useLazyQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
     variables: getRetroArgs
   })
 

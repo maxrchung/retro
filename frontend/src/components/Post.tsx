@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
@@ -15,8 +15,15 @@ interface PostProps {
   index: number
 }
 
+interface PostDragItem {
+  columnId: string
+  postId: string
+}
+
 export default function Post(props: PostProps): JSX.Element {
-  const { column, post } = props
+  const ref = useRef<HTMLDivElement>(null)
+
+  const { column, post, index } = props
   const { id: columnId } = column
   const { id: postId, content } = post
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -29,7 +36,11 @@ export default function Post(props: PostProps): JSX.Element {
 
   const [movePost] = useMovePost()
 
-  const [{ isDragging }, dragRef] = useDrag(() => ({
+  const [{ isDragging }, dragRef] = useDrag<
+    PostDragItem,
+    void,
+    { isDragging: boolean }
+  >(() => ({
     type: ItemTypes.Post,
     item: { postId, columnId },
     collect: (monitor) => ({
@@ -37,18 +48,43 @@ export default function Post(props: PostProps): JSX.Element {
     })
   }))
 
-  const [{ isOver }, dropRef] = useDrop(() => ({
+  const [{ isOver }, dropRef] = useDrop<
+    PostDragItem,
+    void,
+    { isOver: boolean }
+  >(() => ({
     accept: ItemTypes.Post,
-    hover: (item, monitor) => {},
     drop: (item, monitor) => {
-      console.log('item', item)
+      // Don't handle drag on self
+      if (item.postId === postId) {
+        return
+      }
+
+      const current = ref.current
+      if (!current) {
+        return
+      }
+
+      // Mouse position
+      const mouseOffset = monitor.getClientOffset()
+      if (!mouseOffset) {
+        return
+      }
+
+      // Bounding rect of post
+      const currentRect = current.getBoundingClientRect()
+
+      // Middle y-value of post
+      const currentMiddle =
+        currentRect.top + (currentRect.bottom - currentRect.top) / 2
+
       movePost({
         variables: {
-          newColumnId: columnId,
-          newPostId: postId,
+          retroId,
           oldColumnId: item.columnId,
           oldPostId: item.postId,
-          retroId
+          newColumnId: columnId,
+          newPostIndex: mouseOffset.y <= currentMiddle ? index : index + 1
         }
       })
     },
@@ -57,12 +93,11 @@ export default function Post(props: PostProps): JSX.Element {
     })
   }))
 
+  dragRef(dropRef(ref))
+
   return (
     <div
-      ref={(ref) => {
-        dragRef(ref)
-        dropRef(ref)
-      }}
+      ref={ref}
       className={classNames(
         'border-2 hover:border-blue-500 cursor-grab my-2 bg-gray-100 rounded',
         {
