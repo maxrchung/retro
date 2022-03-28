@@ -52,46 +52,49 @@ export default function Post(props: PostProps): JSX.Element {
     PostDragItem,
     void,
     { isOver: boolean }
-  >(() => ({
-    accept: ItemTypes.Post,
-    drop: (item, monitor) => {
-      // Don't handle drag on self
-      if (item.postId === postId) {
-        return
-      }
-
-      const current = ref.current
-      if (!current) {
-        return
-      }
-
-      // Mouse position
-      const mouseOffset = monitor.getClientOffset()
-      if (!mouseOffset) {
-        return
-      }
-
-      // Bounding rect of post
-      const currentRect = current.getBoundingClientRect()
-
-      // Middle y-value of post
-      const currentMiddle =
-        currentRect.top + (currentRect.bottom - currentRect.top) / 2
-
-      movePost({
-        variables: {
-          retroId,
-          oldColumnId: item.columnId,
-          oldPostId: item.postId,
-          newColumnId: columnId,
-          newPostIndex: mouseOffset.y <= currentMiddle ? index : index + 1
+  >(
+    () => ({
+      accept: ItemTypes.Post,
+      drop: (item, monitor) => {
+        // Don't handle drag on self
+        if (item.postId === postId) {
+          return
         }
+
+        const current = ref.current
+        if (!current) {
+          return
+        }
+
+        // Mouse position
+        const mouseOffset = monitor.getClientOffset()
+        if (!mouseOffset) {
+          return
+        }
+
+        // Bounding rect of post
+        const currentRect = current.getBoundingClientRect()
+
+        // Middle y-value of post
+        const currentMiddle =
+          currentRect.top + (currentRect.bottom - currentRect.top) / 2
+
+        movePost({
+          variables: {
+            retroId,
+            oldColumnId: item.columnId,
+            oldPostId: item.postId,
+            newColumnId: columnId,
+            newPostIndex: mouseOffset.y <= currentMiddle ? index : index + 1
+          }
+        })
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver()
       })
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver()
-    })
-  }))
+    }),
+    [index]
+  )
 
   dragRef(dropRef(ref))
 

@@ -1,12 +1,6 @@
 // Moving this to the frontend because otherwise backend will need a reference to react for @apollo/client
 
-import {
-  gql,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-  useSubscription
-} from '@apollo/client'
+import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
   CreateColumnMutation,
   CreateColumnMutationVariables,
@@ -37,8 +31,7 @@ import {
   UpdateColumnNameMutation,
   UpdateColumnNameMutationVariables,
   UpdatePostContentMutation,
-  UpdatePostContentMutationVariables,
-  useGetRetroQuery
+  UpdatePostContentMutationVariables
 } from 'graphql/types'
 
 const RETRO_FRAGMENT = gql`
@@ -173,11 +166,6 @@ export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
   useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
     variables: getRetroArgs,
     skip
-  })
-
-export const useLazyGetRetro = (getRetroArgs: QueryGetRetroArgs) =>
-  useLazyQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
-    variables: getRetroArgs
   })
 
 export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>

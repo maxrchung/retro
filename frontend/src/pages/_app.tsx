@@ -46,14 +46,7 @@ const splitLink = process.browser
 
 const client = new ApolloClient({
   link: splitLink,
-  cache: new InMemoryCache(),
-  // Caching issues when the server sends an update
-  // https://stackoverflow.com/questions/47879016/how-to-disable-cache-in-apollo-link-or-apollo-client
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: 'cache-and-network'
-    }
-  }
+  cache: new InMemoryCache()
 })
 
 // https://nextjs.org/docs/advanced-features/custom-app
