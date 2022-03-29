@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
@@ -20,8 +20,15 @@ interface PostDragItem {
   postId: string
 }
 
+enum HoverState {
+  NONE,
+  TOP,
+  BOT
+}
+
 export default function Post(props: PostProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null)
+  const [hoverState, setHoverState] = useState<HoverState>(HoverState.NONE)
 
   const { column, post, index } = props
   const { id: columnId } = column
@@ -48,14 +55,10 @@ export default function Post(props: PostProps): JSX.Element {
     })
   }))
 
-  const [{ isOver }, dropRef] = useDrop<
-    PostDragItem,
-    void,
-    { isOver: boolean }
-  >(
+  const [, dropRef] = useDrop<PostDragItem, void, void>(
     () => ({
       accept: ItemTypes.Post,
-      drop: (item, monitor) => {
+      hover: (item, monitor) => {
         // Don't handle drag on self
         if (item.postId === postId) {
           return
@@ -79,45 +82,64 @@ export default function Post(props: PostProps): JSX.Element {
         const currentMiddle =
           currentRect.top + (currentRect.bottom - currentRect.top) / 2
 
+        setHoverState(
+          mouseOffset.y <= currentMiddle ? HoverState.TOP : HoverState.BOT
+        )
+      },
+      drop: (item) => {
         movePost({
           variables: {
             retroId,
             oldColumnId: item.columnId,
             oldPostId: item.postId,
             newColumnId: columnId,
-            newPostIndex: mouseOffset.y <= currentMiddle ? index : index + 1
+            newPostIndex: hoverState === HoverState.TOP ? index : index + 1
           }
         })
       },
-      collect: (monitor) => ({
-        isOver: monitor.isOver()
-      })
+      collect: (monitor) => {
+        if (!monitor.isOver()) {
+          setHoverState(HoverState.NONE)
+        }
+      }
     }),
-    [index]
+    [index, hoverState]
   )
 
   dragRef(dropRef(ref))
 
   return (
-    <div
-      ref={ref}
-      className={classNames(
-        'border-2 hover:border-blue-500 cursor-grab my-2 bg-gray-100 rounded',
-        {
-          'opacity-50 cursor-grabbing': isDragging,
-          'border-blue-500': isOver,
-          'border-transparent': !isOver
-        }
-      )}
-    >
-      <Card
-        content={<>{content}</>}
-        buttons={
-          <IconButton onClick={() => removePost()}>
-            <MinusSmIcon />
-          </IconButton>
-        }
+    <>
+      <hr
+        className={classNames('border-2 mt-1', {
+          'border-blue-500': hoverState === HoverState.TOP,
+          'border-transparent': hoverState !== HoverState.TOP
+        })}
       />
-    </div>
+      <div
+        ref={ref}
+        className={classNames(
+          'border-2 border-transparent hover:border-blue-500 cursor-grab bg-gray-100 rounded',
+          {
+            'opacity-50 cursor-grabbing': isDragging
+          }
+        )}
+      >
+        <Card
+          content={<>{content}</>}
+          buttons={
+            <IconButton onClick={() => removePost()}>
+              <MinusSmIcon />
+            </IconButton>
+          }
+        />
+      </div>
+      <hr
+        className={classNames('border-2 mb-1', {
+          'border-blue-500': hoverState === HoverState.BOT,
+          'border-transparent': hoverState !== HoverState.BOT
+        })}
+      />
+    </>
   )
 }
