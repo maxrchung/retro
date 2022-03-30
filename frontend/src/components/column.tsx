@@ -62,7 +62,12 @@ export default function Column(props: ColumnProps): JSX.Element {
           </div>
         }
         buttons={
-          <IconButton onClick={() => createPost()}>
+          <IconButton
+            onClick={() => {
+              createPost()
+              setPost('')
+            }}
+          >
             <PlusIcon />
           </IconButton>
         }
