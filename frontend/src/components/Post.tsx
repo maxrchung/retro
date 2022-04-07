@@ -99,7 +99,8 @@ export default function Post(props: PostProps): JSX.Element {
       },
       collect: (monitor) => {
         if (!monitor.isOver()) {
-          setHoverState(HoverState.NONE)
+          // Hack to reduce flickering as border changes from one post to the next
+          setTimeout(() => setHoverState(HoverState.NONE))
         }
       }
     }),
@@ -109,15 +110,14 @@ export default function Post(props: PostProps): JSX.Element {
   dragRef(dropRef(ref))
 
   return (
-    <>
+    <div ref={ref} className="py-1">
       <hr
-        className={classNames('border-2 mt-1', {
+        className={classNames('border-2 -translate-y-1.5', {
           'border-blue-500': hoverState === HoverState.TOP,
           'border-transparent': hoverState !== HoverState.TOP
         })}
       />
       <div
-        ref={ref}
         className={classNames(
           'border-2 border-transparent hover:border-blue-500 cursor-grab bg-gray-100 rounded',
           {
@@ -135,11 +135,11 @@ export default function Post(props: PostProps): JSX.Element {
         />
       </div>
       <hr
-        className={classNames('border-2 mb-1', {
+        className={classNames('border-2 translate-y-1.5', {
           'border-blue-500': hoverState === HoverState.BOT,
           'border-transparent': hoverState !== HoverState.BOT
         })}
       />
-    </>
+    </div>
   )
 }
