@@ -7,6 +7,7 @@ import { useAppSelector } from 'state/hooks'
 import Post from 'components/Post'
 import { useCreatePost, useRemoveColumn } from 'graphql/client'
 import * as Types from 'graphql/types'
+import Divider from './Divider'
 
 interface ColumnProps {
   column: Types.Column
@@ -19,6 +20,7 @@ export default function Column(props: ColumnProps): JSX.Element {
 
   const { id: retroId } = useAppSelector((state) => state.retro)
   const [post, setPost] = useState('')
+  const [dragHoverIndex, setDragHoverIndex] = useState(-1)
 
   const [removeColumn] = useRemoveColumn({
     retroId,
@@ -30,6 +32,8 @@ export default function Column(props: ColumnProps): JSX.Element {
     columnId,
     postContent: post
   })
+
+  console.log('dragHoverIndex', dragHoverIndex)
 
   return (
     <div className={'flex flex-col w-80 p-5'}>
@@ -45,7 +49,20 @@ export default function Column(props: ColumnProps): JSX.Element {
       </Header>
 
       {posts.map((post, index) => (
-        <Post key={post.id} column={column} post={post} index={index} />
+        <>
+          <Divider index={index} dragHoverIndex={dragHoverIndex} />
+          <Post
+            key={post.id}
+            column={column}
+            post={post}
+            index={index}
+            dragHoverIndex={dragHoverIndex}
+            setDragHoverIndex={setDragHoverIndex}
+          />
+          {index === posts.length - 1 && (
+            <Divider index={index + 1} dragHoverIndex={dragHoverIndex} />
+          )}
+        </>
       ))}
 
       <Card

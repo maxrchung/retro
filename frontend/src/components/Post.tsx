@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import { MinusSmIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
@@ -13,6 +13,8 @@ interface PostProps {
   column: Types.Column
   post: Types.Post
   index: number
+  dragHoverIndex: number
+  setDragHoverIndex: (index: number) => void
 }
 
 interface PostDragItem {
@@ -20,17 +22,15 @@ interface PostDragItem {
   postId: string
 }
 
-enum HoverState {
-  NONE,
-  TOP,
-  BOT
-}
-
-export default function Post(props: PostProps): JSX.Element {
+export default function Post({
+  column,
+  post,
+  index,
+  dragHoverIndex,
+  setDragHoverIndex
+}: PostProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null)
-  const [hoverState, setHoverState] = useState<HoverState>(HoverState.NONE)
 
-  const { column, post, index } = props
   const { id: columnId } = column
   const { id: postId, content } = post
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -82,9 +82,7 @@ export default function Post(props: PostProps): JSX.Element {
         const currentMiddle =
           currentRect.top + (currentRect.bottom - currentRect.top) / 2
 
-        setHoverState(
-          mouseOffset.y <= currentMiddle ? HoverState.TOP : HoverState.BOT
-        )
+        setDragHoverIndex(mouseOffset.y <= currentMiddle ? index : index + 1)
       },
       drop: (item) => {
         movePost({
@@ -93,53 +91,40 @@ export default function Post(props: PostProps): JSX.Element {
             oldColumnId: item.columnId,
             oldPostId: item.postId,
             newColumnId: columnId,
-            newPostIndex: hoverState === HoverState.TOP ? index : index + 1
+            newPostIndex: dragHoverIndex
           }
         })
       },
       collect: (monitor) => {
-        if (!monitor.isOver()) {
-          setHoverState(HoverState.NONE)
-        }
+        // if (!monitor.isOver()) {
+        //   setDragHoverIndex(-1)
+        // }
       }
     }),
-    [index, hoverState]
+    [index, dragHoverIndex]
   )
 
+  // ?? from looking at examples
   dragRef(dropRef(ref))
 
   return (
-    <>
-      <hr
-        className={classNames('border-2 mt-1', {
-          'border-blue-500': hoverState === HoverState.TOP,
-          'border-transparent': hoverState !== HoverState.TOP
-        })}
+    <div
+      ref={ref}
+      className={classNames(
+        'border-2 border-transparent hover:border-blue-500 cursor-grab bg-gray-100 rounded',
+        {
+          'opacity-50 cursor-grabbing': isDragging
+        }
+      )}
+    >
+      <Card
+        content={<>{content}</>}
+        buttons={
+          <IconButton onClick={() => removePost()}>
+            <MinusSmIcon />
+          </IconButton>
+        }
       />
-      <div
-        ref={ref}
-        className={classNames(
-          'border-2 border-transparent hover:border-blue-500 cursor-grab bg-gray-100 rounded',
-          {
-            'opacity-50 cursor-grabbing': isDragging
-          }
-        )}
-      >
-        <Card
-          content={<>{content}</>}
-          buttons={
-            <IconButton onClick={() => removePost()}>
-              <MinusSmIcon />
-            </IconButton>
-          }
-        />
-      </div>
-      <hr
-        className={classNames('border-2 mb-1', {
-          'border-blue-500': hoverState === HoverState.BOT,
-          'border-transparent': hoverState !== HoverState.BOT
-        })}
-      />
-    </>
+    </div>
   )
 }
