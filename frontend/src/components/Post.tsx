@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import * as Types from 'graphql/types'
-import { MinusSmIcon } from '@heroicons/react/outline'
+import { PencilIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import { useMovePost, useRemovePost } from 'graphql/client'
@@ -128,9 +128,14 @@ export default function Post(props: PostProps): JSX.Element {
         <Card
           content={<>{content}</>}
           buttons={
-            <IconButton onClick={() => removePost()}>
-              <MinusSmIcon />
-            </IconButton>
+            <>
+              <IconButton onClick={() => removePost()}>
+                <XIcon />
+              </IconButton>
+              <IconButton onClick={() => {}}>
+                <PencilIcon />
+              </IconButton>
+            </>
           }
         />
       </div>

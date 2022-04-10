@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useAppSelector } from '../state/hooks'
 import Card from 'components/Card'
 import IconButton from 'components/IconButton'
-import { PlusIcon } from '@heroicons/react/outline'
+import { PlusIcon } from '@heroicons/react/solid'
 import Header from 'components/Header'
 import { useCreateColumn } from 'graphql/client'
 

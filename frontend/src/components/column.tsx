@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { PlusIcon, XIcon } from '@heroicons/react/outline'
+import { PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import Header from 'components/Header'
@@ -37,9 +37,14 @@ export default function Column(props: ColumnProps): JSX.Element {
         <Card
           content={<>{name}</>}
           buttons={
-            <IconButton onClick={() => removeColumn()}>
-              <XIcon />
-            </IconButton>
+            <>
+              <IconButton onClick={() => removeColumn()}>
+                <XIcon />
+              </IconButton>
+              <IconButton onClick={() => {}}>
+                <PencilIcon />
+              </IconButton>
+            </>
           }
         />
       </Header>
