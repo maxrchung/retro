@@ -7,6 +7,7 @@ import { useAppSelector } from 'state/hooks'
 import Post from 'components/Post'
 import { useCreatePost, useRemoveColumn } from 'graphql/client'
 import * as Types from 'graphql/types'
+import TextareaAutosize from 'react-textarea-autosize'
 
 interface ColumnProps {
   column: Types.Column
@@ -49,19 +50,15 @@ export default function Column(props: ColumnProps): JSX.Element {
         />
       </Header>
 
-      {posts.map((post, index) => (
-        <Post key={post.id} column={column} post={post} index={index} />
-      ))}
-
       <Card
+        alwaysShowButtons
         content={
           // Ok https://stackoverflow.com/a/64556831/13183186
           <div className="flex">
-            <textarea
+            <TextareaAutosize
               className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
               onChange={(e) => setPost(e.target.value)}
-              cols={0}
-              rows={3}
+              placeholder="Post"
               value={post}
             />
           </div>
@@ -77,6 +74,10 @@ export default function Column(props: ColumnProps): JSX.Element {
           </IconButton>
         }
       />
+
+      {posts.map((post, index) => (
+        <Post key={post.id} column={column} post={post} index={index} />
+      ))}
     </div>
   )
 }

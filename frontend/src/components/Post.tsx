@@ -8,6 +8,7 @@ import { useAppSelector } from 'state/hooks'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
+import TextareaAutosize from 'react-textarea-autosize'
 
 interface PostProps {
   column: Types.Column
@@ -28,7 +29,8 @@ enum HoverState {
 
 export default function Post(props: PostProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null)
-  const [hoverState, setHoverState] = useState<HoverState>(HoverState.NONE)
+  const [hoverState, setHoverState] = useState(HoverState.NONE)
+  const [isEditing, setIsEditing] = useState(false)
 
   const { column, post, index } = props
   const { id: columnId } = column
@@ -126,13 +128,28 @@ export default function Post(props: PostProps): JSX.Element {
         )}
       >
         <Card
-          content={<>{content}</>}
+          content={
+            <>
+              {isEditing ? (
+                <div className="flex">
+                  <TextareaAutosize
+                    className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
+                    onChange={(e) => {}}
+                    placeholder="Post"
+                    value={content}
+                  />
+                </div>
+              ) : (
+                content
+              )}
+            </>
+          }
           buttons={
             <>
               <IconButton onClick={() => removePost()}>
                 <XIcon />
               </IconButton>
-              <IconButton onClick={() => {}}>
+              <IconButton onClick={() => setIsEditing(!isEditing)}>
                 <PencilIcon />
               </IconButton>
             </>
