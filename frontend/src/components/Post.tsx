@@ -3,7 +3,11 @@ import * as Types from 'graphql/types'
 import { PencilIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
-import { useMovePost, useRemovePost } from 'graphql/client'
+import {
+  useMovePost,
+  useRemovePost,
+  useUpdatePostContent
+} from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
@@ -27,12 +31,13 @@ enum HoverState {
   BOT
 }
 
-export default function Post(props: PostProps): JSX.Element {
+export default function Post({ column, post, index }: PostProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null)
   const [hoverState, setHoverState] = useState(HoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
+  const [displayContent, setDisplayContent] = useState(post.content)
+  const [editContent, setEditContent] = useState(displayContent)
 
-  const { column, post, index } = props
   const { id: columnId } = column
   const { id: postId, content } = post
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -44,18 +49,23 @@ export default function Post(props: PostProps): JSX.Element {
   })
 
   const [movePost] = useMovePost()
+  const [updatePostContent] = useUpdatePostContent()
 
   const [{ isDragging }, dragRef] = useDrag<
     PostDragItem,
     void,
     { isDragging: boolean }
-  >(() => ({
-    type: ItemTypes.Post,
-    item: { postId, columnId },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  }))
+  >(
+    () => ({
+      type: ItemTypes.Post,
+      item: { postId, columnId },
+      canDrag: !isEditing,
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging()
+      })
+    }),
+    [isEditing]
+  )
 
   const [, dropRef] = useDrop<PostDragItem, void, void>(
     () => ({
@@ -134,13 +144,36 @@ export default function Post(props: PostProps): JSX.Element {
                 <div className="flex">
                   <TextareaAutosize
                     className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-                    onChange={(e) => {}}
+                    onKeyDown={(e) => {
+                      if (
+                        e.key === 'Enter' &&
+                        !e.altKey &&
+                        !e.ctrlKey &&
+                        !e.shiftKey &&
+                        !e.metaKey
+                      ) {
+                        setIsEditing(false)
+                        setDisplayContent(editContent)
+                        updatePostContent({
+                          variables: {
+                            retroId,
+                            columnId,
+                            postId,
+                            postContent: editContent
+                          }
+                        })
+                      } else if (e.key === 'Escape') {
+                        setIsEditing(false)
+                        setEditContent(displayContent)
+                      }
+                    }}
+                    onChange={(e) => setEditContent(e.target.value)}
                     placeholder="Post"
-                    value={content}
+                    value={editContent}
                   />
                 </div>
               ) : (
-                content
+                displayContent
               )}
             </>
           }
@@ -149,7 +182,14 @@ export default function Post(props: PostProps): JSX.Element {
               <IconButton onClick={() => removePost()}>
                 <XIcon />
               </IconButton>
-              <IconButton onClick={() => setIsEditing(!isEditing)}>
+              <IconButton
+                onClick={() => {
+                  isEditing
+                    ? setDisplayContent(editContent)
+                    : setEditContent(displayContent)
+                  setIsEditing(!isEditing)
+                }}
+              >
                 <PencilIcon />
               </IconButton>
             </>

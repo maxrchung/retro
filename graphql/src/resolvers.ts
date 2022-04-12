@@ -93,7 +93,7 @@ const updatePostContent = (
   if (!post) {
     return false
   }
-  post.content = args.postId
+  post.content = args.postContent
   return publish(retro)
 }
 

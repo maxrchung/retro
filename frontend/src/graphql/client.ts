@@ -192,7 +192,7 @@ export const useUpdateColumnName = (
   )
 
 export const useUpdatePostContent = (
-  updatePostContentArgs: MutationUpdatePostContentArgs
+  updatePostContentArgs?: MutationUpdatePostContentArgs
 ) =>
   useMutation<UpdatePostContentMutation, UpdatePostContentMutationVariables>(
     UPDATE_POST_CONTENT,
