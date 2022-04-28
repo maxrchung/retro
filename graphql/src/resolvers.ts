@@ -18,11 +18,11 @@ const retro: Retro = {
   columns: [
     {
       id: 'column-id',
-      name: 'column-name',
+      name: 'Column',
       posts: [
         {
           id: 'post-id',
-          content: 'content'
+          content: 'Post'
         }
       ]
     }

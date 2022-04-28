@@ -32,6 +32,13 @@ export default function Column(props: ColumnProps): JSX.Element {
     postContent: post
   })
 
+  const submitCreatePost = () => {
+    if (post.length > 0) {
+      createPost()
+      setPost('')
+    }
+  }
+
   return (
     <div className={'flex flex-col w-80 p-5'}>
       <Header>
@@ -57,7 +64,21 @@ export default function Column(props: ColumnProps): JSX.Element {
           <div className="flex">
             <TextareaAutosize
               className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-              onChange={(e) => setPost(e.target.value)}
+              onKeyDown={(e) => {
+                if (
+                  e.key === 'Enter' &&
+                  !e.altKey &&
+                  !e.ctrlKey &&
+                  !e.shiftKey &&
+                  !e.metaKey
+                ) {
+                  submitCreatePost()
+                  e.preventDefault()
+                }
+              }}
+              onChange={(e) => {
+                setPost(e.target.value)
+              }}
               placeholder="Post"
               value={post}
             />
@@ -66,8 +87,7 @@ export default function Column(props: ColumnProps): JSX.Element {
         buttons={
           <IconButton
             onClick={() => {
-              createPost()
-              setPost('')
+              submitCreatePost()
             }}
           >
             <PlusIcon />

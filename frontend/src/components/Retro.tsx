@@ -16,6 +16,13 @@ export default function Retro(): JSX.Element {
     columnName
   })
 
+  const submitCreateColumn = () => {
+    if (columnName.length > 0) {
+      createColumn()
+      setColumnName('')
+    }
+  }
+
   return (
     <div className="container break-words text-gray-700 text-base">
       <Head>
@@ -35,13 +42,25 @@ export default function Retro(): JSX.Element {
               content={
                 <input
                   className="p-2 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === 'Enter' &&
+                      !e.altKey &&
+                      !e.ctrlKey &&
+                      !e.shiftKey &&
+                      !e.metaKey
+                    ) {
+                      submitCreateColumn()
+                      e.preventDefault()
+                    }
+                  }}
                   onChange={(e) => setColumnName(e.target.value)}
                   value={columnName}
                   placeholder="Column"
                 />
               }
               buttons={
-                <IconButton onClick={() => createColumn()}>
+                <IconButton onClick={() => submitCreateColumn()}>
                   <PlusIcon />
                 </IconButton>
               }
