@@ -17,8 +17,8 @@ export default function Card({
   return (
     <div
       className={'p-2 min-w-0 flex justify-between items-center'}
-      onMouseEnter={() => !alwaysShowButtons && setShowButtons(true)}
-      onMouseLeave={() => !alwaysShowButtons && setShowButtons(false)}
+      onMouseOver={() => !alwaysShowButtons && setShowButtons(true)}
+      onMouseOut={() => !alwaysShowButtons && setShowButtons(false)}
     >
       {/* wat https://stackoverflow.com/a/40612184/13183186 */}
       <div className="p-1 min-w-0 flex-1">{content}</div>
