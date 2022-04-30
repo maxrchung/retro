@@ -48,6 +48,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
     postId
   })
 
+  const confirmRemovePost = () => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      removePost()
+    }
+  }
+
   const [movePost] = useMovePost()
   const [updatePostContent] = useUpdatePostContent()
 
@@ -179,7 +185,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           }
           buttons={
             <>
-              <IconButton onClick={() => removePost()}>
+              <IconButton onClick={() => confirmRemovePost()}>
                 <XIcon />
               </IconButton>
               <IconButton

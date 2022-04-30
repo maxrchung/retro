@@ -26,6 +26,12 @@ export default function Column(props: ColumnProps): JSX.Element {
     columnId
   })
 
+  const confirmRemoveColumn = () => {
+    if (confirm('Are you sure you want to delete this column?')) {
+      removeColumn()
+    }
+  }
+
   const [createPost] = useCreatePost({
     retroId,
     columnId,
@@ -46,7 +52,7 @@ export default function Column(props: ColumnProps): JSX.Element {
           content={<>{name}</>}
           buttons={
             <>
-              <IconButton onClick={() => removeColumn()}>
+              <IconButton onClick={() => confirmRemoveColumn()}>
                 <XIcon />
               </IconButton>
               <IconButton onClick={() => {}}>
