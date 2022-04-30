@@ -174,7 +174,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                       }
                     }}
                     onChange={(e) => setEditContent(e.target.value)}
-                    placeholder="Post"
                     value={editContent}
                   />
                 </div>

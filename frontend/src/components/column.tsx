@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import { PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
+import { CheckIcon, PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import Header from 'components/Header'
 import { useAppSelector } from 'state/hooks'
 import Post from 'components/Post'
-import { useCreatePost, useRemoveColumn } from 'graphql/client'
+import {
+  useCreatePost,
+  useRemoveColumn,
+  useUpdateColumnName
+} from 'graphql/client'
 import * as Types from 'graphql/types'
 import TextareaAutosize from 'react-textarea-autosize'
 
@@ -14,16 +18,24 @@ interface ColumnProps {
   index: number
 }
 
-export default function Column(props: ColumnProps): JSX.Element {
-  const { column } = props
-  const { id: columnId, name, posts } = column
+export default function Column({ column }: ColumnProps): JSX.Element {
+  const [displayName, setDisplayName] = useState(column.name)
+  const [editName, setEditName] = useState(displayName)
+  const { id: columnId, posts } = column
 
   const { id: retroId } = useAppSelector((state) => state.retro)
   const [post, setPost] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
 
   const [removeColumn] = useRemoveColumn({
     retroId,
     columnId
+  })
+
+  const [updateColumnName] = useUpdateColumnName({
+    retroId,
+    columnId,
+    columnName: editName
   })
 
   const confirmRemoveColumn = () => {
@@ -49,14 +61,57 @@ export default function Column(props: ColumnProps): JSX.Element {
     <div className={'flex flex-col w-80 p-5'}>
       <Header>
         <Card
-          content={<>{name}</>}
+          content={
+            <>
+              {isEditing ? (
+                <div className="flex">
+                  <input
+                    className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                    onKeyDown={(e) => {
+                      if (
+                        e.key === 'Enter' &&
+                        !e.altKey &&
+                        !e.ctrlKey &&
+                        !e.shiftKey &&
+                        !e.metaKey
+                      ) {
+                        setIsEditing(false)
+                        setDisplayName(editName)
+                        updateColumnName({
+                          variables: {
+                            retroId,
+                            columnId,
+                            columnName: editName
+                          }
+                        })
+                      } else if (e.key === 'Escape') {
+                        setIsEditing(false)
+                        setEditName(displayName)
+                      }
+                    }}
+                    onChange={(e) => setEditName(e.target.value)}
+                    value={editName}
+                  />
+                </div>
+              ) : (
+                displayName
+              )}
+            </>
+          }
           buttons={
             <>
               <IconButton onClick={() => confirmRemoveColumn()}>
                 <XIcon />
               </IconButton>
-              <IconButton onClick={() => {}}>
-                <PencilIcon />
+              <IconButton
+                onClick={() => {
+                  isEditing
+                    ? setDisplayName(editName)
+                    : setEditName(displayName)
+                  setIsEditing(!isEditing)
+                }}
+              >
+                {isEditing ? <CheckIcon /> : <PencilIcon />}
               </IconButton>
             </>
           }
