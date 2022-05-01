@@ -66,6 +66,7 @@ export default function Column({ column }: ColumnProps): JSX.Element {
               {isEditing ? (
                 <div className="flex">
                   <input
+                    autoFocus
                     className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
                     onKeyDown={(e) => {
                       if (
