@@ -150,6 +150,10 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                 <div className="flex">
                   <TextareaAutosize
                     autoFocus
+                    onFocus={(e) =>
+                      // ? https://stackoverflow.com/questions/10158190/how-to-set-cursor-at-the-end-in-a-textarea
+                      (e.target.selectionStart = e.target.value.length)
+                    }
                     className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
                     onKeyDown={(e) => {
                       if (
