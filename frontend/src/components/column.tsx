@@ -17,6 +17,7 @@ import * as Types from 'graphql/types'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
+import classNames from 'classnames'
 
 interface ColumnProps {
   column: Types.Column
@@ -118,11 +119,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         const currentMiddle =
           currentRect.left + (currentRect.right - currentRect.left) / 2
 
-        console.log()
-        console.log('mouseOffset', mouseOffset)
-        console.log('currentRect', currentRect)
-        console.log('currentMiddle', currentMiddle)
-
         setHoverState(
           mouseOffset.x <= currentMiddle ? HoverState.LEFT : HoverState.RIGHT
         )
@@ -137,7 +133,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           variables: {
             retroId,
             oldColumnId: item.columnId,
-            newColumnIndex: hoverState === HoverState.LEFT ? index - 1 : index
+            newColumnIndex: hoverState === HoverState.LEFT ? index : index + 1
           }
         })
       },
@@ -154,109 +150,129 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   dragRef(dropRef(ref))
 
   return (
-    <div ref={ref} className={'flex flex-col w-80 p-5'}>
-      <Header>
-        <Card
-          content={
-            <>
-              {isEditing ? (
-                <div className="flex">
-                  <input
-                    autoFocus
-                    className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
-                    onKeyDown={(e) => {
-                      if (
-                        e.key === 'Enter' &&
-                        !e.altKey &&
-                        !e.ctrlKey &&
-                        !e.shiftKey &&
-                        !e.metaKey
-                      ) {
-                        setIsEditing(false)
-                        updateColumnName({
-                          variables: {
-                            retroId,
-                            columnId,
-                            columnName: editName
-                          }
-                        })
-                      } else if (e.key === 'Escape') {
-                        setIsEditing(false)
-                        setEditName(name)
-                      }
-                    }}
-                    onChange={(e) => setEditName(e.target.value)}
-                    value={editName}
-                  />
-                </div>
-              ) : (
-                <span
-                  className="cursor-text"
-                  onClick={() => setIsEditing(true)}
+    <div ref={ref} className="flex">
+      <hr
+        className={classNames('border-2 -translate-x-1.5 h-full', {
+          'border-blue-500': hoverState === HoverState.LEFT,
+          'border-transparent': hoverState !== HoverState.LEFT
+        })}
+      />
+
+      <div
+        className={classNames('flex flex-col w-80 p-5 cursor-grab', {
+          'opacity-50 cursor-grabbing': isDragging
+        })}
+      >
+        <Header>
+          <Card
+            content={
+              <>
+                {isEditing ? (
+                  <div className="flex">
+                    <input
+                      autoFocus
+                      className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === 'Enter' &&
+                          !e.altKey &&
+                          !e.ctrlKey &&
+                          !e.shiftKey &&
+                          !e.metaKey
+                        ) {
+                          setIsEditing(false)
+                          updateColumnName({
+                            variables: {
+                              retroId,
+                              columnId,
+                              columnName: editName
+                            }
+                          })
+                        } else if (e.key === 'Escape') {
+                          setIsEditing(false)
+                          setEditName(name)
+                        }
+                      }}
+                      onChange={(e) => setEditName(e.target.value)}
+                      value={editName}
+                    />
+                  </div>
+                ) : (
+                  <span
+                    className="cursor-text"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    {name}
+                  </span>
+                )}
+              </>
+            }
+            buttons={
+              <>
+                <IconButton onClick={() => confirmRemoveColumn()}>
+                  <XIcon />
+                </IconButton>
+                <IconButton
+                  onClick={() => {
+                    !isEditing && setEditName(name)
+                    setIsEditing(!isEditing)
+                  }}
                 >
-                  {name}
-                </span>
-              )}
-            </>
+                  {isEditing ? <CheckIcon /> : <PencilIcon />}
+                </IconButton>
+              </>
+            }
+          />
+        </Header>
+
+        {posts.map((post, index) => (
+          <Post key={post.id} column={column} post={post} index={index} />
+        ))}
+
+        <Card
+          alwaysShowButtons
+          content={
+            // Ok https://stackoverflow.com/a/64556831/13183186
+            <div className="flex">
+              <TextareaAutosize
+                className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
+                onKeyDown={(e) => {
+                  if (
+                    e.key === 'Enter' &&
+                    !e.altKey &&
+                    !e.ctrlKey &&
+                    !e.shiftKey &&
+                    !e.metaKey
+                  ) {
+                    submitCreatePost()
+                    e.preventDefault()
+                  }
+                }}
+                onChange={(e) => {
+                  setPost(e.target.value)
+                }}
+                placeholder="Post"
+                value={post}
+              />
+            </div>
           }
           buttons={
-            <>
-              <IconButton onClick={() => confirmRemoveColumn()}>
-                <XIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  !isEditing && setEditName(name)
-                  setIsEditing(!isEditing)
-                }}
-              >
-                {isEditing ? <CheckIcon /> : <PencilIcon />}
-              </IconButton>
-            </>
+            <IconButton
+              onClick={() => {
+                submitCreatePost()
+              }}
+            >
+              <PlusIcon />
+            </IconButton>
           }
         />
-      </Header>
+      </div>
 
-      {posts.map((post, index) => (
-        <Post key={post.id} column={column} post={post} index={index} />
-      ))}
-
-      <Card
-        alwaysShowButtons
-        content={
-          // Ok https://stackoverflow.com/a/64556831/13183186
-          <div className="flex">
-            <TextareaAutosize
-              className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-              onKeyDown={(e) => {
-                if (
-                  e.key === 'Enter' &&
-                  !e.altKey &&
-                  !e.ctrlKey &&
-                  !e.shiftKey &&
-                  !e.metaKey
-                ) {
-                  submitCreatePost()
-                  e.preventDefault()
-                }
-              }}
-              onChange={(e) => {
-                setPost(e.target.value)
-              }}
-              placeholder="Post"
-              value={post}
-            />
-          </div>
-        }
-        buttons={
-          <IconButton
-            onClick={() => {
-              submitCreatePost()
-            }}
-          >
-            <PlusIcon />
-          </IconButton>
-        }
+      <hr
+        className={classNames('border-2 translate-x-1.5 h-full', {
+          'border-blue-500': hoverState === HoverState.RIGHT,
+          'border-transparent': hoverState !== HoverState.RIGHT
+        })}
       />
     </div>
   )
