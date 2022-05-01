@@ -104,13 +104,17 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
         )
       },
       drop: (item) => {
+        if (hoverState === HoverState.NONE) {
+          return
+        }
+
         movePost({
           variables: {
             retroId,
             oldColumnId: item.columnId,
             oldPostId: item.postId,
             newColumnId: columnId,
-            newPostIndex: hoverState === HoverState.TOP ? index : index + 1
+            newPostIndex: hoverState === HoverState.TOP ? index - 1 : index
           }
         })
       },
