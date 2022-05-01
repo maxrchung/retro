@@ -19,11 +19,10 @@ interface ColumnProps {
 }
 
 export default function Column({ column }: ColumnProps): JSX.Element {
-  const [displayName, setDisplayName] = useState(column.name)
-  const [editName, setEditName] = useState(displayName)
-  const { id: columnId, posts } = column
-
+  const { id: columnId, posts, name } = column
   const { id: retroId } = useAppSelector((state) => state.retro)
+
+  const [editName, setEditName] = useState(name)
   const [post, setPost] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
@@ -77,7 +76,6 @@ export default function Column({ column }: ColumnProps): JSX.Element {
                         !e.metaKey
                       ) {
                         setIsEditing(false)
-                        setDisplayName(editName)
                         updateColumnName({
                           variables: {
                             retroId,
@@ -87,7 +85,7 @@ export default function Column({ column }: ColumnProps): JSX.Element {
                         })
                       } else if (e.key === 'Escape') {
                         setIsEditing(false)
-                        setEditName(displayName)
+                        setEditName(name)
                       }
                     }}
                     onChange={(e) => setEditName(e.target.value)}
@@ -99,7 +97,7 @@ export default function Column({ column }: ColumnProps): JSX.Element {
                   className="cursor-text"
                   onClick={() => setIsEditing(true)}
                 >
-                  {displayName}
+                  {name}
                 </span>
               )}
             </>
@@ -111,9 +109,7 @@ export default function Column({ column }: ColumnProps): JSX.Element {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  isEditing
-                    ? setDisplayName(editName)
-                    : setEditName(displayName)
+                  !isEditing && setEditName(name)
                   setIsEditing(!isEditing)
                 }}
               >

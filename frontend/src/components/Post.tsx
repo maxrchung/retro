@@ -32,15 +32,14 @@ enum HoverState {
 }
 
 export default function Post({ column, post, index }: PostProps): JSX.Element {
+  const { id: columnId } = column
+  const { id: postId, content } = post
+  const { id: retroId } = useAppSelector((state) => state.retro)
+
   const ref = useRef<HTMLDivElement>(null)
   const [hoverState, setHoverState] = useState(HoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
-  const [displayContent, setDisplayContent] = useState(post.content)
-  const [editContent, setEditContent] = useState(displayContent)
-
-  const { id: columnId } = column
-  const { id: postId } = post
-  const { id: retroId } = useAppSelector((state) => state.retro)
+  const [editContent, setEditContent] = useState(content)
 
   const [removePost] = useRemovePost({
     retroId,
@@ -164,7 +163,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                         !e.metaKey
                       ) {
                         setIsEditing(false)
-                        setDisplayContent(editContent)
                         updatePostContent({
                           variables: {
                             retroId,
@@ -175,7 +173,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                         })
                       } else if (e.key === 'Escape') {
                         setIsEditing(false)
-                        setEditContent(displayContent)
+                        setEditContent(content)
                       }
                     }}
                     onChange={(e) => setEditContent(e.target.value)}
@@ -187,7 +185,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   className="cursor-text"
                   onClick={() => setIsEditing(true)}
                 >
-                  {displayContent}
+                  {content}
                 </span>
               )}
             </>
@@ -199,9 +197,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  isEditing
-                    ? setDisplayContent(editContent)
-                    : setEditContent(displayContent)
+                  !isEditing && setEditContent(content)
                   setIsEditing(!isEditing)
                 }}
               >
