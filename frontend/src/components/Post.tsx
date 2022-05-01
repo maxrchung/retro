@@ -114,7 +114,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
             oldColumnId: item.columnId,
             oldPostId: item.postId,
             newColumnId: columnId,
-            newPostIndex: hoverState === HoverState.TOP ? index - 1 : index
+            newPostIndex: hoverState === HoverState.TOP ? index : index + 1
           }
         })
       },
