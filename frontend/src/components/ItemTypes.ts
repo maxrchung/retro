@@ -1,5 +1,6 @@
 enum ItemTypes {
-  Post = 'Post'
+  Post = 'Post',
+  Column = 'Column'
 }
 
 export { ItemTypes }
