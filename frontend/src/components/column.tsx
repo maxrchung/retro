@@ -94,7 +94,12 @@ export default function Column({ column }: ColumnProps): JSX.Element {
                   />
                 </div>
               ) : (
-                displayName
+                <span
+                  className="cursor-text"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {displayName}
+                </span>
               )}
             </>
           }

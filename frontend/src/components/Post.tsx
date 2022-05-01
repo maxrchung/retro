@@ -178,7 +178,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   />
                 </div>
               ) : (
-                displayContent
+                <span
+                  className="cursor-text"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {displayContent}
+                </span>
               )}
             </>
           }
