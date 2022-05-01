@@ -124,6 +124,10 @@ export default function Column({ column }: ColumnProps): JSX.Element {
         />
       </Header>
 
+      {posts.map((post, index) => (
+        <Post key={post.id} column={column} post={post} index={index} />
+      ))}
+
       <Card
         alwaysShowButtons
         content={
@@ -161,10 +165,6 @@ export default function Column({ column }: ColumnProps): JSX.Element {
           </IconButton>
         }
       />
-
-      {posts.map((post, index) => (
-        <Post key={post.id} column={column} post={post} index={index} />
-      ))}
     </div>
   )
 }
