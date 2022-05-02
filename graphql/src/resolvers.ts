@@ -1,5 +1,6 @@
 import { PubSub, withFilter } from 'apollo-server'
 import {
+  ColumnMoveDirection,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationMoveColumnArgs,
@@ -105,10 +106,14 @@ const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
     return false
   }
   const oldColumn = retro.columns.splice(oldColumnIndex, 1)[0]
-  if (args.newColumnIndex < 0) {
-    return false
-  }
-  retro.columns.splice(args.newColumnIndex, 0, oldColumn)
+  const targetColumnIndex = retro.columns.findIndex(
+    (column) => column.id === args.targetColumnId
+  )
+  retro.columns.splice(
+    targetColumnIndex + ColumnMoveDirection.Left ? 0 : 1,
+    0,
+    oldColumn
+  )
   return publish(retro)
 }
 
@@ -126,16 +131,17 @@ const movePost = (parent: unknown, args: MutationMovePostArgs) => {
     return false
   }
   const oldPost = oldColumn.posts.splice(oldPostIndex, 1)[0]
-  const newColumn = retro.columns.find(
-    (column) => column.id === args.newColumnId
+
+  const targetColumn = retro.columns.find(
+    (column) => column.id === args.targetColumnId
   )
-  if (!newColumn) {
+  if (!targetColumn) {
     return false
   }
-  if (args.newPostIndex < 0) {
-    return false
-  }
-  newColumn.posts.splice(args.newPostIndex, 0, oldPost)
+  const targetPostIndex = targetColumn.posts.findIndex(
+    (post) => post.id === args.targetPostId
+  )
+  targetColumn.posts.splice(targetPostIndex, 0, oldPost)
   return publish(retro)
 }
 

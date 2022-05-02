@@ -133,7 +133,11 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           variables: {
             retroId,
             oldColumnId: item.columnId,
-            newColumnIndex: hoverState === HoverState.LEFT ? index : index + 1
+            targetColumnId: columnId,
+            columnMoveDirection:
+              hoverState === HoverState.LEFT
+                ? Types.ColumnMoveDirection.Left
+                : Types.ColumnMoveDirection.Right
           }
         })
       },
@@ -152,7 +156,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   return (
     <div ref={ref} className="flex">
       <hr
-        className={classNames('border-2 -translate-x-1.5 h-full', {
+        className={classNames('border-2 -translate-x-0.5 h-full', {
           'border-blue-500': hoverState === HoverState.LEFT,
           'border-transparent': hoverState !== HoverState.LEFT
         })}
@@ -269,7 +273,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       </div>
 
       <hr
-        className={classNames('border-2 translate-x-1.5 h-full', {
+        className={classNames('border-2 translate-x-0.5 h-full', {
           'border-blue-500': hoverState === HoverState.RIGHT,
           'border-transparent': hoverState !== HoverState.RIGHT
         })}

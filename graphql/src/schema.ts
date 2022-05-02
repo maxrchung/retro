@@ -1,6 +1,16 @@
 import { gql } from 'apollo-server'
 
 const schema = gql`
+  enum ColumnMoveDirection {
+    LEFT
+    RIGHT
+  }
+
+  enum PostMoveDirection {
+    TOP
+    BOTTOM
+  }
+
   type Retro {
     id: ID!
     columns: [Column!]!
@@ -31,13 +41,19 @@ const schema = gql`
       postId: ID!
       postContent: String!
     ): Boolean!
-    moveColumn(retroId: ID!, oldColumnId: ID!, newColumnIndex: Int!): Boolean!
+    moveColumn(
+      retroId: ID!
+      oldColumnId: ID!
+      targetColumnId: ID!
+      columnMoveDirection: ColumnMoveDirection!
+    ): Boolean!
     movePost(
       retroId: ID!
       oldColumnId: ID!
       oldPostId: ID!
-      newColumnId: ID!
-      newPostIndex: Int!
+      targetColumnId: ID!
+      targetPostId: ID!
+      postMoveDirection: PostMoveDirection!
     ): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!

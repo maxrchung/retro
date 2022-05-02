@@ -113,11 +113,17 @@ const UPDATE_POST_CONTENT = gql`
 `
 
 const MOVE_COLUMN = gql`
-  mutation MoveColumn($retroId: ID!, $oldColumnId: ID!, $newColumnIndex: Int!) {
+  mutation MoveColumn(
+    $retroId: ID!
+    $oldColumnId: ID!
+    $targetColumnId: ID!
+    $columnMoveDirection: ColumnMoveDirection!
+  ) {
     moveColumn(
       retroId: $retroId
       oldColumnId: $oldColumnId
-      newColumnIndex: $newColumnIndex
+      targetColumnId: $targetColumnId
+      columnMoveDirection: $columnMoveDirection
     )
   }
 `
@@ -127,15 +133,17 @@ const MOVE_POST = gql`
     $retroId: ID!
     $oldColumnId: ID!
     $oldPostId: ID!
-    $newColumnId: ID!
-    $newPostIndex: Int!
+    $targetColumnId: ID!
+    $targetPostId: ID!
+    $postMoveDirection: PostMoveDirection!
   ) {
     movePost(
       retroId: $retroId
       oldColumnId: $oldColumnId
       oldPostId: $oldPostId
-      newColumnId: $newColumnId
-      newPostIndex: $newPostIndex
+      targetColumnId: $targetColumnId
+      targetPostId: $targetPostId
+      postMoveDirection: $postMoveDirection
     )
   }
 `

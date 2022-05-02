@@ -28,7 +28,7 @@ interface PostDragItem {
 enum HoverState {
   NONE,
   TOP,
-  BOT
+  BOTTOM
 }
 
 export default function Post({ column, post, index }: PostProps): JSX.Element {
@@ -100,7 +100,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           currentRect.top + (currentRect.bottom - currentRect.top) / 2
 
         setHoverState(
-          mouseOffset.y <= currentMiddle ? HoverState.TOP : HoverState.BOT
+          mouseOffset.y <= currentMiddle ? HoverState.TOP : HoverState.BOTTOM
         )
       },
       drop: (item) => {
@@ -113,8 +113,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
             retroId,
             oldColumnId: item.columnId,
             oldPostId: item.postId,
-            newColumnId: columnId,
-            newPostIndex: hoverState === HoverState.TOP ? index : index + 1
+            targetColumnId: columnId,
+            targetPostId: postId,
+            postMoveDirection:
+              hoverState === HoverState.TOP
+                ? Types.PostMoveDirection.Top
+                : Types.PostMoveDirection.Bottom
           }
         })
       },
@@ -213,8 +217,8 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       </div>
       <hr
         className={classNames('border-2 translate-y-1.5', {
-          'border-blue-500': hoverState === HoverState.BOT,
-          'border-transparent': hoverState !== HoverState.BOT
+          'border-blue-500': hoverState === HoverState.BOTTOM,
+          'border-transparent': hoverState !== HoverState.BOTTOM
         })}
       />
     </div>
