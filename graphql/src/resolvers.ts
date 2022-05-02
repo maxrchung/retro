@@ -9,6 +9,7 @@ import {
   MutationRemovePostArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
+  PostMoveDirection,
   Resolvers,
   Retro
 } from './types'
@@ -106,11 +107,13 @@ const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
     return false
   }
   const oldColumn = retro.columns.splice(oldColumnIndex, 1)[0]
+
   const targetColumnIndex = retro.columns.findIndex(
     (column) => column.id === args.targetColumnId
   )
   retro.columns.splice(
-    targetColumnIndex + ColumnMoveDirection.Left ? 0 : 1,
+    targetColumnIndex +
+      (args.columnMoveDirection === ColumnMoveDirection.Left ? 0 : 1),
     0,
     oldColumn
   )
@@ -141,7 +144,12 @@ const movePost = (parent: unknown, args: MutationMovePostArgs) => {
   const targetPostIndex = targetColumn.posts.findIndex(
     (post) => post.id === args.targetPostId
   )
-  targetColumn.posts.splice(targetPostIndex, 0, oldPost)
+  targetColumn.posts.splice(
+    targetPostIndex +
+      (args.postMoveDirection === PostMoveDirection.Top ? 0 : 1),
+    0,
+    oldPost
+  )
   return publish(retro)
 }
 

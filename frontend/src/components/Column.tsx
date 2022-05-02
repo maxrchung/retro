@@ -128,7 +128,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           return
         }
 
-        console.log(hoverState)
         moveColumn({
           variables: {
             retroId,
