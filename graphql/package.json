@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.5.7",
+    "@apollo/client": "^3",
     "@graphql-codegen/cli": "^2.3.1",
     "@graphql-codegen/typescript": "^2.4.2",
     "@graphql-codegen/typescript-operations": "^2.2.2",
@@ -30,6 +30,7 @@
     "graphql": "^15.5.1",
     "nodemon": "^2.0.9",
     "prettier": "^2.4.1",
+    "react": "17.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.5",
     "uid": "^2.0.0"
