@@ -6,10 +6,11 @@ import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import Header from 'components/Header'
 import { useAppSelector } from 'state/hooks'
-import Post from 'components/Post'
+import Post, { PostDragItem } from 'components/Post'
 import {
   useCreatePost,
   useMoveColumn,
+  useMovePost,
   useRemoveColumn,
   useUpdateColumnName
 } from 'graphql/client'
@@ -43,6 +44,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [post, setPost] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [hoverState, setHoverState] = useState(HoverState.NONE)
+  const [isHovering, setIsHovering] = useState(false)
 
   const [removeColumn] = useRemoveColumn({
     retroId,
@@ -56,6 +58,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   })
 
   const [moveColumn] = useMoveColumn()
+  const [movePost] = useMovePost()
 
   const confirmRemoveColumn = () => {
     if (confirm('Are you sure you want to delete this column?')) {
@@ -92,7 +95,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     [isEditing]
   )
 
-  const [, dropRef] = useDrop<ColumnDragItem, void, void>(
+  const [, dropColumnRef] = useDrop<ColumnDragItem, void, void>(
     () => ({
       accept: ItemTypes.Column,
       hover: (item, monitor) => {
@@ -150,7 +153,49 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     [index, hoverState]
   )
 
-  dragRef(dropRef(ref))
+  const [, dropPostRef] = useDrop<PostDragItem, void, void>(
+    () => ({
+      accept: ItemTypes.Post,
+      hover: (item) => {
+        // Don't handle drag on self
+        if (item.columnId === columnId) {
+          return
+        }
+
+        const current = ref.current
+        if (!current) {
+          return
+        }
+
+        setIsHovering(true)
+      },
+      drop: (item) => {
+        if (isHovering) {
+          return
+        }
+
+        movePost({
+          variables: {
+            retroId,
+            oldColumnId: item.columnId,
+            oldPostId: item.postId,
+            targetColumnId: columnId,
+            targetPostId: '',
+            postMoveDirection: Types.PostMoveDirection.Top
+          }
+        })
+      },
+      collect: (monitor) => {
+        if (!monitor.isOver()) {
+          // Hack to reduce flickering as border changes from one post to the next
+          setTimeout(() => setIsHovering(false))
+        }
+      }
+    }),
+    [index, hoverState]
+  )
+
+  dragRef(dropPostRef(dropColumnRef(ref)))
 
   return (
     <div ref={ref} className="flex">
@@ -227,6 +272,13 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             }
           />
         </Header>
+
+        <hr
+          className={classNames('border-2 translate-y-0.5', {
+            'border-blue-500': isHovering && posts.length === 0,
+            'border-transparent': !isHovering || posts.length > 0
+          })}
+        />
 
         {posts.map((post, index) => (
           <Post key={post.id} column={column} post={post} index={index} />

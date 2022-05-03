@@ -20,7 +20,7 @@ interface PostProps {
   index: number
 }
 
-interface PostDragItem {
+export interface PostDragItem {
   columnId: string
   postId: string
 }
