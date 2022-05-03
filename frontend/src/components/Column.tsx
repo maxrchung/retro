@@ -128,9 +128,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [, dropPostRef] = useDrop<PostDragItem, void, void>(
     () => ({
       accept: ItemTypes.Post,
-      hover: (item, monitor) => {
-        setPostHoverState(getPostHoverState(monitor, ref))
-      },
+      hover: (item, monitor) =>
+        setPostHoverState(getPostHoverState(monitor, ref)),
       drop: (item, monitor) => {
         const postHoverState = getPostHoverState(monitor, ref)
         if (postHoverState === PostHoverState.NONE) {
