@@ -13,6 +13,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
 import TextareaAutosize from 'react-textarea-autosize'
+import { getPostHoverState, isKeyEnterOnly, PostHoverState } from './utils'
 
 interface PostProps {
   column: Types.Column
@@ -25,19 +26,13 @@ export interface PostDragItem {
   postId: string
 }
 
-enum HoverState {
-  NONE,
-  TOP,
-  BOTTOM
-}
-
 export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: columnId } = column
   const { id: postId, content } = post
   const { id: retroId } = useAppSelector((state) => state.retro)
 
   const ref = useRef<HTMLDivElement>(null)
-  const [hoverState, setHoverState] = useState(HoverState.NONE)
+  const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
 
@@ -75,36 +70,10 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const [, dropRef] = useDrop<PostDragItem, void, void>(
     () => ({
       accept: ItemTypes.Post,
-      hover: (item, monitor) => {
-        // Don't handle drag on self
-        if (item.postId === postId) {
-          return
-        }
-
-        const current = ref.current
-        if (!current) {
-          return
-        }
-
-        // Mouse position
-        const mouseOffset = monitor.getClientOffset()
-        if (!mouseOffset) {
-          return
-        }
-
-        // Bounding rect of post
-        const currentRect = current.getBoundingClientRect()
-
-        // Middle y-value of post
-        const currentMiddle =
-          currentRect.top + (currentRect.bottom - currentRect.top) / 2
-
-        setHoverState(
-          mouseOffset.y <= currentMiddle ? HoverState.TOP : HoverState.BOTTOM
-        )
-      },
+      hover: (item, monitor) =>
+        setPostHoverState(getPostHoverState(monitor, ref)),
       drop: (item) => {
-        if (hoverState === HoverState.NONE) {
+        if (postHoverState === PostHoverState.NONE) {
           return
         }
 
@@ -116,7 +85,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
             targetColumnId: columnId,
             targetPostId: postId,
             postMoveDirection:
-              hoverState === HoverState.TOP
+              postHoverState === PostHoverState.TOP
                 ? Types.PostMoveDirection.Top
                 : Types.PostMoveDirection.Bottom
           }
@@ -125,11 +94,11 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       collect: (monitor) => {
         if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setHoverState(HoverState.NONE))
+          setTimeout(() => setPostHoverState(PostHoverState.NONE))
         }
       }
     }),
-    [index, hoverState]
+    [index, postHoverState]
   )
 
   dragRef(dropRef(ref))
@@ -138,8 +107,8 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
     <div ref={ref} className="py-1">
       <hr
         className={classNames('border-2 -translate-y-1.5', {
-          'border-blue-500': hoverState === HoverState.TOP,
-          'border-transparent': hoverState !== HoverState.TOP
+          'border-blue-500': postHoverState === PostHoverState.TOP,
+          'border-transparent': postHoverState !== PostHoverState.TOP
         })}
       />
       <div
@@ -163,13 +132,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     }
                     className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
                     onKeyDown={(e) => {
-                      if (
-                        e.key === 'Enter' &&
-                        !e.altKey &&
-                        !e.ctrlKey &&
-                        !e.shiftKey &&
-                        !e.metaKey
-                      ) {
+                      if (isKeyEnterOnly(e)) {
                         setIsEditing(false)
                         updatePostContent({
                           variables: {
@@ -217,8 +180,8 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       </div>
       <hr
         className={classNames('border-2 translate-y-1.5', {
-          'border-blue-500': hoverState === HoverState.BOTTOM,
-          'border-transparent': hoverState !== HoverState.BOTTOM
+          'border-blue-500': postHoverState === PostHoverState.BOTTOM,
+          'border-transparent': postHoverState !== PostHoverState.BOTTOM
         })}
       />
     </div>

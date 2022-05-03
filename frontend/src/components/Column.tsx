@@ -19,6 +19,8 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
+import { getPostHoverState, isKeyEnterOnly, PostHoverState } from './utils'
+import { ColumnHoverState, getColumnHoverState } from './utils'
 
 interface ColumnProps {
   column: Types.Column
@@ -29,12 +31,6 @@ interface ColumnDragItem {
   columnId: string
 }
 
-enum HoverState {
-  NONE,
-  LEFT,
-  RIGHT
-}
-
 export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -43,8 +39,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [editName, setEditName] = useState(name)
   const [post, setPost] = useState('')
   const [isEditing, setIsEditing] = useState(false)
-  const [hoverState, setHoverState] = useState(HoverState.NONE)
-  const [isHovering, setIsHovering] = useState(false)
+  const [columnHoverState, setColumnHoverState] = useState(
+    ColumnHoverState.NONE
+  )
+  const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
 
   const [removeColumn] = useRemoveColumn({
     retroId,
@@ -98,36 +96,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [, dropColumnRef] = useDrop<ColumnDragItem, void, void>(
     () => ({
       accept: ItemTypes.Column,
-      hover: (item, monitor) => {
-        // Don't handle drag on self
-        if (item.columnId === columnId) {
-          return
-        }
-
-        const current = ref.current
-        if (!current) {
-          return
-        }
-
-        // Mouse position
-        const mouseOffset = monitor.getClientOffset()
-        if (!mouseOffset) {
-          return
-        }
-
-        // Bounding rect of column
-        const currentRect = current.getBoundingClientRect()
-
-        // Middle x-value of column
-        const currentMiddle =
-          currentRect.left + (currentRect.right - currentRect.left) / 2
-
-        setHoverState(
-          mouseOffset.x <= currentMiddle ? HoverState.LEFT : HoverState.RIGHT
-        )
-      },
+      hover: (item, monitor) =>
+        setColumnHoverState(getColumnHoverState(monitor, ref)),
       drop: (item) => {
-        if (hoverState === HoverState.NONE) {
+        if (columnHoverState === ColumnHoverState.NONE) {
           return
         }
 
@@ -137,7 +109,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             oldColumnId: item.columnId,
             targetColumnId: columnId,
             columnMoveDirection:
-              hoverState === HoverState.LEFT
+              columnHoverState === ColumnHoverState.LEFT
                 ? Types.ColumnMoveDirection.Left
                 : Types.ColumnMoveDirection.Right
           }
@@ -146,31 +118,22 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       collect: (monitor) => {
         if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setHoverState(HoverState.NONE))
+          setTimeout(() => setColumnHoverState(ColumnHoverState.NONE))
         }
       }
     }),
-    [index, hoverState]
+    [index, columnHoverState]
   )
 
   const [, dropPostRef] = useDrop<PostDragItem, void, void>(
     () => ({
       accept: ItemTypes.Post,
-      hover: (item) => {
-        // Don't handle drag on self
-        if (item.columnId === columnId) {
-          return
-        }
-
-        const current = ref.current
-        if (!current) {
-          return
-        }
-
-        setIsHovering(true)
+      hover: (item, monitor) => {
+        setPostHoverState(getPostHoverState(monitor, ref))
       },
-      drop: (item) => {
-        if (isHovering) {
+      drop: (item, monitor) => {
+        const postHoverState = getPostHoverState(monitor, ref)
+        if (postHoverState === PostHoverState.NONE) {
           return
         }
 
@@ -181,18 +144,21 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             oldPostId: item.postId,
             targetColumnId: columnId,
             targetPostId: '',
-            postMoveDirection: Types.PostMoveDirection.Top
+            postMoveDirection:
+              postHoverState === PostHoverState.TOP
+                ? Types.PostMoveDirection.Top
+                : Types.PostMoveDirection.Bottom
           }
         })
       },
       collect: (monitor) => {
-        if (!monitor.isOver()) {
+        if (!monitor.isOver({ shallow: true })) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setIsHovering(false))
+          setTimeout(() => setPostHoverState(PostHoverState.NONE))
         }
       }
     }),
-    [index, hoverState]
+    [index, columnHoverState]
   )
 
   dragRef(dropPostRef(dropColumnRef(ref)))
@@ -201,8 +167,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     <div ref={ref} className="flex">
       <hr
         className={classNames('border-2 -translate-x-0.5 h-full', {
-          'border-blue-500': hoverState === HoverState.LEFT,
-          'border-transparent': hoverState !== HoverState.LEFT
+          'border-blue-500': columnHoverState === ColumnHoverState.LEFT,
+          'border-transparent': columnHoverState !== ColumnHoverState.LEFT
         })}
       />
 
@@ -221,13 +187,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                       autoFocus
                       className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
                       onKeyDown={(e) => {
-                        if (
-                          e.key === 'Enter' &&
-                          !e.altKey &&
-                          !e.ctrlKey &&
-                          !e.shiftKey &&
-                          !e.metaKey
-                        ) {
+                        if (isKeyEnterOnly(e)) {
                           setIsEditing(false)
                           updateColumnName({
                             variables: {
@@ -275,14 +235,21 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
         <hr
           className={classNames('border-2 translate-y-0.5', {
-            'border-blue-500': isHovering && posts.length === 0,
-            'border-transparent': !isHovering || posts.length > 0
+            'border-blue-500': postHoverState === PostHoverState.TOP,
+            'border-transparent': postHoverState !== PostHoverState.TOP
           })}
         />
 
         {posts.map((post, index) => (
           <Post key={post.id} column={column} post={post} index={index} />
         ))}
+
+        <hr
+          className={classNames('border-2 -translate-y-0.5', {
+            'border-blue-500': postHoverState === PostHoverState.BOTTOM,
+            'border-transparent': postHoverState !== PostHoverState.BOTTOM
+          })}
+        />
 
         <Card
           alwaysShowButtons
@@ -292,13 +259,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               <TextareaAutosize
                 className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
                 onKeyDown={(e) => {
-                  if (
-                    e.key === 'Enter' &&
-                    !e.altKey &&
-                    !e.ctrlKey &&
-                    !e.shiftKey &&
-                    !e.metaKey
-                  ) {
+                  if (isKeyEnterOnly(e)) {
                     submitCreatePost()
                     e.preventDefault()
                   }
@@ -325,8 +286,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
       <hr
         className={classNames('border-2 translate-x-0.5 h-full', {
-          'border-blue-500': hoverState === HoverState.RIGHT,
-          'border-transparent': hoverState !== HoverState.RIGHT
+          'border-blue-500': columnHoverState === ColumnHoverState.RIGHT,
+          'border-transparent': columnHoverState !== ColumnHoverState.RIGHT
         })}
       />
     </div>

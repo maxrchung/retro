@@ -141,15 +141,23 @@ const movePost = (parent: unknown, args: MutationMovePostArgs) => {
   if (!targetColumn) {
     return false
   }
-  const targetPostIndex = targetColumn.posts.findIndex(
-    (post) => post.id === args.targetPostId
-  )
-  targetColumn.posts.splice(
-    targetPostIndex +
-      (args.postMoveDirection === PostMoveDirection.Top ? 0 : 1),
-    0,
-    oldPost
-  )
+
+  if (args.targetPostId && args.targetPostId.length > 0) {
+    const targetPostIndex = targetColumn.posts.findIndex(
+      (post) => post.id === args.targetPostId
+    )
+    targetColumn.posts.splice(
+      targetPostIndex +
+        (args.postMoveDirection === PostMoveDirection.Top ? 0 : 1),
+      0,
+      oldPost
+    )
+  } else if (args.postMoveDirection === PostMoveDirection.Top) {
+    targetColumn.posts.unshift(oldPost)
+  } else {
+    targetColumn.posts.push(oldPost)
+  }
+
   return publish(retro)
 }
 

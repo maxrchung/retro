@@ -69,7 +69,7 @@ export type MutationMovePostArgs = {
   postMoveDirection: PostMoveDirection;
   retroId: Scalars['ID'];
   targetColumnId: Scalars['ID'];
-  targetPostId: Scalars['ID'];
+  targetPostId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -243,7 +243,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
   moveColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveColumnArgs, 'columnMoveDirection' | 'oldColumnId' | 'retroId' | 'targetColumnId'>>;
-  movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId' | 'targetPostId'>>;
+  movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId'>>;
   removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
   removePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   updateColumnName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnNameArgs, 'columnId' | 'columnName' | 'retroId'>>;
@@ -347,7 +347,7 @@ export type MovePostMutationVariables = Exact<{
   oldColumnId: Scalars['ID'];
   oldPostId: Scalars['ID'];
   targetColumnId: Scalars['ID'];
-  targetPostId: Scalars['ID'];
+  targetPostId?: InputMaybe<Scalars['ID']>;
   postMoveDirection: PostMoveDirection;
 }>;
 
@@ -630,7 +630,7 @@ export type MoveColumnMutationHookResult = ReturnType<typeof useMoveColumnMutati
 export type MoveColumnMutationResult = Apollo.MutationResult<MoveColumnMutation>;
 export type MoveColumnMutationOptions = Apollo.BaseMutationOptions<MoveColumnMutation, MoveColumnMutationVariables>;
 export const MovePostDocument = gql`
-    mutation MovePost($retroId: ID!, $oldColumnId: ID!, $oldPostId: ID!, $targetColumnId: ID!, $targetPostId: ID!, $postMoveDirection: PostMoveDirection!) {
+    mutation MovePost($retroId: ID!, $oldColumnId: ID!, $oldPostId: ID!, $targetColumnId: ID!, $targetPostId: ID, $postMoveDirection: PostMoveDirection!) {
   movePost(
     retroId: $retroId
     oldColumnId: $oldColumnId

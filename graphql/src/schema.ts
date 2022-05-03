@@ -52,7 +52,7 @@ const schema = gql`
       oldColumnId: ID!
       oldPostId: ID!
       targetColumnId: ID!
-      targetPostId: ID!
+      targetPostId: ID
       postMoveDirection: PostMoveDirection!
     ): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!

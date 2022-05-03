@@ -134,7 +134,7 @@ const MOVE_POST = gql`
     $oldColumnId: ID!
     $oldPostId: ID!
     $targetColumnId: ID!
-    $targetPostId: ID!
+    $targetPostId: ID
     $postMoveDirection: PostMoveDirection!
   ) {
     movePost(
