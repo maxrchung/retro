@@ -35,7 +35,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column
   const { id: retroId } = useAppSelector((state) => state.retro)
 
-  const ref = useRef<HTMLDivElement>(null)
+  const columnRef = useRef<HTMLDivElement>(null)
+  const postsRef = useRef<HTMLDivElement>(null)
   const [editName, setEditName] = useState(name)
   const [post, setPost] = useState('')
   const [isEditing, setIsEditing] = useState(false)
@@ -97,7 +98,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     () => ({
       accept: ItemTypes.Column,
       hover: (item, monitor) =>
-        setColumnHoverState(getColumnHoverState(monitor, ref)),
+        setColumnHoverState(getColumnHoverState(monitor, columnRef)),
       drop: (item) => {
         if (columnHoverState === ColumnHoverState.NONE) {
           return
@@ -128,10 +129,34 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [, dropPostRef] = useDrop<PostDragItem, void, void>(
     () => ({
       accept: ItemTypes.Post,
-      hover: (item, monitor) =>
-        setPostHoverState(getPostHoverState(monitor, ref)),
+      hover: (item, monitor) => {
+        const current = postsRef.current
+        if (!current) {
+          setPostHoverState(PostHoverState.NONE)
+          return
+        }
+
+        // Mouse position
+        const mouseOffset = monitor.getClientOffset()
+        if (!mouseOffset) {
+          setPostHoverState(PostHoverState.NONE)
+          return
+        }
+
+        // Bounding rect of post
+        const currentRect = current.getBoundingClientRect()
+        if (
+          mouseOffset.y > currentRect.top + 10 &&
+          mouseOffset.y < currentRect.bottom - 10
+        ) {
+          setPostHoverState(PostHoverState.NONE)
+          return
+        }
+
+        setPostHoverState(getPostHoverState(monitor, columnRef))
+      },
       drop: (item, monitor) => {
-        const postHoverState = getPostHoverState(monitor, ref)
+        const postHoverState = getPostHoverState(monitor, columnRef)
         if (postHoverState === PostHoverState.NONE) {
           return
         }
@@ -151,7 +176,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         })
       },
       collect: (monitor) => {
-        if (!monitor.isOver({ shallow: true })) {
+        if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
           setTimeout(() => setPostHoverState(PostHoverState.NONE))
         }
@@ -160,10 +185,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     [index, columnHoverState]
   )
 
-  dragRef(dropPostRef(dropColumnRef(ref)))
+  dragRef(dropPostRef(dropColumnRef(columnRef)))
 
   return (
-    <div ref={ref} className="flex">
+    <div className="flex">
       <hr
         className={classNames('border-2 -translate-x-0.5 h-full', {
           'border-blue-500': columnHoverState === ColumnHoverState.LEFT,
@@ -171,116 +196,121 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         })}
       />
 
-      <div
-        className={classNames('flex flex-col w-80 p-5 cursor-grab', {
-          'opacity-50 cursor-grabbing': isDragging
-        })}
-      >
-        <Header>
-          <Card
-            content={
-              <>
-                {isEditing ? (
-                  <div className="flex">
-                    <input
-                      autoFocus
-                      className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
-                      onKeyDown={(e) => {
-                        if (isKeyEnterOnly(e)) {
-                          setIsEditing(false)
-                          updateColumnName({
-                            variables: {
-                              retroId,
-                              columnId,
-                              columnName: editName
-                            }
-                          })
-                        } else if (e.key === 'Escape') {
-                          setIsEditing(false)
-                          setEditName(name)
-                        }
-                      }}
-                      onChange={(e) => setEditName(e.target.value)}
-                      value={editName}
-                    />
-                  </div>
-                ) : (
-                  <span
-                    className="cursor-text"
-                    onClick={() => setIsEditing(true)}
+      <div className="flex flex-col w-80 p-5">
+        <div
+          ref={columnRef}
+          className={classNames('cursor-grab', {
+            'opacity-50 cursor-grabbing': isDragging
+          })}
+        >
+          <Header>
+            <Card
+              content={
+                <>
+                  {isEditing ? (
+                    <div className="flex">
+                      <input
+                        autoFocus
+                        className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                        onKeyDown={(e) => {
+                          if (isKeyEnterOnly(e)) {
+                            setIsEditing(false)
+                            updateColumnName({
+                              variables: {
+                                retroId,
+                                columnId,
+                                columnName: editName
+                              }
+                            })
+                          } else if (e.key === 'Escape') {
+                            setIsEditing(false)
+                            setEditName(name)
+                          }
+                        }}
+                        onChange={(e) => setEditName(e.target.value)}
+                        value={editName}
+                      />
+                    </div>
+                  ) : (
+                    <span
+                      className="cursor-text"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      {name}
+                    </span>
+                  )}
+                </>
+              }
+              buttons={
+                <>
+                  <IconButton onClick={() => confirmRemoveColumn()}>
+                    <XIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      !isEditing && setEditName(name)
+                      setIsEditing(!isEditing)
+                    }}
                   >
-                    {name}
-                  </span>
-                )}
-              </>
+                    {isEditing ? <CheckIcon /> : <PencilIcon />}
+                  </IconButton>
+                </>
+              }
+            />
+          </Header>
+
+          <div ref={postsRef}>
+            <hr
+              className={classNames('border-2 translate-y-0.5', {
+                'border-blue-500': postHoverState === PostHoverState.TOP,
+                'border-transparent': postHoverState !== PostHoverState.TOP
+              })}
+            />
+
+            {posts.map((post, index) => (
+              <Post key={post.id} column={column} post={post} index={index} />
+            ))}
+
+            <hr
+              className={classNames('border-2 -translate-y-0.5', {
+                'border-blue-500': postHoverState === PostHoverState.BOTTOM,
+                'border-transparent': postHoverState !== PostHoverState.BOTTOM
+              })}
+            />
+          </div>
+
+          <Card
+            alwaysShowButtons
+            content={
+              // Ok https://stackoverflow.com/a/64556831/13183186
+              <div className="flex">
+                <TextareaAutosize
+                  className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
+                  onKeyDown={(e) => {
+                    if (isKeyEnterOnly(e)) {
+                      submitCreatePost()
+                      e.preventDefault()
+                    }
+                  }}
+                  onChange={(e) => {
+                    setPost(e.target.value)
+                  }}
+                  placeholder="Post"
+                  value={post}
+                />
+              </div>
             }
             buttons={
-              <>
-                <IconButton onClick={() => confirmRemoveColumn()}>
-                  <XIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    !isEditing && setEditName(name)
-                    setIsEditing(!isEditing)
-                  }}
-                >
-                  {isEditing ? <CheckIcon /> : <PencilIcon />}
-                </IconButton>
-              </>
+              <IconButton
+                onClick={() => {
+                  submitCreatePost()
+                }}
+              >
+                <PlusIcon />
+              </IconButton>
             }
           />
-        </Header>
-
-        <hr
-          className={classNames('border-2 translate-y-0.5', {
-            'border-blue-500': postHoverState === PostHoverState.TOP,
-            'border-transparent': postHoverState !== PostHoverState.TOP
-          })}
-        />
-
-        {posts.map((post, index) => (
-          <Post key={post.id} column={column} post={post} index={index} />
-        ))}
-
-        <hr
-          className={classNames('border-2 -translate-y-0.5', {
-            'border-blue-500': postHoverState === PostHoverState.BOTTOM,
-            'border-transparent': postHoverState !== PostHoverState.BOTTOM
-          })}
-        />
-
-        <Card
-          alwaysShowButtons
-          content={
-            // Ok https://stackoverflow.com/a/64556831/13183186
-            <div className="flex">
-              <TextareaAutosize
-                className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
-                onKeyDown={(e) => {
-                  if (isKeyEnterOnly(e)) {
-                    submitCreatePost()
-                    e.preventDefault()
-                  }
-                }}
-                onChange={(e) => {
-                  setPost(e.target.value)
-                }}
-                placeholder="Post"
-                value={post}
-              />
-            </div>
-          }
-          buttons={
-            <IconButton
-              onClick={() => {
-                submitCreatePost()
-              }}
-            >
-              <PlusIcon />
-            </IconButton>
-          }
-        />
+        </div>
       </div>
 
       <hr

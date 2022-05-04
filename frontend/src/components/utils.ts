@@ -43,10 +43,6 @@ export const getPostHoverState = (
   monitor: DropTargetMonitor,
   ref: React.RefObject<HTMLDivElement>
 ): PostHoverState => {
-  if (!monitor.isOver({ shallow: true })) {
-    return PostHoverState.NONE
-  }
-
   const current = ref.current
   if (!current) {
     return PostHoverState.NONE
