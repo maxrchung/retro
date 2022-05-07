@@ -31,6 +31,9 @@ interface ColumnDragItem {
   columnId: string
 }
 
+// Buffer space to fix flicker from column indicator to post indicator
+const selectionBuffer = 10;
+
 export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column
   const { id: retroId } = useAppSelector((state) => state.retro)
@@ -146,8 +149,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         // Bounding rect of post
         const currentRect = current.getBoundingClientRect()
         if (
-          mouseOffset.y > currentRect.top + 10 &&
-          mouseOffset.y < currentRect.bottom - 10
+          mouseOffset.y > currentRect.top + selectionBuffer &&
+          mouseOffset.y < currentRect.bottom - selectionBuffer
         ) {
           setPostHoverState(PostHoverState.NONE)
           return
