@@ -1,3 +1,6 @@
+# Local DynamoDB
+shared-local-instance.db
+
 # Logs
 logs
 *.log
