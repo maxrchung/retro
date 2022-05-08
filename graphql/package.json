@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/client": "^3",
+    "@aws-sdk/client-dynamodb": "^3.85.0",
     "@graphql-codegen/cli": "^2.3.1",
     "@graphql-codegen/typescript": "^2.4.2",
     "@graphql-codegen/typescript-operations": "^2.2.2",

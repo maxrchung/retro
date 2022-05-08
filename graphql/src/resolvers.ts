@@ -1,4 +1,5 @@
 import { PubSub, withFilter } from 'apollo-server'
+import { ServerContext } from './server'
 import {
   ColumnMoveDirection,
   MutationCreateColumnArgs,
@@ -46,6 +47,14 @@ const subscribe = withFilter(
 ) as never
 
 const getRetro = () => retro
+
+const createRetro = (
+  parent: unknown,
+  args: unknown,
+  context: ServerContext
+) => {
+  return ''
+}
 
 const createColumn = (parent: unknown, args: MutationCreateColumnArgs) => {
   const id = generateUid(retro.columns)
@@ -185,7 +194,7 @@ const removePost = (parent: unknown, args: MutationRemovePostArgs) => {
   return publish(retro)
 }
 
-const resolvers: Resolvers = {
+const resolvers: Resolvers<ServerContext> = {
   Subscription: {
     retroUpdated: {
       subscribe
@@ -195,6 +204,7 @@ const resolvers: Resolvers = {
     getRetro
   },
   Mutation: {
+    createRetro,
     createColumn,
     createPost,
     updateColumnName,

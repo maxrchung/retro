@@ -6,6 +6,8 @@ import {
   CreateColumnMutationVariables,
   CreatePostMutation,
   CreatePostMutationVariables,
+  CreateRetroMutation,
+  CreateRetroMutationVariables,
   GetRetroQuery,
   GetRetroQueryVariables,
   MoveColumnMutation,
@@ -63,6 +65,12 @@ const GET_RETRO = gql`
     getRetro(retroId: $retroId) {
       ...RetroFragment
     }
+  }
+`
+
+const CREATE_RETRO = gql`
+  mutation CreateRetro {
+    createRetro
   }
 `
 
@@ -175,6 +183,9 @@ export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
     variables: getRetroArgs,
     skip
   })
+
+export const useCreateRetro = (createRetroArgs: MutationCreatePostArgs) =>
+  useMutation<CreateRetroMutation, CreateRetroMutationVariables>(CREATE_RETRO)
 
 export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>
   useMutation<CreateColumnMutation, CreateColumnMutationVariables>(

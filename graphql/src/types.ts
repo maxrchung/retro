@@ -33,6 +33,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createColumn: Scalars['Boolean'];
   createPost: Scalars['Boolean'];
+  createRetro: Scalars['ID'];
   moveColumn: Scalars['Boolean'];
   movePost: Scalars['Boolean'];
   removeColumn: Scalars['Boolean'];
@@ -242,6 +243,7 @@ export type ColumnResolvers<ContextType = any, ParentType extends ResolversParen
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
+  createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   moveColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveColumnArgs, 'columnMoveDirection' | 'oldColumnId' | 'retroId' | 'targetColumnId'>>;
   movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId'>>;
   removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
@@ -295,6 +297,11 @@ export type GetRetroQueryVariables = Exact<{
 
 
 export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+
+export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateRetroMutation = { __typename?: 'Mutation', createRetro: string };
 
 export type CreateColumnMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -449,6 +456,36 @@ export function useGetRetroLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetRetroQueryHookResult = ReturnType<typeof useGetRetroQuery>;
 export type GetRetroLazyQueryHookResult = ReturnType<typeof useGetRetroLazyQuery>;
 export type GetRetroQueryResult = Apollo.QueryResult<GetRetroQuery, GetRetroQueryVariables>;
+export const CreateRetroDocument = gql`
+    mutation CreateRetro {
+  createRetro
+}
+    `;
+export type CreateRetroMutationFn = Apollo.MutationFunction<CreateRetroMutation, CreateRetroMutationVariables>;
+
+/**
+ * __useCreateRetroMutation__
+ *
+ * To run a mutation, you first call `useCreateRetroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRetroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRetroMutation, { data, loading, error }] = useCreateRetroMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateRetroMutation(baseOptions?: Apollo.MutationHookOptions<CreateRetroMutation, CreateRetroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRetroMutation, CreateRetroMutationVariables>(CreateRetroDocument, options);
+      }
+export type CreateRetroMutationHookResult = ReturnType<typeof useCreateRetroMutation>;
+export type CreateRetroMutationResult = Apollo.MutationResult<CreateRetroMutation>;
+export type CreateRetroMutationOptions = Apollo.BaseMutationOptions<CreateRetroMutation, CreateRetroMutationVariables>;
 export const CreateColumnDocument = gql`
     mutation CreateColumn($retroId: ID!, $columnName: String!) {
   createColumn(retroId: $retroId, columnName: $columnName)

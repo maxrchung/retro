@@ -32,6 +32,7 @@ const schema = gql`
   }
 
   type Mutation {
+    createRetro: ID!
     createColumn(retroId: ID!, columnName: String!): Boolean!
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Boolean!
     updateColumnName(retroId: ID!, columnId: ID!, columnName: String!): Boolean!
