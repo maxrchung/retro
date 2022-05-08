@@ -1,36 +1,16 @@
-import { useAppDispatch } from '../state/hooks'
-import React, { useEffect } from 'react'
+import React from 'react'
 import Retro from 'components/Retro'
-import { actions } from 'state/retroSlice'
-import { useGetRetro, useRetroUpdated } from 'graphql/client'
-import { useRouter } from 'next/router'
+import { DndProvider } from 'react-dnd'
+import { Provider } from 'react-redux'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import store from 'state/store'
 
-export default function Home(): JSX.Element {
-  const router = useRouter()
-  const { id } = router.query
-  const retroId = id as string
-
-  const dispatch = useAppDispatch()
-
-  const { error, data: dataGet } = useGetRetro({ retroId })
-
-  const { data: dataUpdate } = useRetroUpdated({ retroId })
-
-  useEffect(() => {
-    if (dataGet) {
-      dispatch(actions.setRetro(dataGet.getRetro))
-    }
-  }, [dataGet])
-
-  useEffect(() => {
-    if (dataUpdate) {
-      dispatch(actions.setRetro(dataUpdate.retroUpdated))
-    }
-  }, [dataUpdate])
-
-  if (error) {
-    return <>{`Failed to load retro: ${error.message}`}</>
-  }
-
-  return <Retro />
+export default function Id(): JSX.Element {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Provider store={store}>
+        <Retro />
+      </Provider>
+    </DndProvider>
+  )
 }

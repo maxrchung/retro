@@ -1,16 +1,38 @@
 import Column from 'components/Column'
 import Head from 'next/head'
-import React, { useState } from 'react'
-import { useAppSelector } from '../state/hooks'
+import React, { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../state/hooks'
 import Card from 'components/Card'
 import IconButton from 'components/IconButton'
 import { PlusIcon } from '@heroicons/react/solid'
 import Header from 'components/Header'
-import { useCreateColumn } from 'graphql/client'
+import { useCreateColumn, useGetRetro, useRetroUpdated } from 'graphql/client'
+import { useRouter } from 'next/router'
+import { actions } from 'state/retroSlice'
 
 export default function Retro(): JSX.Element {
+  const router = useRouter()
+  const { id } = router.query
+  const retroId = id as string
+
+  const dispatch = useAppDispatch()
+  const { error, data: dataGet } = useGetRetro({ retroId })
+  const { data: dataUpdate } = useRetroUpdated({ retroId })
+
+  useEffect(() => {
+    if (dataGet) {
+      dispatch(actions.setRetro(dataGet.getRetro))
+    }
+  }, [dataGet])
+
+  useEffect(() => {
+    if (dataUpdate) {
+      dispatch(actions.setRetro(dataUpdate.retroUpdated))
+    }
+  }, [dataUpdate])
+
   const [columnName, setColumnName] = useState('')
-  const { id: retroId, columns } = useAppSelector((state) => state.retro)
+  const { columns } = useAppSelector((state) => state.retro)
   const [createColumn] = useCreateColumn({
     retroId,
     columnName
@@ -21,6 +43,10 @@ export default function Retro(): JSX.Element {
       createColumn()
       setColumnName('')
     }
+  }
+
+  if (error) {
+    return <>{`Failed to load retro: ${error.message}`}</>
   }
 
   return (

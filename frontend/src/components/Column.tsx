@@ -19,8 +19,8 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
-import { getPostHoverState, isKeyEnterOnly, PostHoverState } from './utils'
-import { ColumnHoverState, getColumnHoverState } from './utils'
+import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
+import { ColumnHoverState, getColumnHoverState } from '../utils'
 
 interface ColumnProps {
   column: Types.Column
@@ -32,7 +32,7 @@ interface ColumnDragItem {
 }
 
 // Buffer space to fix flicker from column indicator to post indicator
-const selectionBuffer = 10;
+const selectionBuffer = 10
 
 export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column

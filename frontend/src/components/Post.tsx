@@ -13,7 +13,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
 import TextareaAutosize from 'react-textarea-autosize'
-import { getPostHoverState, isKeyEnterOnly, PostHoverState } from './utils'
+import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
 
 interface PostProps {
   column: Types.Column

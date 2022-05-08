@@ -184,7 +184,7 @@ export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
     skip
   })
 
-export const useCreateRetro = (createRetroArgs: MutationCreatePostArgs) =>
+export const useCreateRetro = () =>
   useMutation<CreateRetroMutation, CreateRetroMutationVariables>(CREATE_RETRO)
 
 export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>

@@ -1,4 +1,6 @@
+import { UpdateItemCommand } from '@aws-sdk/client-dynamodb'
 import { PubSub, withFilter } from 'apollo-server'
+import { uid } from 'uid'
 import { ServerContext } from './server'
 import {
   ColumnMoveDirection,
@@ -14,7 +16,6 @@ import {
   Resolvers,
   Retro
 } from './types'
-import { generateUid } from './utils'
 
 const retro: Retro = {
   id: 'test-id',
@@ -48,18 +49,32 @@ const subscribe = withFilter(
 
 const getRetro = () => retro
 
-const createRetro = (
+const createRetro = async (
   parent: unknown,
   args: unknown,
   context: ServerContext
 ) => {
-  return ''
+  console.log('createRetro')
+  console.log(context.client)
+
+  const client = context.client
+  const id = uid()
+  await client.send(
+    new UpdateItemCommand({
+      TableName: 'retro-table',
+      Key: {
+        retroId: {
+          S: id
+        }
+      }
+    })
+  )
+  return id
 }
 
 const createColumn = (parent: unknown, args: MutationCreateColumnArgs) => {
-  const id = generateUid(retro.columns)
   retro.columns.push({
-    id,
+    id: uid(),
     name: args.columnName,
     posts: []
   })
@@ -71,9 +86,8 @@ const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
   if (!column) {
     return false
   }
-  const id = generateUid(column.posts)
   const post = {
-    id,
+    id: uid(),
     content: args.postContent
   }
   column.posts.push(post)

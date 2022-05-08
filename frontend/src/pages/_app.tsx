@@ -1,6 +1,4 @@
 import { AppProps } from 'next/app'
-import { Provider } from 'react-redux'
-import store from 'state/store'
 import React from 'react'
 import 'tailwindcss/tailwind.css'
 import {
@@ -12,17 +10,16 @@ import {
 } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { GRAPHQL_HTTP_URI, GRAPHQL_WEB_SOCKET_URI } from '../constants'
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000'
+  uri: GRAPHQL_HTTP_URI
 })
 
 // https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
 const webSocketLink = process.browser
   ? new WebSocketLink({
-      uri: 'ws://localhost:4000/graphql',
+      uri: GRAPHQL_WEB_SOCKET_URI,
       options: {
         reconnect: true
       }
@@ -33,6 +30,7 @@ const webSocketLink = process.browser
 const splitLink = process.browser
   ? split(
       ({ query }) => {
+        console.log(query)
         const definition = getMainDefinition(query)
         return (
           definition.kind === 'OperationDefinition' &&
@@ -53,11 +51,7 @@ const client = new ApolloClient({
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ApolloProvider client={client}>
-      <DndProvider backend={HTML5Backend}>
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </DndProvider>
+      <Component {...pageProps} />
     </ApolloProvider>
   )
 }

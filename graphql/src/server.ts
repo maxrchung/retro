@@ -1,16 +1,11 @@
 import { ApolloServer } from 'apollo-server'
 import schema from './schema'
 import resolvers from './resolvers'
-import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DYNAMODB_ENDPOINT } from './constants'
 
 export interface ServerContext {
   client: DynamoDBClient
-}
-
-const serverContext: ServerContext = {
-  client: new DynamoDBClient({
-    endpoint: 'http://localhost:8000'
-  })
 }
 
 const server = new ApolloServer({
@@ -24,7 +19,11 @@ const server = new ApolloServer({
     }
   },
   resolvers,
-  context: {}
+  context: {
+    client: new DynamoDBClient({
+      endpoint: DYNAMODB_ENDPOINT
+    })
+  }
 })
 
 server.installSubscriptionHandlers
