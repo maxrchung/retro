@@ -1,4 +1,3 @@
-import { UpdateItemCommand } from '@aws-sdk/client-dynamodb'
 import { PubSub, withFilter } from 'apollo-server'
 import { uid } from 'uid'
 import { ServerContext } from './server'
@@ -13,29 +12,17 @@ import {
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
   PostMoveDirection,
+  QueryGetRetroArgs,
   Resolvers,
   Retro
 } from './types'
-
-const retro: Retro = {
-  id: 'test-id',
-  columns: [
-    {
-      id: 'column-id',
-      name: 'Column',
-      posts: [
-        {
-          id: 'post-id',
-          content: 'Post'
-        }
-      ]
-    }
-  ]
-}
+import { createDbRetro, getDbRetro, updateDbRetro } from './db'
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
 const pubsub = new PubSub()
 
-const publish = (retro: Retro): boolean => {
+const publish = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbRetro(client, retro)
   pubsub.publish('retro-updated', { retroUpdated: retro })
   return true
 }
@@ -47,41 +34,38 @@ const subscribe = withFilter(
   (payload, variables) => payload.retroUpdated.id === variables.retroId
 ) as never
 
-const getRetro = () => retro
+const getRetro = async (
+  parent: unknown,
+  args: QueryGetRetroArgs,
+  { client }: ServerContext
+) => await getDbRetro(client, args.retroId)
 
 const createRetro = async (
   parent: unknown,
   args: unknown,
-  context: ServerContext
+  { client }: ServerContext
+) => await createDbRetro(client)
+
+const createColumn = async (
+  parent: unknown,
+  args: MutationCreateColumnArgs,
+  { client }: ServerContext
 ) => {
-  console.log('createRetro')
-  console.log(context.client)
-
-  const client = context.client
-  const id = uid()
-  await client.send(
-    new UpdateItemCommand({
-      TableName: 'retro-table',
-      Key: {
-        retroId: {
-          S: id
-        }
-      }
-    })
-  )
-  return id
-}
-
-const createColumn = (parent: unknown, args: MutationCreateColumnArgs) => {
+  const retro = await getDbRetro(client, args.retroId)
   retro.columns.push({
     id: uid(),
     name: args.columnName,
     posts: []
   })
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
+const createPost = async (
+  parent: unknown,
+  args: MutationCreatePostArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
     return false
@@ -91,25 +75,29 @@ const createPost = (parent: unknown, args: MutationCreatePostArgs) => {
     content: args.postContent
   }
   column.posts.push(post)
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const updateColumnName = (
+const updateColumnName = async (
   parent: unknown,
-  args: MutationUpdateColumnNameArgs
+  args: MutationUpdateColumnNameArgs,
+  { client }: ServerContext
 ) => {
+  const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
     return false
   }
   column.name = args.columnName
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const updatePostContent = (
+const updatePostContent = async (
   parent: unknown,
-  args: MutationUpdatePostContentArgs
+  args: MutationUpdatePostContentArgs,
+  { client }: ServerContext
 ) => {
+  const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
     return false
@@ -119,10 +107,15 @@ const updatePostContent = (
     return false
   }
   post.content = args.postContent
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
+const moveColumn = async (
+  parent: unknown,
+  args: MutationMoveColumnArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
   const oldColumnIndex = retro.columns.findIndex(
     (column) => column.id === args.oldColumnId
   )
@@ -140,10 +133,15 @@ const moveColumn = (parent: unknown, args: MutationMoveColumnArgs) => {
     0,
     oldColumn
   )
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const movePost = (parent: unknown, args: MutationMovePostArgs) => {
+const movePost = async (
+  parent: unknown,
+  args: MutationMovePostArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
   const oldColumn = retro.columns.find(
     (column) => column.id === args.oldColumnId
   )
@@ -181,10 +179,15 @@ const movePost = (parent: unknown, args: MutationMovePostArgs) => {
     targetColumn.posts.push(oldPost)
   }
 
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const removeColumn = (parent: unknown, args: MutationRemoveColumnArgs) => {
+const removeColumn = async (
+  parent: unknown,
+  args: MutationRemoveColumnArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
   const columnIndex = retro.columns.findIndex(
     (column) => column.id === args.columnId
   )
@@ -192,10 +195,15 @@ const removeColumn = (parent: unknown, args: MutationRemoveColumnArgs) => {
     return false
   }
   retro.columns.splice(columnIndex, 1)
-  return publish(retro)
+  return publish(client, retro)
 }
 
-const removePost = (parent: unknown, args: MutationRemovePostArgs) => {
+const removePost = async (
+  parent: unknown,
+  args: MutationRemovePostArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
     return false
@@ -205,7 +213,7 @@ const removePost = (parent: unknown, args: MutationRemovePostArgs) => {
     return false
   }
   column.posts.splice(postIndex, 1)
-  return publish(retro)
+  return publish(client, retro)
 }
 
 const resolvers: Resolvers<ServerContext> = {
