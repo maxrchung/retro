@@ -25,7 +25,6 @@ export const createDbRetro = async (
     Key: {
       id
     },
-    ConditionExpression: 'attribute_not_exists(retroId)',
     UpdateExpression: 'SET #columns = :columns',
     ExpressionAttributeNames: { '#columns': 'columns' },
     ExpressionAttributeValues: { ':columns': DEFAULT_COLUMNS }
@@ -33,18 +32,18 @@ export const createDbRetro = async (
   return id
 }
 
-export const updateDbRetro = async (
+export const updateDbColumns = (
   client: DynamoDBDocument,
   retro: Retro
-): Promise<Retro> => {
-  await client.update({
+): Retro => {
+  client.update({
     TableName: RETRO_TABLE,
     Key: {
       id: retro.id
     },
     UpdateExpression: 'SET #columns = :columns',
     ExpressionAttributeNames: { '#columns': 'columns' },
-    ExpressionAttributeValues: { ':columns': DEFAULT_COLUMNS }
+    ExpressionAttributeValues: { ':columns': retro.columns }
   })
   return retro
 }

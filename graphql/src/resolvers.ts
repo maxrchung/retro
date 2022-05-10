@@ -16,13 +16,16 @@ import {
   Resolvers,
   Retro
 } from './types'
-import { createDbRetro, getDbRetro, updateDbRetro } from './db'
+import { createDbRetro, getDbRetro, updateDbColumns } from './db'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
 const pubsub = new PubSub()
 
-const publish = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbRetro(client, retro)
+const publish = async (
+  client: DynamoDBDocument,
+  retro: Retro
+): Promise<boolean> => {
+  await updateDbColumns(client, retro)
   pubsub.publish('retro-updated', { retroUpdated: retro })
   return true
 }

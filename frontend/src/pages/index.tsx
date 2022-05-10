@@ -7,7 +7,6 @@ export default function Home(): JSX.Element {
   const [createRetro, { loading, data }] = useCreateRetro()
 
   if (data) {
-    console.log(data)
     router.push(`/${data.createRetro}`)
   }
 
