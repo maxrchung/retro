@@ -5,12 +5,12 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
 export const getDbRetro = async (
   client: DynamoDBDocument,
-  retroId: string
+  id: string
 ): Promise<Retro> => {
   const response = await client.get({
     TableName: RETRO_TABLE,
     Key: {
-      retroId
+      id
     }
   })
   return response.Item as Retro
@@ -19,19 +19,18 @@ export const getDbRetro = async (
 export const createDbRetro = async (
   client: DynamoDBDocument
 ): Promise<string> => {
-  const retroId = uid()
+  const id = uid()
   await client.update({
     TableName: RETRO_TABLE,
     Key: {
-      retroId
+      id
     },
     ConditionExpression: 'attribute_not_exists(retroId)',
-    UpdateExpression: 'SET columns = :columns',
-    ExpressionAttributeValues: {
-      ':columns': DEFAULT_COLUMNS
-    }
+    UpdateExpression: 'SET #columns = :columns',
+    ExpressionAttributeNames: { '#columns': 'columns' },
+    ExpressionAttributeValues: { ':columns': DEFAULT_COLUMNS }
   })
-  return retroId
+  return id
 }
 
 export const updateDbRetro = async (
@@ -41,12 +40,11 @@ export const updateDbRetro = async (
   await client.update({
     TableName: RETRO_TABLE,
     Key: {
-      retroId: retro.id
+      id: retro.id
     },
-    UpdateExpression: 'SET columns = :columns',
-    ExpressionAttributeValues: {
-      ':columns': DEFAULT_COLUMNS
-    }
+    UpdateExpression: 'SET #columns = :columns',
+    ExpressionAttributeNames: { '#columns': 'columns' },
+    ExpressionAttributeValues: { ':columns': DEFAULT_COLUMNS }
   })
   return retro
 }

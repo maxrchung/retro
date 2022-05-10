@@ -10,7 +10,7 @@ export class RetroStack extends Stack {
     const table = new dynamodb.Table(this, 'retro-table', {
       tableName: 'retro-table',
       pointInTimeRecovery: true,
-      partitionKey: { name: 'retroId', type: dynamodb.AttributeType.STRING }
+      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING }
     })
 
     // The code that defines your stack goes here
