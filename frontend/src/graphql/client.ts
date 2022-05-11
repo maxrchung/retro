@@ -2,6 +2,8 @@
 
 import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
+  ColumnsUpdatedSubscription,
+  ColumnsUpdatedSubscriptionVariables,
   CreateColumnMutation,
   CreateColumnMutationVariables,
   CreatePostMutation,
@@ -27,43 +29,42 @@ import {
   RemoveColumnMutationVariables,
   RemovePostMutation,
   RemovePostMutationVariables,
-  RetroUpdatedSubscription,
-  RetroUpdatedSubscriptionVariables,
-  SubscriptionRetroUpdatedArgs,
+  SubscriptionColumnsUpdatedArgs,
   UpdateColumnNameMutation,
   UpdateColumnNameMutationVariables,
   UpdatePostContentMutation,
   UpdatePostContentMutationVariables
 } from 'graphql/types'
 
-const RETRO_FRAGMENT = gql`
-  fragment RetroFragment on Retro {
-    id
-    columns {
+// Naming to differentiate subscriptions from queries/mutations
+const COLUMNS_UPDATED = gql`
+  subscription ColumnsUpdated($retroId: ID!) {
+    columnsUpdated(retroId: $retroId) {
       id
-      name
-      posts {
+      columns {
         id
-        content
+        name
+        posts {
+          id
+          content
+        }
       }
     }
   }
 `
 
-const RETRO_UPDATED = gql`
-  ${RETRO_FRAGMENT}
-  subscription RetroUpdated($retroId: ID!) {
-    retroUpdated(retroId: $retroId) {
-      ...RetroFragment
-    }
-  }
-`
-
 const GET_RETRO = gql`
-  ${RETRO_FRAGMENT}
   query GetRetro($retroId: ID!) {
     getRetro(retroId: $retroId) {
-      ...RetroFragment
+      id
+      columns {
+        id
+        name
+        posts {
+          id
+          content
+        }
+      }
     }
   }
 `
@@ -168,15 +169,15 @@ const REMOVE_POST = gql`
   }
 `
 
-export const useRetroUpdated = (
-  retroUpdatedArgs: SubscriptionRetroUpdatedArgs
+export const useColumnsUpdated = (
+  columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs
 ) =>
-  useSubscription<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>(
-    RETRO_UPDATED,
-    {
-      variables: retroUpdatedArgs
-    }
-  )
+  useSubscription<
+    ColumnsUpdatedSubscription,
+    ColumnsUpdatedSubscriptionVariables
+  >(COLUMNS_UPDATED, {
+    variables: columnsUpdatedArgs
+  })
 
 export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
   useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {

@@ -16,8 +16,11 @@ export const retroSlice = createSlice({
   name: 'retro',
   initialState,
   reducers: {
-    setRetro: (state, action: PayloadAction<Types.Retro>) => {
+    updateRetro: (state, action: PayloadAction<Types.Retro>) => {
       state.retro = action.payload
+    },
+    updateColumns: (state, action: PayloadAction<Array<Types.Column>>) => {
+      state.retro.columns = action.payload
     }
   }
 })

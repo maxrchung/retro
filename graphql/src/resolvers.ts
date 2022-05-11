@@ -18,23 +18,25 @@ import {
 } from './types'
 import { createDbRetro, getDbRetro, updateDbColumns } from './db'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
+import { COLUMNS_UPDATED_SUBSCRIPTION } from './constants'
 
+// TODO: Move PubSub into DDB as this won't be able to scale with multiple containers
 const pubsub = new PubSub()
 
-const publish = async (
-  client: DynamoDBDocument,
-  retro: Retro
-): Promise<boolean> => {
-  await updateDbColumns(client, retro)
-  pubsub.publish('retro-updated', { retroUpdated: retro })
+const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbColumns(client, retro.id, retro.columns)
+  pubsub.publish(COLUMNS_UPDATED_SUBSCRIPTION, {
+    // We have to include retro id so that filtering can send to the correct clients
+    columnsUpdated: retro
+  })
   return true
 }
 
 // Casting to never because there's an issue with subscription resolver type
 // https://github.com/dotansimha/graphql-code-generator/issues/7197
 const subscribe = withFilter(
-  () => pubsub.asyncIterator('retro-updated'),
-  (payload, variables) => payload.retroUpdated.id === variables.retroId
+  () => pubsub.asyncIterator(COLUMNS_UPDATED_SUBSCRIPTION),
+  (payload, variables) => payload.columnsUpdated.id === variables.retroId
 ) as never
 
 const getRetro = async (
@@ -60,7 +62,7 @@ const createColumn = async (
     name: args.columnName,
     posts: []
   })
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const createPost = async (
@@ -78,7 +80,7 @@ const createPost = async (
     content: args.postContent
   }
   column.posts.push(post)
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const updateColumnName = async (
@@ -92,7 +94,7 @@ const updateColumnName = async (
     return false
   }
   column.name = args.columnName
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const updatePostContent = async (
@@ -110,7 +112,7 @@ const updatePostContent = async (
     return false
   }
   post.content = args.postContent
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const moveColumn = async (
@@ -136,7 +138,7 @@ const moveColumn = async (
     0,
     oldColumn
   )
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const movePost = async (
@@ -182,7 +184,7 @@ const movePost = async (
     targetColumn.posts.push(oldPost)
   }
 
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const removeColumn = async (
@@ -198,7 +200,7 @@ const removeColumn = async (
     return false
   }
   retro.columns.splice(columnIndex, 1)
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const removePost = async (
@@ -216,12 +218,12 @@ const removePost = async (
     return false
   }
   column.posts.splice(postIndex, 1)
-  return publish(client, retro)
+  return publishColumns(client, retro)
 }
 
 const resolvers: Resolvers<ServerContext> = {
   Subscription: {
-    retroUpdated: {
+    columnsUpdated: {
       subscribe
     }
   },

@@ -12,3 +12,5 @@ export const DEFAULT_COLUMNS = [
     ]
   }
 ]
+
+export const COLUMNS_UPDATED_SUBSCRIPTION = 'columns-updated'

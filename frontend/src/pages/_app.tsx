@@ -30,7 +30,6 @@ const webSocketLink = process.browser
 const splitLink = process.browser
   ? split(
       ({ query }) => {
-        console.log(query)
         const definition = getMainDefinition(query)
         return (
           definition.kind === 'OperationDefinition' &&

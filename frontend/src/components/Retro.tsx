@@ -6,7 +6,7 @@ import Card from 'components/Card'
 import IconButton from 'components/IconButton'
 import { PlusIcon } from '@heroicons/react/solid'
 import Header from 'components/Header'
-import { useCreateColumn, useGetRetro, useRetroUpdated } from 'graphql/client'
+import { useCreateColumn, useGetRetro, useColumnsUpdated } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
 
@@ -17,19 +17,20 @@ export default function Retro(): JSX.Element {
 
   const dispatch = useAppDispatch()
   const { error, data: dataGet } = useGetRetro({ retroId })
-  const { data: dataUpdate } = useRetroUpdated({ retroId })
+  const { data: dataColumns } = useColumnsUpdated({ retroId })
 
   useEffect(() => {
     if (dataGet) {
-      dispatch(actions.setRetro(dataGet.getRetro))
+      dispatch(actions.updateRetro(dataGet.getRetro))
     }
   }, [dataGet])
 
   useEffect(() => {
-    if (dataUpdate) {
-      dispatch(actions.setRetro(dataUpdate.retroUpdated))
+    if (dataColumns) {
+      console.log('dataColumns', dataColumns)
+      dispatch(actions.updateColumns(dataColumns.columnsUpdated.columns))
     }
-  }, [dataUpdate])
+  }, [dataColumns])
 
   const [columnName, setColumnName] = useState('')
   const { columns } = useAppSelector((state) => state.retro)

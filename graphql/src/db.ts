@@ -1,7 +1,7 @@
 import { uid } from 'uid'
 import { DEFAULT_COLUMNS, RETRO_TABLE } from './constants'
-import { Retro } from './types'
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
+import { Column, Retro } from './types'
+import { DynamoDBDocument, UpdateCommandOutput } from '@aws-sdk/lib-dynamodb'
 
 export const getDbRetro = async (
   client: DynamoDBDocument,
@@ -34,16 +34,15 @@ export const createDbRetro = async (
 
 export const updateDbColumns = (
   client: DynamoDBDocument,
-  retro: Retro
-): Retro => {
+  retroId: string,
+  columns: Array<Column>
+): Promise<UpdateCommandOutput> =>
   client.update({
     TableName: RETRO_TABLE,
     Key: {
-      id: retro.id
+      id: retroId
     },
     UpdateExpression: 'SET #columns = :columns',
     ExpressionAttributeNames: { '#columns': 'columns' },
-    ExpressionAttributeValues: { ':columns': retro.columns }
+    ExpressionAttributeValues: { ':columns': columns }
   })
-  return retro
-}

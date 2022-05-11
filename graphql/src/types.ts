@@ -130,11 +130,11 @@ export type Retro = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  retroUpdated: Retro;
+  columnsUpdated: Retro;
 };
 
 
-export type SubscriptionRetroUpdatedArgs = {
+export type SubscriptionColumnsUpdatedArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -269,7 +269,7 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  retroUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "retroUpdated", ParentType, ContextType, RequireFields<SubscriptionRetroUpdatedArgs, 'retroId'>>;
+  columnsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "columnsUpdated", ParentType, ContextType, RequireFields<SubscriptionColumnsUpdatedArgs, 'retroId'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -282,14 +282,12 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type RetroFragmentFragment = { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> };
-
-export type RetroUpdatedSubscriptionVariables = Exact<{
+export type ColumnsUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
 }>;
 
 
-export type RetroUpdatedSubscription = { __typename?: 'Subscription', retroUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
 
 export type GetRetroQueryVariables = Exact<{
   retroId: Scalars['ID'];
@@ -378,56 +376,59 @@ export type RemovePostMutationVariables = Exact<{
 
 export type RemovePostMutation = { __typename?: 'Mutation', removePost: boolean };
 
-export const RetroFragmentFragmentDoc = gql`
-    fragment RetroFragment on Retro {
-  id
-  columns {
-    id
-    name
-    posts {
+
+export const ColumnsUpdatedDocument = gql`
+    subscription ColumnsUpdated($retroId: ID!) {
+  columnsUpdated(retroId: $retroId) {
+    columns {
       id
-      content
+      name
+      posts {
+        id
+        content
+      }
     }
   }
 }
     `;
-export const RetroUpdatedDocument = gql`
-    subscription RetroUpdated($retroId: ID!) {
-  retroUpdated(retroId: $retroId) {
-    ...RetroFragment
-  }
-}
-    ${RetroFragmentFragmentDoc}`;
 
 /**
- * __useRetroUpdatedSubscription__
+ * __useColumnsUpdatedSubscription__
  *
- * To run a query within a React component, call `useRetroUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useRetroUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useColumnsUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useColumnsUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useRetroUpdatedSubscription({
+ * const { data, loading, error } = useColumnsUpdatedSubscription({
  *   variables: {
  *      retroId: // value for 'retroId'
  *   },
  * });
  */
-export function useRetroUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>) {
+export function useColumnsUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<ColumnsUpdatedSubscription, ColumnsUpdatedSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<RetroUpdatedSubscription, RetroUpdatedSubscriptionVariables>(RetroUpdatedDocument, options);
+        return Apollo.useSubscription<ColumnsUpdatedSubscription, ColumnsUpdatedSubscriptionVariables>(ColumnsUpdatedDocument, options);
       }
-export type RetroUpdatedSubscriptionHookResult = ReturnType<typeof useRetroUpdatedSubscription>;
-export type RetroUpdatedSubscriptionResult = Apollo.SubscriptionResult<RetroUpdatedSubscription>;
+export type ColumnsUpdatedSubscriptionHookResult = ReturnType<typeof useColumnsUpdatedSubscription>;
+export type ColumnsUpdatedSubscriptionResult = Apollo.SubscriptionResult<ColumnsUpdatedSubscription>;
 export const GetRetroDocument = gql`
     query GetRetro($retroId: ID!) {
   getRetro(retroId: $retroId) {
-    ...RetroFragment
+    id
+    columns {
+      id
+      name
+      posts {
+        id
+        content
+      }
+    }
   }
 }
-    ${RetroFragmentFragmentDoc}`;
+    `;
 
 /**
  * __useGetRetroQuery__
