@@ -1,5 +1,5 @@
 import { uid } from 'uid'
-import { DEFAULT_COLUMNS, RETRO_TABLE } from './constants'
+import { RETRO_TABLE } from './constants'
 import { Column, Retro } from './types'
 import { DynamoDBDocument, UpdateCommandOutput } from '@aws-sdk/lib-dynamodb'
 
@@ -13,23 +13,70 @@ export const getDbRetro = async (
       id
     }
   })
+
+  if (!response.Item) {
+    throw new Error("Couldn't find retro")
+  }
+
+  client.update({
+    TableName: RETRO_TABLE,
+    Key: {
+      id
+    },
+    ConditionExpression: 'attribute_exists(id)',
+    UpdateExpression: 'SET #lastViewed = :lastViewed',
+    ExpressionAttributeNames: { '#lastViewed': 'lastViewed' },
+    ExpressionAttributeValues: { ':lastViewed': new Date().toISOString() }
+  })
+
   return response.Item as Retro
+}
+
+const createDefaultRetro = (): Retro => {
+  // Per DDB docs they recommend storing strings in ISO format
+  const isoDate = new Date().toISOString()
+  return {
+    id: uid(),
+    name: 'My simple retro',
+    columns: [
+      {
+        id: 'a',
+        name: 'What went well',
+        posts: []
+      },
+      {
+        id: 'b',
+        name: 'What to improve',
+        posts: []
+      },
+      {
+        id: 'c',
+        name: 'Action items',
+        posts: [
+          {
+            id: 'd',
+            content: 'Update the retro :)'
+          }
+        ]
+      }
+    ],
+    createdAt: isoDate,
+    lastUpdated: isoDate,
+    lastViewed: isoDate,
+    timerEnd: isoDate
+  }
 }
 
 export const createDbRetro = async (
   client: DynamoDBDocument
 ): Promise<string> => {
-  const id = uid()
-  await client.update({
+  const retro = createDefaultRetro()
+  await client.put({
     TableName: RETRO_TABLE,
-    Key: {
-      id
-    },
-    UpdateExpression: 'SET #columns = :columns',
-    ExpressionAttributeNames: { '#columns': 'columns' },
-    ExpressionAttributeValues: { ':columns': DEFAULT_COLUMNS }
+    ConditionExpression: 'attribute_not_exists(id)',
+    Item: retro
   })
-  return id
+  return retro.id
 }
 
 export const updateDbColumns = (
@@ -42,7 +89,14 @@ export const updateDbColumns = (
     Key: {
       id: retroId
     },
-    UpdateExpression: 'SET #columns = :columns',
-    ExpressionAttributeNames: { '#columns': 'columns' },
-    ExpressionAttributeValues: { ':columns': columns }
+    ConditionExpression: 'attribute_exists(id)',
+    UpdateExpression: 'SET #columns = :columns, #lastUpdated = :lastUpdated',
+    ExpressionAttributeNames: {
+      '#columns': 'columns',
+      '#lastUpdated': 'lastUpdated'
+    },
+    ExpressionAttributeValues: {
+      ':columns': columns,
+      ':lastUpdated': new Date().toISOString()
+    }
   })

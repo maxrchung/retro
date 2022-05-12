@@ -8,7 +8,12 @@ interface RetroState {
 const initialState: RetroState = {
   retro: {
     id: '',
-    columns: []
+    name: '',
+    columns: [],
+    createdAt: '',
+    lastUpdated: '',
+    lastViewed: '',
+    timerEnd: ''
   }
 }
 

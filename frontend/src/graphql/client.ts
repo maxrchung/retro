@@ -57,6 +57,7 @@ const GET_RETRO = gql`
   query GetRetro($retroId: ID!) {
     getRetro(retroId: $retroId) {
       id
+      name
       columns {
         id
         name
@@ -65,6 +66,10 @@ const GET_RETRO = gql`
           content
         }
       }
+      createdAt
+      lastUpdated
+      lastViewed
+      timerEnd
     }
   }
 `
@@ -170,13 +175,15 @@ const REMOVE_POST = gql`
 `
 
 export const useColumnsUpdated = (
-  columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs
+  columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs,
+  skip?: boolean
 ) =>
   useSubscription<
     ColumnsUpdatedSubscription,
     ColumnsUpdatedSubscriptionVariables
   >(COLUMNS_UPDATED, {
-    variables: columnsUpdatedArgs
+    variables: columnsUpdatedArgs,
+    skip
   })
 
 export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>

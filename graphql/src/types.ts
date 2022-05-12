@@ -125,7 +125,12 @@ export type QueryGetRetroArgs = {
 export type Retro = {
   __typename?: 'Retro';
   columns: Array<Column>;
+  createdAt: Scalars['String'];
   id: Scalars['ID'];
+  lastUpdated: Scalars['String'];
+  lastViewed: Scalars['String'];
+  name: Scalars['String'];
+  timerEnd: Scalars['String'];
 };
 
 export type Subscription = {
@@ -264,7 +269,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type RetroResolvers<ContextType = any, ParentType extends ResolversParentTypes['Retro'] = ResolversParentTypes['Retro']> = {
   columns?: Resolver<Array<ResolversTypes['Column']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastUpdated?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastViewed?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timerEnd?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -287,14 +297,14 @@ export type ColumnsUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
 
 export type GetRetroQueryVariables = Exact<{
   retroId: Scalars['ID'];
 }>;
 
 
-export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
 
 export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -380,6 +390,7 @@ export type RemovePostMutation = { __typename?: 'Mutation', removePost: boolean 
 export const ColumnsUpdatedDocument = gql`
     subscription ColumnsUpdated($retroId: ID!) {
   columnsUpdated(retroId: $retroId) {
+    id
     columns {
       id
       name
@@ -418,6 +429,7 @@ export const GetRetroDocument = gql`
     query GetRetro($retroId: ID!) {
   getRetro(retroId: $retroId) {
     id
+    name
     columns {
       id
       name
@@ -426,6 +438,10 @@ export const GetRetroDocument = gql`
         content
       }
     }
+    createdAt
+    lastUpdated
+    lastViewed
+    timerEnd
   }
 }
     `;

@@ -13,7 +13,12 @@ const schema = gql`
 
   type Retro {
     id: ID!
+    name: String!
     columns: [Column!]!
+    timerEnd: String!
+    createdAt: String!
+    lastViewed: String!
+    lastUpdated: String!
   }
 
   type Column {

@@ -16,8 +16,9 @@ export default function Retro(): JSX.Element {
   const retroId = id as string
 
   const dispatch = useAppDispatch()
-  const { error, data: dataGet } = useGetRetro({ retroId })
-  const { data: dataColumns } = useColumnsUpdated({ retroId })
+  // No point to fetch if retroId is not set
+  const { error, data: dataGet } = useGetRetro({ retroId }, !retroId)
+  const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
 
   useEffect(() => {
     if (dataGet) {
@@ -27,7 +28,6 @@ export default function Retro(): JSX.Element {
 
   useEffect(() => {
     if (dataColumns) {
-      console.log('dataColumns', dataColumns)
       dispatch(actions.updateColumns(dataColumns.columnsUpdated.columns))
     }
   }, [dataColumns])

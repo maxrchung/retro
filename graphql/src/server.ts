@@ -19,6 +19,15 @@ const server = new ApolloServer({
       console.log('Disconnected!')
     }
   },
+  // https://stackoverflow.com/a/61152192
+  formatError: (err) => {
+    console.error(err)
+    return err
+  },
+  formatResponse: (response) => {
+    console.log(response)
+    return response
+  },
   resolvers,
   context: {
     client: DynamoDBDocument.from(
