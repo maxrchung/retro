@@ -33,7 +33,7 @@ export default function Retro(): JSX.Element {
   }, [dataColumns])
 
   const [columnName, setColumnName] = useState('')
-  const { columns } = useAppSelector((state) => state.retro)
+  const { name, columns } = useAppSelector((state) => state.retro)
   const [createColumn] = useCreateColumn({
     retroId,
     columnName
@@ -50,8 +50,14 @@ export default function Retro(): JSX.Element {
     return <>{`Failed to load retro: ${error.message}`}</>
   }
 
+  if (!dataGet) {
+    return <></>
+  }
+
   return (
     <div className="container break-words text-gray-700 text-base">
+      <h1>{name}</h1>
+
       <Head>
         <title>Retro</title>
         <meta name="description" content="A retrospective tool" />

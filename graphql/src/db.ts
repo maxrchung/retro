@@ -1,6 +1,6 @@
 import { uid } from 'uid'
 import { RETRO_TABLE } from './constants'
-import { Column, Retro } from './types'
+import { Retro } from './types'
 import { DynamoDBDocument, UpdateCommandOutput } from '@aws-sdk/lib-dynamodb'
 
 export const getDbRetro = async (
@@ -79,24 +79,41 @@ export const createDbRetro = async (
   return retro.id
 }
 
-export const updateDbColumns = (
+export const updateDbRetro = (
   client: DynamoDBDocument,
-  retroId: string,
-  columns: Array<Column>
-): Promise<UpdateCommandOutput> =>
-  client.update({
+  retro: Retro,
+  attribute: keyof Retro
+): Promise<UpdateCommandOutput> => {
+  const isoDate = new Date().toISOString()
+  return client.update({
     TableName: RETRO_TABLE,
     Key: {
-      id: retroId
+      id: retro.id
     },
     ConditionExpression: 'attribute_exists(id)',
-    UpdateExpression: 'SET #columns = :columns, #lastUpdated = :lastUpdated',
+    UpdateExpression: `SET #${attribute} = :${attribute}, #lastUpdated = :lastUpdated, #lastViewed = :lastViewed`,
     ExpressionAttributeNames: {
-      '#columns': 'columns',
-      '#lastUpdated': 'lastUpdated'
+      [`#${attribute}`]: attribute,
+      '#lastUpdated': 'lastUpdated',
+      '#lastViewed': 'lastViewed'
     },
     ExpressionAttributeValues: {
-      ':columns': columns,
-      ':lastUpdated': new Date().toISOString()
+      [`:${attribute}`]: retro[attribute],
+      ':lastUpdated': isoDate,
+      ':lastViewed': isoDate
     }
   })
+}
+
+export const removeDbRetro = async (
+  client: DynamoDBDocument,
+  id: string
+): Promise<boolean> => {
+  await client.delete({
+    TableName: RETRO_TABLE,
+    Key: {
+      id
+    }
+  })
+  return true
+}

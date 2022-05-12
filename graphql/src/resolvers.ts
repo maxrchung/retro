@@ -9,35 +9,46 @@ import {
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
+  MutationRemoveRetroArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
+  MutationUpdateRetroNameArgs,
   PostMoveDirection,
   QueryGetRetroArgs,
   Resolvers,
   Retro
 } from './types'
-import { createDbRetro, getDbRetro, updateDbColumns } from './db'
+import { createDbRetro, getDbRetro, removeDbRetro, updateDbRetro } from './db'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
-import { COLUMNS_UPDATED_SUBSCRIPTION } from './constants'
+import { RETRO_UPDATED_SUBSCRIPTION } from './constants'
 
-// TODO: Move PubSub into DDB as this won't be able to scale with multiple containers
+// Note, this can't scale with multiple contains, we should eventually move pubsub into something like DDB
 const pubsub = new PubSub()
 
+// Casting to never because there's an issue with subscription resolver type
+// https://github.com/dotansimha/graphql-code-generator/issues/7197
+const subscribe = withFilter(
+  () => pubsub.asyncIterator(RETRO_UPDATED_SUBSCRIPTION),
+  (payload, variables) => payload.columnsUpdated.id === variables.retroId
+) as never
+
+const publishName = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbRetro(client, retro, 'name')
+  pubsub.publish(RETRO_UPDATED_SUBSCRIPTION, {
+    // We have to include retro id so that filtering can send to the correct clients
+    nameUpdated: retro
+  })
+  return true
+}
+
 const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbColumns(client, retro.id, retro.columns)
-  pubsub.publish(COLUMNS_UPDATED_SUBSCRIPTION, {
+  updateDbRetro(client, retro, 'columns')
+  pubsub.publish(RETRO_UPDATED_SUBSCRIPTION, {
     // We have to include retro id so that filtering can send to the correct clients
     columnsUpdated: retro
   })
   return true
 }
-
-// Casting to never because there's an issue with subscription resolver type
-// https://github.com/dotansimha/graphql-code-generator/issues/7197
-const subscribe = withFilter(
-  () => pubsub.asyncIterator(COLUMNS_UPDATED_SUBSCRIPTION),
-  (payload, variables) => payload.columnsUpdated.id === variables.retroId
-) as never
 
 const getRetro = async (
   parent: unknown,
@@ -81,6 +92,16 @@ const createPost = async (
   }
   column.posts.push(post)
   return publishColumns(client, retro)
+}
+
+const updateRetroName = async (
+  parent: unknown,
+  args: MutationUpdateRetroNameArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  retro.name = args.retroName
+  return publishName(client, retro)
 }
 
 const updateColumnName = async (
@@ -187,6 +208,12 @@ const movePost = async (
   return publishColumns(client, retro)
 }
 
+const removeRetro = async (
+  parent: unknown,
+  args: MutationRemoveRetroArgs,
+  { client }: ServerContext
+) => await removeDbRetro(client, args.retroId)
+
 const removeColumn = async (
   parent: unknown,
   args: MutationRemoveColumnArgs,
@@ -234,10 +261,12 @@ const resolvers: Resolvers<ServerContext> = {
     createRetro,
     createColumn,
     createPost,
+    updateRetroName,
     updateColumnName,
     updatePostContent,
     moveColumn,
     movePost,
+    removeRetro,
     removeColumn,
     removePost
   }

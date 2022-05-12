@@ -38,8 +38,10 @@ export type Mutation = {
   movePost: Scalars['Boolean'];
   removeColumn: Scalars['Boolean'];
   removePost: Scalars['Boolean'];
+  removeRetro: Scalars['Boolean'];
   updateColumnName: Scalars['Boolean'];
   updatePostContent: Scalars['Boolean'];
+  updateRetroName: Scalars['Boolean'];
 };
 
 
@@ -87,6 +89,11 @@ export type MutationRemovePostArgs = {
 };
 
 
+export type MutationRemoveRetroArgs = {
+  retroId: Scalars['ID'];
+};
+
+
 export type MutationUpdateColumnNameArgs = {
   columnId: Scalars['ID'];
   columnName: Scalars['String'];
@@ -99,6 +106,12 @@ export type MutationUpdatePostContentArgs = {
   postContent: Scalars['String'];
   postId: Scalars['ID'];
   retroId: Scalars['ID'];
+};
+
+
+export type MutationUpdateRetroNameArgs = {
+  retroId: Scalars['ID'];
+  retroName: Scalars['String'];
 };
 
 export type Post = {
@@ -253,8 +266,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId'>>;
   removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
   removePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
+  removeRetro?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveRetroArgs, 'retroId'>>;
   updateColumnName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnNameArgs, 'columnId' | 'columnName' | 'retroId'>>;
   updatePostContent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePostContentArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
+  updateRetroName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateRetroNameArgs, 'retroId' | 'retroName'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
