@@ -13,6 +13,7 @@ import {
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
   MutationUpdateRetroNameArgs,
+  MutationUpdateTimerArgs,
   PostMoveDirection,
   QueryGetRetroArgs,
   Resolvers,
@@ -20,32 +21,53 @@ import {
 } from './types'
 import { createDbRetro, getDbRetro, removeDbRetro, updateDbRetro } from './db'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
-import { RETRO_UPDATED_SUBSCRIPTION } from './constants'
+import {
+  COLUMNS_UPDATED_SUBSCRIPTION,
+  NAME_UPDATED_SUBSCRIPTION,
+  TIMER_UPDATED_SUBSCRIPTION
+} from './constants'
 
 // Note, this can't scale with multiple contains, we should eventually move pubsub into something like DDB
 const pubsub = new PubSub()
 
 // Casting to never because there's an issue with subscription resolver type
 // https://github.com/dotansimha/graphql-code-generator/issues/7197
-const subscribe = withFilter(
-  () => pubsub.asyncIterator(RETRO_UPDATED_SUBSCRIPTION),
+const subscribeColumns = withFilter(
+  () => pubsub.asyncIterator(COLUMNS_UPDATED_SUBSCRIPTION),
   (payload, variables) => payload.columnsUpdated.id === variables.retroId
+) as never
+
+const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbRetro(client, retro, 'columns')
+  pubsub.publish(COLUMNS_UPDATED_SUBSCRIPTION, {
+    // We have to include retro id so that filtering can send to the correct clients
+    columnsUpdated: retro
+  })
+  return true
+}
+
+const subscribeName = withFilter(
+  () => pubsub.asyncIterator(NAME_UPDATED_SUBSCRIPTION),
+  (payload, variables) => payload.nameUpdated.id === variables.retroId
 ) as never
 
 const publishName = (client: DynamoDBDocument, retro: Retro): boolean => {
   updateDbRetro(client, retro, 'name')
-  pubsub.publish(RETRO_UPDATED_SUBSCRIPTION, {
-    // We have to include retro id so that filtering can send to the correct clients
+  pubsub.publish(NAME_UPDATED_SUBSCRIPTION, {
     nameUpdated: retro
   })
   return true
 }
 
-const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbRetro(client, retro, 'columns')
-  pubsub.publish(RETRO_UPDATED_SUBSCRIPTION, {
-    // We have to include retro id so that filtering can send to the correct clients
-    columnsUpdated: retro
+const subscribeTimer = withFilter(
+  () => pubsub.asyncIterator(TIMER_UPDATED_SUBSCRIPTION),
+  (payload, variables) => payload.nameUpdated.id === variables.retroId
+) as never
+
+const publishTimer = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbRetro(client, retro, 'timerEnd')
+  pubsub.publish(TIMER_UPDATED_SUBSCRIPTION, {
+    timerUpdated: retro
   })
   return true
 }
@@ -102,6 +124,16 @@ const updateRetroName = async (
   const retro = await getDbRetro(client, args.retroId)
   retro.name = args.retroName
   return publishName(client, retro)
+}
+
+const updateTimer = async (
+  parent: unknown,
+  args: MutationUpdateTimerArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  retro.timerEnd = args.timerEnd
+  return publishTimer(client, retro)
 }
 
 const updateColumnName = async (
@@ -251,7 +283,13 @@ const removePost = async (
 const resolvers: Resolvers<ServerContext> = {
   Subscription: {
     columnsUpdated: {
-      subscribe
+      subscribe: subscribeColumns
+    },
+    nameUpdated: {
+      subscribe: subscribeName
+    },
+    timerUpdated: {
+      subscribe: subscribeTimer
     }
   },
   Query: {
@@ -262,6 +300,7 @@ const resolvers: Resolvers<ServerContext> = {
     createColumn,
     createPost,
     updateRetroName,
+    updateTimer,
     updateColumnName,
     updatePostContent,
     moveColumn,

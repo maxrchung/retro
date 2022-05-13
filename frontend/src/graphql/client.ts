@@ -1,4 +1,5 @@
-// Moving this to the frontend because otherwise backend will need a reference to react for @apollo/client
+// Yeah I'm good
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
@@ -24,16 +25,28 @@ import {
   MutationRemovePostArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
+  MutationUpdateRetroNameArgs,
+  MutationUpdateTimerArgs,
+  NameUpdatedSubscription,
+  NameUpdatedSubscriptionVariables,
   QueryGetRetroArgs,
   RemoveColumnMutation,
   RemoveColumnMutationVariables,
   RemovePostMutation,
   RemovePostMutationVariables,
   SubscriptionColumnsUpdatedArgs,
+  SubscriptionNameUpdatedArgs,
+  SubscriptionTimerUpdatedArgs,
+  TimerUpdatedSubscription,
+  TimerUpdatedSubscriptionVariables,
   UpdateColumnNameMutation,
   UpdateColumnNameMutationVariables,
   UpdatePostContentMutation,
-  UpdatePostContentMutationVariables
+  UpdatePostContentMutationVariables,
+  UpdateRetroNameMutation,
+  UpdateRetroNameMutationVariables,
+  UpdateTimerMutation,
+  UpdateTimerMutationVariables
 } from 'graphql/types'
 
 // Naming to differentiate subscriptions from queries/mutations
@@ -49,6 +62,24 @@ const COLUMNS_UPDATED = gql`
           content
         }
       }
+    }
+  }
+`
+
+const NAME_UPDATED = gql`
+  subscription NameUpdated($retroId: ID!, $retroName: String!) {
+    nameUpdated(retroId: $retroId, retroName: $retroName) {
+      id
+      name
+    }
+  }
+`
+
+const TIMER_UPDATED = gql`
+  subscription TimerUpdated($retroId: ID!, $timerEnd: String!) {
+    timerUpdated(retroId: $retroId, timerEnd: $timerEnd) {
+      id
+      timerEnd
     }
   }
 `
@@ -93,6 +124,18 @@ const CREATE_POST = gql`
       columnId: $columnId
       postContent: $postContent
     )
+  }
+`
+
+const UPDATE_RETRO_NAME = gql`
+  mutation UpdateRetroName($retroId: ID!, $retroName: String!) {
+    updateRetroName(retroId: $retroId, retroName: $retroName)
+  }
+`
+
+const UPDATE_TIMER = gql`
+  mutation UpdateTimer($retroId: ID!, $timerEnd: String!) {
+    updateTimer(retroId: $retroId, timerEnd: $timerEnd)
   }
 `
 
@@ -186,6 +229,30 @@ export const useColumnsUpdated = (
     skip
   })
 
+export const useNameUpdated = (
+  nameUpdatedArgs: SubscriptionNameUpdatedArgs,
+  skip?: boolean
+) =>
+  useSubscription<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>(
+    NAME_UPDATED,
+    {
+      variables: nameUpdatedArgs,
+      skip
+    }
+  )
+
+export const useTimerUpdated = (
+  timerUpdatedArgs: SubscriptionTimerUpdatedArgs,
+  skip?: boolean
+) =>
+  useSubscription<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>(
+    TIMER_UPDATED,
+    {
+      variables: timerUpdatedArgs,
+      skip
+    }
+  )
+
 export const useGetRetro = (getRetroArgs: QueryGetRetroArgs, skip?: boolean) =>
   useQuery<GetRetroQuery, GetRetroQueryVariables>(GET_RETRO, {
     variables: getRetroArgs,
@@ -206,6 +273,21 @@ export const useCreateColumn = (createColumnArgs: MutationCreateColumnArgs) =>
 export const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
   useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
     variables: createPostArgs
+  })
+
+export const useUpdateRetroName = (
+  updateRetroNameArgs: MutationUpdateRetroNameArgs
+) =>
+  useMutation<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>(
+    UPDATE_RETRO_NAME,
+    {
+      variables: updateRetroNameArgs
+    }
+  )
+
+export const useUpdateTimer = (updateTimerArgs: MutationUpdateTimerArgs) =>
+  useMutation<UpdateTimerMutation, UpdateTimerMutationVariables>(UPDATE_TIMER, {
+    variables: updateTimerArgs
   })
 
 export const useUpdateColumnName = (

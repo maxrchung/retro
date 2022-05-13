@@ -42,6 +42,7 @@ export type Mutation = {
   updateColumnName: Scalars['Boolean'];
   updatePostContent: Scalars['Boolean'];
   updateRetroName: Scalars['Boolean'];
+  updateTimer: Scalars['Boolean'];
 };
 
 
@@ -114,6 +115,12 @@ export type MutationUpdateRetroNameArgs = {
   retroName: Scalars['String'];
 };
 
+
+export type MutationUpdateTimerArgs = {
+  retroId: Scalars['ID'];
+  timerEnd: Scalars['String'];
+};
+
 export type Post = {
   __typename?: 'Post';
   content: Scalars['String'];
@@ -149,11 +156,25 @@ export type Retro = {
 export type Subscription = {
   __typename?: 'Subscription';
   columnsUpdated: Retro;
+  nameUpdated: Retro;
+  timerUpdated: Retro;
 };
 
 
 export type SubscriptionColumnsUpdatedArgs = {
   retroId: Scalars['ID'];
+};
+
+
+export type SubscriptionNameUpdatedArgs = {
+  retroId: Scalars['ID'];
+  retroName: Scalars['String'];
+};
+
+
+export type SubscriptionTimerUpdatedArgs = {
+  retroId: Scalars['ID'];
+  timerEnd: Scalars['String'];
 };
 
 
@@ -270,6 +291,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateColumnName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnNameArgs, 'columnId' | 'columnName' | 'retroId'>>;
   updatePostContent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePostContentArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
   updateRetroName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateRetroNameArgs, 'retroId' | 'retroName'>>;
+  updateTimer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateTimerArgs, 'retroId' | 'timerEnd'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -295,6 +317,8 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   columnsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "columnsUpdated", ParentType, ContextType, RequireFields<SubscriptionColumnsUpdatedArgs, 'retroId'>>;
+  nameUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "nameUpdated", ParentType, ContextType, RequireFields<SubscriptionNameUpdatedArgs, 'retroId' | 'retroName'>>;
+  timerUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "timerUpdated", ParentType, ContextType, RequireFields<SubscriptionTimerUpdatedArgs, 'retroId' | 'timerEnd'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -313,6 +337,22 @@ export type ColumnsUpdatedSubscriptionVariables = Exact<{
 
 
 export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+
+export type NameUpdatedSubscriptionVariables = Exact<{
+  retroId: Scalars['ID'];
+  retroName: Scalars['String'];
+}>;
+
+
+export type NameUpdatedSubscription = { __typename?: 'Subscription', nameUpdated: { __typename?: 'Retro', id: string, name: string } };
+
+export type TimerUpdatedSubscriptionVariables = Exact<{
+  retroId: Scalars['ID'];
+  timerEnd: Scalars['String'];
+}>;
+
+
+export type TimerUpdatedSubscription = { __typename?: 'Subscription', timerUpdated: { __typename?: 'Retro', id: string, timerEnd: string } };
 
 export type GetRetroQueryVariables = Exact<{
   retroId: Scalars['ID'];
@@ -342,6 +382,22 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: boolean };
+
+export type UpdateRetroNameMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  retroName: Scalars['String'];
+}>;
+
+
+export type UpdateRetroNameMutation = { __typename?: 'Mutation', updateRetroName: boolean };
+
+export type UpdateTimerMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  timerEnd: Scalars['String'];
+}>;
+
+
+export type UpdateTimerMutation = { __typename?: 'Mutation', updateTimer: boolean };
 
 export type UpdateColumnNameMutationVariables = Exact<{
   retroId: Scalars['ID'];
@@ -440,6 +496,70 @@ export function useColumnsUpdatedSubscription(baseOptions: Apollo.SubscriptionHo
       }
 export type ColumnsUpdatedSubscriptionHookResult = ReturnType<typeof useColumnsUpdatedSubscription>;
 export type ColumnsUpdatedSubscriptionResult = Apollo.SubscriptionResult<ColumnsUpdatedSubscription>;
+export const NameUpdatedDocument = gql`
+    subscription NameUpdated($retroId: ID!, $retroName: String!) {
+  nameUpdated(retroId: $retroId, retroName: $retroName) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useNameUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useNameUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNameUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNameUpdatedSubscription({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      retroName: // value for 'retroName'
+ *   },
+ * });
+ */
+export function useNameUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>(NameUpdatedDocument, options);
+      }
+export type NameUpdatedSubscriptionHookResult = ReturnType<typeof useNameUpdatedSubscription>;
+export type NameUpdatedSubscriptionResult = Apollo.SubscriptionResult<NameUpdatedSubscription>;
+export const TimerUpdatedDocument = gql`
+    subscription TimerUpdated($retroId: ID!, $timerEnd: String!) {
+  timerUpdated(retroId: $retroId, timerEnd: $timerEnd) {
+    id
+    timerEnd
+  }
+}
+    `;
+
+/**
+ * __useTimerUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useTimerUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTimerUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTimerUpdatedSubscription({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      timerEnd: // value for 'timerEnd'
+ *   },
+ * });
+ */
+export function useTimerUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>(TimerUpdatedDocument, options);
+      }
+export type TimerUpdatedSubscriptionHookResult = ReturnType<typeof useTimerUpdatedSubscription>;
+export type TimerUpdatedSubscriptionResult = Apollo.SubscriptionResult<TimerUpdatedSubscription>;
 export const GetRetroDocument = gql`
     query GetRetro($retroId: ID!) {
   getRetro(retroId: $retroId) {
@@ -583,6 +703,70 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const UpdateRetroNameDocument = gql`
+    mutation UpdateRetroName($retroId: ID!, $retroName: String!) {
+  updateRetroName(retroId: $retroId, retroName: $retroName)
+}
+    `;
+export type UpdateRetroNameMutationFn = Apollo.MutationFunction<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>;
+
+/**
+ * __useUpdateRetroNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateRetroNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRetroNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRetroNameMutation, { data, loading, error }] = useUpdateRetroNameMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      retroName: // value for 'retroName'
+ *   },
+ * });
+ */
+export function useUpdateRetroNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>(UpdateRetroNameDocument, options);
+      }
+export type UpdateRetroNameMutationHookResult = ReturnType<typeof useUpdateRetroNameMutation>;
+export type UpdateRetroNameMutationResult = Apollo.MutationResult<UpdateRetroNameMutation>;
+export type UpdateRetroNameMutationOptions = Apollo.BaseMutationOptions<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>;
+export const UpdateTimerDocument = gql`
+    mutation UpdateTimer($retroId: ID!, $timerEnd: String!) {
+  updateTimer(retroId: $retroId, timerEnd: $timerEnd)
+}
+    `;
+export type UpdateTimerMutationFn = Apollo.MutationFunction<UpdateTimerMutation, UpdateTimerMutationVariables>;
+
+/**
+ * __useUpdateTimerMutation__
+ *
+ * To run a mutation, you first call `useUpdateTimerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTimerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTimerMutation, { data, loading, error }] = useUpdateTimerMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      timerEnd: // value for 'timerEnd'
+ *   },
+ * });
+ */
+export function useUpdateTimerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTimerMutation, UpdateTimerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTimerMutation, UpdateTimerMutationVariables>(UpdateTimerDocument, options);
+      }
+export type UpdateTimerMutationHookResult = ReturnType<typeof useUpdateTimerMutation>;
+export type UpdateTimerMutationResult = Apollo.MutationResult<UpdateTimerMutation>;
+export type UpdateTimerMutationOptions = Apollo.BaseMutationOptions<UpdateTimerMutation, UpdateTimerMutationVariables>;
 export const UpdateColumnNameDocument = gql`
     mutation UpdateColumnName($retroId: ID!, $columnId: ID!, $columnName: String!) {
   updateColumnName(

@@ -32,6 +32,12 @@ const schema = gql`
     content: String!
   }
 
+  type Subscription {
+    columnsUpdated(retroId: ID!): Retro!
+    nameUpdated(retroId: ID!, retroName: String!): Retro!
+    timerUpdated(retroId: ID!, timerEnd: String!): Retro!
+  }
+
   type Query {
     getRetro(retroId: ID!): Retro!
   }
@@ -41,6 +47,7 @@ const schema = gql`
     createColumn(retroId: ID!, columnName: String!): Boolean!
     createPost(retroId: ID!, columnId: ID!, postContent: String!): Boolean!
     updateRetroName(retroId: ID!, retroName: String!): Boolean!
+    updateTimer(retroId: ID!, timerEnd: String!): Boolean!
     updateColumnName(retroId: ID!, columnId: ID!, columnName: String!): Boolean!
     updatePostContent(
       retroId: ID!
@@ -69,10 +76,6 @@ const schema = gql`
     removeRetro(retroId: ID!): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
-  }
-
-  type Subscription {
-    columnsUpdated(retroId: ID!): Retro!
   }
 `
 
