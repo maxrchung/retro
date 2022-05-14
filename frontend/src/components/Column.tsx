@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import { CheckIcon, PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
-import Header from 'components/Header'
+import ColumnHeader from 'components/ColumnHeader'
 import { useAppSelector } from 'state/hooks'
 import Post, { PostDragItem } from 'components/Post'
 import {
@@ -200,7 +200,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             'opacity-50 cursor-grabbing': isDragging
           })}
         >
-          <Header>
+          <ColumnHeader>
             <Card
               content={
                 <>
@@ -267,7 +267,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 </>
               }
             />
-          </Header>
+          </ColumnHeader>
 
           <div ref={postsRef}>
             <hr

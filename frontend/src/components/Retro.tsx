@@ -10,7 +10,7 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/solid'
-import Header from 'components/Header'
+import ColumnHeader from 'components/ColumnHeader'
 import {
   useCreateColumn,
   useGetRetro,
@@ -145,7 +145,7 @@ export default function Retro(): JSX.Element {
         ))}
 
         <div className={'w-80 p-5'}>
-          <Header>
+          <ColumnHeader>
             <Card
               alwaysShowButtons
               content={
@@ -174,7 +174,7 @@ export default function Retro(): JSX.Element {
                 </IconButton>
               }
             />
-          </Header>
+          </ColumnHeader>
         </div>
       </div>
     </div>
