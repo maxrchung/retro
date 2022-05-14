@@ -8,6 +8,7 @@ import {
   CheckIcon,
   PencilIcon,
   PlusIcon,
+  RefreshIcon,
   TrashIcon
 } from '@heroicons/react/solid'
 import ColumnHeader from 'components/ColumnHeader'
@@ -30,7 +31,7 @@ export default function Retro(): JSX.Element {
 
   const dispatch = useAppDispatch()
   // No point to fetch if retroId is not set
-  const { error, data: dataGet } = useGetRetro({ retroId }, !retroId)
+  const { error, data: dataGet, refetch } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataName } = useNameUpdated({ retroId }, !retroId)
   const [removeRetro] = useRemoveRetro({ retroId })
@@ -44,6 +45,8 @@ export default function Retro(): JSX.Element {
     retroId,
     columnName
   })
+
+  useEffect(() => setEditName(name), [name])
 
   useEffect(() => {
     if (dataGet) {
@@ -60,7 +63,6 @@ export default function Retro(): JSX.Element {
   useEffect(() => {
     if (dataName) {
       dispatch(actions.updateName(dataName.nameUpdated.name))
-      setEditName(dataName.nameUpdated.name)
     }
   }, [dataName])
 
@@ -114,6 +116,10 @@ export default function Retro(): JSX.Element {
           </span>
         )}
       </h1>
+
+      <IconButton onClick={() => refetch()}>
+        <RefreshIcon />
+      </IconButton>
 
       <IconButton
         onClick={() => {
