@@ -1,6 +1,6 @@
 // TODO: Hover styling, post drop
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { CheckIcon, PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
@@ -47,6 +47,9 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     ColumnHoverState.NONE
   )
   const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
+
+  // Pick up updates
+  useEffect(() => setEditName(name), [name])
 
   const [removeColumn] = useRemoveColumn({
     retroId,
@@ -233,7 +236,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                       className="cursor-text"
                       onClick={() => setIsEditing(true)}
                     >
-                      {name}
+                      {editName}
                     </span>
                   )}
                 </>

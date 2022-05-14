@@ -60,8 +60,9 @@ export default function Retro(): JSX.Element {
   useEffect(() => {
     if (dataName) {
       dispatch(actions.updateName(dataName.nameUpdated.name))
+      setEditName(dataName.nameUpdated.name)
     }
-  })
+  }, [dataName])
 
   const submitCreateColumn = () => {
     if (columnName.length > 0) {
@@ -81,7 +82,7 @@ export default function Retro(): JSX.Element {
   return (
     <div className="container break-words text-gray-700 text-base">
       <Head>
-        <title>{name} - retro</title>
+        <title>{editName} - retro</title>
         <meta name="description" content="A retrospective tool" />
       </Head>
 
@@ -109,7 +110,7 @@ export default function Retro(): JSX.Element {
           />
         ) : (
           <span className="cursor-text" onClick={() => setIsEditing(true)}>
-            {name}
+            {editName}
           </span>
         )}
       </h1>

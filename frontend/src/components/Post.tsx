@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import { CheckIcon, PencilIcon, XIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
@@ -35,6 +35,9 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
+
+  // Pick up changes
+  useEffect(() => setEditContent(content), [content])
 
   const [removePost] = useRemovePost({
     retroId,
@@ -156,7 +159,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   className="cursor-text"
                   onClick={() => setIsEditing(true)}
                 >
-                  {content}
+                  {editContent}
                 </span>
               )}
             </>
