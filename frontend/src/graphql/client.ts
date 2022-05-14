@@ -23,6 +23,7 @@ import {
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
+  MutationRemoveRetroArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
   MutationUpdateRetroNameArgs,
@@ -34,6 +35,8 @@ import {
   RemoveColumnMutationVariables,
   RemovePostMutation,
   RemovePostMutationVariables,
+  RemoveRetroMutation,
+  RemoveRetroMutationVariables,
   SubscriptionColumnsUpdatedArgs,
   SubscriptionNameUpdatedArgs,
   SubscriptionTimerUpdatedArgs,
@@ -67,8 +70,8 @@ const COLUMNS_UPDATED = gql`
 `
 
 const NAME_UPDATED = gql`
-  subscription NameUpdated($retroId: ID!, $retroName: String!) {
-    nameUpdated(retroId: $retroId, retroName: $retroName) {
+  subscription NameUpdated($retroId: ID!) {
+    nameUpdated(retroId: $retroId) {
       id
       name
     }
@@ -76,8 +79,8 @@ const NAME_UPDATED = gql`
 `
 
 const TIMER_UPDATED = gql`
-  subscription TimerUpdated($retroId: ID!, $timerEnd: String!) {
-    timerUpdated(retroId: $retroId, timerEnd: $timerEnd) {
+  subscription TimerUpdated($retroId: ID!) {
+    timerUpdated(retroId: $retroId) {
       id
       timerEnd
     }
@@ -205,6 +208,12 @@ const MOVE_POST = gql`
   }
 `
 
+const REMOVE_RETRO = gql`
+  mutation RemoveRetro($retroId: ID!) {
+    removeRetro(retroId: $retroId)
+  }
+`
+
 const REMOVE_COLUMN = gql`
   mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
     removeColumn(retroId: $retroId, columnId: $columnId)
@@ -276,7 +285,7 @@ export const useCreatePost = (createPostArgs: MutationCreatePostArgs) =>
   })
 
 export const useUpdateRetroName = (
-  updateRetroNameArgs: MutationUpdateRetroNameArgs
+  updateRetroNameArgs?: MutationUpdateRetroNameArgs
 ) =>
   useMutation<UpdateRetroNameMutation, UpdateRetroNameMutationVariables>(
     UPDATE_RETRO_NAME,
@@ -291,7 +300,7 @@ export const useUpdateTimer = (updateTimerArgs: MutationUpdateTimerArgs) =>
   })
 
 export const useUpdateColumnName = (
-  updateColumnNameArgs: MutationUpdateColumnNameArgs
+  updateColumnNameArgs?: MutationUpdateColumnNameArgs
 ) =>
   useMutation<UpdateColumnNameMutation, UpdateColumnNameMutationVariables>(
     UPDATE_COLUMN_NAME,
@@ -318,6 +327,11 @@ export const useMoveColumn = (moveColumnArgs?: MutationMoveColumnArgs) =>
 export const useMovePost = (movePostArgs?: MutationMovePostArgs) =>
   useMutation<MovePostMutation, MovePostMutationVariables>(MOVE_POST, {
     variables: movePostArgs
+  })
+
+export const useRemoveRetro = (removeRetroArgs: MutationRemoveRetroArgs) =>
+  useMutation<RemoveRetroMutation, RemoveRetroMutationVariables>(REMOVE_RETRO, {
+    variables: removeRetroArgs
   })
 
 export const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>

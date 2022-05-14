@@ -34,8 +34,8 @@ const schema = gql`
 
   type Subscription {
     columnsUpdated(retroId: ID!): Retro!
-    nameUpdated(retroId: ID!, retroName: String!): Retro!
-    timerUpdated(retroId: ID!, timerEnd: String!): Retro!
+    nameUpdated(retroId: ID!): Retro!
+    timerUpdated(retroId: ID!): Retro!
   }
 
   type Query {

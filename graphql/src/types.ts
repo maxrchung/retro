@@ -168,13 +168,11 @@ export type SubscriptionColumnsUpdatedArgs = {
 
 export type SubscriptionNameUpdatedArgs = {
   retroId: Scalars['ID'];
-  retroName: Scalars['String'];
 };
 
 
 export type SubscriptionTimerUpdatedArgs = {
   retroId: Scalars['ID'];
-  timerEnd: Scalars['String'];
 };
 
 
@@ -317,8 +315,8 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   columnsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "columnsUpdated", ParentType, ContextType, RequireFields<SubscriptionColumnsUpdatedArgs, 'retroId'>>;
-  nameUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "nameUpdated", ParentType, ContextType, RequireFields<SubscriptionNameUpdatedArgs, 'retroId' | 'retroName'>>;
-  timerUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "timerUpdated", ParentType, ContextType, RequireFields<SubscriptionTimerUpdatedArgs, 'retroId' | 'timerEnd'>>;
+  nameUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "nameUpdated", ParentType, ContextType, RequireFields<SubscriptionNameUpdatedArgs, 'retroId'>>;
+  timerUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "timerUpdated", ParentType, ContextType, RequireFields<SubscriptionTimerUpdatedArgs, 'retroId'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -340,7 +338,6 @@ export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsU
 
 export type NameUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
-  retroName: Scalars['String'];
 }>;
 
 
@@ -348,7 +345,6 @@ export type NameUpdatedSubscription = { __typename?: 'Subscription', nameUpdated
 
 export type TimerUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
-  timerEnd: Scalars['String'];
 }>;
 
 
@@ -440,6 +436,13 @@ export type MovePostMutationVariables = Exact<{
 
 export type MovePostMutation = { __typename?: 'Mutation', movePost: boolean };
 
+export type RemoveRetroMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type RemoveRetroMutation = { __typename?: 'Mutation', removeRetro: boolean };
+
 export type RemoveColumnMutationVariables = Exact<{
   retroId: Scalars['ID'];
   columnId: Scalars['ID'];
@@ -497,8 +500,8 @@ export function useColumnsUpdatedSubscription(baseOptions: Apollo.SubscriptionHo
 export type ColumnsUpdatedSubscriptionHookResult = ReturnType<typeof useColumnsUpdatedSubscription>;
 export type ColumnsUpdatedSubscriptionResult = Apollo.SubscriptionResult<ColumnsUpdatedSubscription>;
 export const NameUpdatedDocument = gql`
-    subscription NameUpdated($retroId: ID!, $retroName: String!) {
-  nameUpdated(retroId: $retroId, retroName: $retroName) {
+    subscription NameUpdated($retroId: ID!) {
+  nameUpdated(retroId: $retroId) {
     id
     name
   }
@@ -518,7 +521,6 @@ export const NameUpdatedDocument = gql`
  * const { data, loading, error } = useNameUpdatedSubscription({
  *   variables: {
  *      retroId: // value for 'retroId'
- *      retroName: // value for 'retroName'
  *   },
  * });
  */
@@ -529,8 +531,8 @@ export function useNameUpdatedSubscription(baseOptions: Apollo.SubscriptionHookO
 export type NameUpdatedSubscriptionHookResult = ReturnType<typeof useNameUpdatedSubscription>;
 export type NameUpdatedSubscriptionResult = Apollo.SubscriptionResult<NameUpdatedSubscription>;
 export const TimerUpdatedDocument = gql`
-    subscription TimerUpdated($retroId: ID!, $timerEnd: String!) {
-  timerUpdated(retroId: $retroId, timerEnd: $timerEnd) {
+    subscription TimerUpdated($retroId: ID!) {
+  timerUpdated(retroId: $retroId) {
     id
     timerEnd
   }
@@ -550,7 +552,6 @@ export const TimerUpdatedDocument = gql`
  * const { data, loading, error } = useTimerUpdatedSubscription({
  *   variables: {
  *      retroId: // value for 'retroId'
- *      timerEnd: // value for 'timerEnd'
  *   },
  * });
  */
@@ -925,6 +926,37 @@ export function useMovePostMutation(baseOptions?: Apollo.MutationHookOptions<Mov
 export type MovePostMutationHookResult = ReturnType<typeof useMovePostMutation>;
 export type MovePostMutationResult = Apollo.MutationResult<MovePostMutation>;
 export type MovePostMutationOptions = Apollo.BaseMutationOptions<MovePostMutation, MovePostMutationVariables>;
+export const RemoveRetroDocument = gql`
+    mutation RemoveRetro($retroId: ID!) {
+  removeRetro(retroId: $retroId)
+}
+    `;
+export type RemoveRetroMutationFn = Apollo.MutationFunction<RemoveRetroMutation, RemoveRetroMutationVariables>;
+
+/**
+ * __useRemoveRetroMutation__
+ *
+ * To run a mutation, you first call `useRemoveRetroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveRetroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeRetroMutation, { data, loading, error }] = useRemoveRetroMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useRemoveRetroMutation(baseOptions?: Apollo.MutationHookOptions<RemoveRetroMutation, RemoveRetroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveRetroMutation, RemoveRetroMutationVariables>(RemoveRetroDocument, options);
+      }
+export type RemoveRetroMutationHookResult = ReturnType<typeof useRemoveRetroMutation>;
+export type RemoveRetroMutationResult = Apollo.MutationResult<RemoveRetroMutation>;
+export type RemoveRetroMutationOptions = Apollo.BaseMutationOptions<RemoveRetroMutation, RemoveRetroMutationVariables>;
 export const RemoveColumnDocument = gql`
     mutation RemoveColumn($retroId: ID!, $columnId: ID!) {
   removeColumn(retroId: $retroId, columnId: $columnId)
