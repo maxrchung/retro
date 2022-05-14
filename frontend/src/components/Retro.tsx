@@ -34,7 +34,7 @@ export default function Retro(): JSX.Element {
   const { error, data: dataGet, refetch } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataName } = useNameUpdated({ retroId }, !retroId)
-  const [removeRetro] = useRemoveRetro({ retroId })
+  const [removeRetro, { data: dataRemove }] = useRemoveRetro({ retroId })
   const [updateRetroName] = useUpdateRetroName()
 
   const [columnName, setColumnName] = useState('')
@@ -65,6 +65,12 @@ export default function Retro(): JSX.Element {
       dispatch(actions.updateName(dataName.nameUpdated.name))
     }
   }, [dataName])
+
+  useEffect(() => {
+    if (dataRemove) {
+      router.push('/')
+    }
+  }, [dataRemove])
 
   const submitCreateColumn = () => {
     if (columnName.length > 0) {
