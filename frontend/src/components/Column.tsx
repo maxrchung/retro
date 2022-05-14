@@ -1,7 +1,12 @@
 // TODO: Hover styling, post drop
 
 import React, { useEffect, useRef, useState } from 'react'
-import { CheckIcon, PencilIcon, PlusIcon, XIcon } from '@heroicons/react/solid'
+import {
+  CheckIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon
+} from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import ColumnHeader from 'components/ColumnHeader'
@@ -249,7 +254,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                       removeColumn()
                     }
                   >
-                    <XIcon />
+                    <TrashIcon />
                   </IconButton>
                   <IconButton
                     onClick={() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
-import { CheckIcon, PencilIcon, XIcon } from '@heroicons/react/solid'
+import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/solid'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import {
@@ -167,7 +167,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           buttons={
             <>
               <IconButton onClick={() => confirmRemovePost()}>
-                <XIcon />
+                <TrashIcon />
               </IconButton>
               <IconButton
                 onClick={() => {
