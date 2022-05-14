@@ -62,12 +62,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const [moveColumn] = useMoveColumn()
   const [movePost] = useMovePost()
 
-  const confirmRemoveColumn = () => {
-    if (confirm('Are you sure you want to delete this column?')) {
-      removeColumn()
-    }
-  }
-
   const [createPost] = useCreatePost({
     retroId,
     columnId,
@@ -246,12 +240,25 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               }
               buttons={
                 <>
-                  <IconButton onClick={() => confirmRemoveColumn()}>
+                  <IconButton
+                    onClick={() =>
+                      confirm('Are you sure you want to delete this column?') &&
+                      removeColumn()
+                    }
+                  >
                     <XIcon />
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      !isEditing && setEditName(name)
+                      isEditing
+                        ? updateColumnName({
+                            variables: {
+                              retroId,
+                              columnId,
+                              columnName: editName
+                            }
+                          })
+                        : setEditName(name)
                       setIsEditing(!isEditing)
                     }}
                   >

@@ -168,7 +168,16 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  !isEditing && setEditContent(content)
+                  isEditing
+                    ? updatePostContent({
+                        variables: {
+                          retroId,
+                          columnId,
+                          postId,
+                          postContent: editContent
+                        }
+                      })
+                    : setEditContent(content)
                   setIsEditing(!isEditing)
                 }}
               >
