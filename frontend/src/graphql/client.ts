@@ -294,7 +294,7 @@ export const useUpdateRetroName = (
     }
   )
 
-export const useUpdateTimer = (updateTimerArgs: MutationUpdateTimerArgs) =>
+export const useUpdateTimer = (updateTimerArgs?: MutationUpdateTimerArgs) =>
   useMutation<UpdateTimerMutation, UpdateTimerMutationVariables>(UPDATE_TIMER, {
     variables: updateTimerArgs
   })

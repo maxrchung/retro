@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 interface IconButtonProps {
-  children: JSX.Element
-  onClick: React.MouseEventHandler
+  children: ReactNode
+  onClick?: React.MouseEventHandler
 }
 
 export default function IconButton(props: IconButtonProps): JSX.Element {

@@ -61,7 +61,7 @@ const publishName = (client: DynamoDBDocument, retro: Retro): boolean => {
 
 const subscribeTimer = withFilter(
   () => pubsub.asyncIterator(TIMER_UPDATED_SUBSCRIPTION),
-  (payload, variables) => payload.nameUpdated.id === variables.retroId
+  (payload, variables) => payload.timerUpdated.id === variables.retroId
 ) as never
 
 const publishTimer = (client: DynamoDBDocument, retro: Retro): boolean => {

@@ -18,11 +18,13 @@ import {
   useColumnsUpdated,
   useRemoveRetro,
   useUpdateRetroName,
-  useNameUpdated
+  useNameUpdated,
+  useTimerUpdated
 } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
 import { isKeyEnterOnly } from 'utils'
+import Timer from './Timer'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -34,6 +36,7 @@ export default function Retro(): JSX.Element {
   const { error, data: dataGet, refetch } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataName } = useNameUpdated({ retroId }, !retroId)
+  const { data: dataTimer } = useTimerUpdated({ retroId }, !retroId)
   const [removeRetro, { data: dataRemove }] = useRemoveRetro({ retroId })
   const [updateRetroName] = useUpdateRetroName()
 
@@ -65,6 +68,12 @@ export default function Retro(): JSX.Element {
       dispatch(actions.updateName(dataName.nameUpdated.name))
     }
   }, [dataName])
+
+  useEffect(() => {
+    if (dataTimer) {
+      dispatch(actions.updateTimer(dataTimer.timerUpdated.timerEnd))
+    }
+  }, [dataTimer])
 
   useEffect(() => {
     if (dataRemove) {
@@ -151,6 +160,8 @@ export default function Retro(): JSX.Element {
       >
         <TrashIcon />
       </IconButton>
+
+      <Timer />
 
       <div className="flex min-h-screen w-max overflow-x-auto">
         {columns.map((column, index) => (

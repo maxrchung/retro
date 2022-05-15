@@ -29,6 +29,9 @@ export const retroSlice = createSlice({
     },
     updateColumns: (state, action: PayloadAction<Array<Types.Column>>) => {
       state.retro.columns = action.payload
+    },
+    updateTimer: (state, action: PayloadAction<string>) => {
+      state.retro.timerEnd = action.payload
     }
   }
 })
