@@ -6,7 +6,7 @@ import {
   PencilIcon,
   PlusIcon,
   TrashIcon
-} from '@heroicons/react/solid'
+} from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import ColumnHeader from 'components/ColumnHeader'

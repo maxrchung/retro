@@ -15,7 +15,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import GitHubIcon from 'icons/GitHubIcon'
 import TwitterIcon from 'icons/TwitterIcon'
-import { HomeIcon } from '@heroicons/react/solid'
+import { HomeIcon } from '@heroicons/react/outline'
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_URI

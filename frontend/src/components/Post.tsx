@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
-import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/solid'
+import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import Card from 'components/Card'
 import {

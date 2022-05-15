@@ -1,4 +1,4 @@
-import { BanIcon, ClockIcon, PlusIcon } from '@heroicons/react/solid'
+import { BanIcon, ClockIcon, PlusIcon } from '@heroicons/react/outline'
 import { useUpdateTimer } from 'graphql/client'
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from 'state/hooks'
@@ -47,7 +47,6 @@ export default function Timer(): JSX.Element {
   const addSeconds = (seconds: number) => () => {
     const timerUpdate = timer <= curr ? new Date(curr) : new Date(timerEnd)
     timerUpdate.setUTCSeconds(timerUpdate.getUTCSeconds() + seconds)
-    console.log(timerUpdate.toISOString())
     updateTimer({
       variables: {
         retroId: id,

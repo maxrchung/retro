@@ -10,7 +10,7 @@ import {
   PlusIcon,
   RefreshIcon,
   TrashIcon
-} from '@heroicons/react/solid'
+} from '@heroicons/react/outline'
 import ColumnHeader from 'components/ColumnHeader'
 import {
   useCreateColumn,
