@@ -16,18 +16,23 @@ export default function Card({
 
   return (
     <div
-      className={'p-2 min-w-0 flex justify-between items-center'}
+      className="relative"
       onMouseOver={() => !alwaysShowButtons && setShowButtons(true)}
       onMouseOut={() => !alwaysShowButtons && setShowButtons(false)}
     >
-      {/* wat https://stackoverflow.com/a/40612184/13183186 */}
-      <div className="p-1 min-w-0 flex-1">{content}</div>
       <div
-        className={classNames('p-1 flex flex-col gap-y-2', {
-          invisible: !alwaysShowButtons && !showButtons
-        })}
+        className={classNames(
+          'absolute right-0 flex gap-x-1 mr-1 -translate-y-5',
+          {
+            invisible: !alwaysShowButtons && !showButtons
+          }
+        )}
       >
         {buttons}
+      </div>
+      <div className="p-4 w-100 right-0 flex justify-between items-center">
+        {/* wat https://stackoverflow.com/a/40612184/13183186 */}
+        <div className="min-w-0 flex-1">{content}</div>
       </div>
     </div>
   )
