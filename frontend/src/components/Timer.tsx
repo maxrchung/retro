@@ -38,7 +38,8 @@ export default function Timer(): JSX.Element {
   // https://stackoverflow.com/a/59861536
   const [curr, setCurr] = useState(new Date())
   useEffect(() => {
-    const interval = setInterval(() => setCurr(new Date()), 1000)
+    // 100 milliseconds to prevent skips
+    const interval = setInterval(() => setCurr(new Date()), 100)
     return () => {
       clearInterval(interval)
     }
