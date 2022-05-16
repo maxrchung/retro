@@ -166,9 +166,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           }
           buttons={
             <>
-              <IconButton onClick={() => confirmRemovePost()}>
-                <TrashIcon />
-              </IconButton>
               <IconButton
                 onClick={() => {
                   isEditing
@@ -185,6 +182,9 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                 }}
               >
                 {isEditing ? <CheckIcon /> : <PencilIcon />}
+              </IconButton>
+              <IconButton onClick={() => confirmRemovePost()}>
+                <TrashIcon />
               </IconButton>
             </>
           }
