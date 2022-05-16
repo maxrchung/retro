@@ -8,7 +8,7 @@ import {
   TrashIcon
 } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
-import Card from 'components/Card'
+import PostContainer from 'components/PostContainer'
 import ColumnHeader from 'components/ColumnHeader'
 import { useAppSelector } from 'state/hooks'
 import Post, { PostDragItem } from 'components/Post'
@@ -26,6 +26,7 @@ import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
 import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
 import { ColumnHoverState, getColumnHoverState } from '../utils'
+import InputContainer from './InputContainer'
 
 interface ColumnProps {
   column: Types.Column
@@ -195,7 +196,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   return (
     <div className="flex">
       <hr
-        className={classNames('border-2 -translate-x-0.5 h-full', {
+        className={classNames('border-2 rounded -translate-x-0.5 h-full', {
           'border-blue-500': columnHoverState === ColumnHoverState.LEFT,
           'border-transparent': columnHoverState !== ColumnHoverState.LEFT
         })}
@@ -209,7 +210,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           })}
         >
           <ColumnHeader>
-            <Card
+            <PostContainer
               content={
                 <>
                   {isEditing ? (
@@ -249,14 +250,14 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               buttons={
                 <>
                   <IconButton
+                    icon={<TrashIcon />}
                     onClick={() =>
                       confirm('Are you sure you want to delete this column?') &&
                       removeColumn()
                     }
-                  >
-                    <TrashIcon />
-                  </IconButton>
+                  ></IconButton>
                   <IconButton
+                    icon={isEditing ? <CheckIcon /> : <PencilIcon />}
                     onClick={() => {
                       isEditing
                         ? updateColumnName({
@@ -269,9 +270,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                         : setEditName(name)
                       setIsEditing(!isEditing)
                     }}
-                  >
-                    {isEditing ? <CheckIcon /> : <PencilIcon />}
-                  </IconButton>
+                  ></IconButton>
                 </>
               }
             />
@@ -279,7 +278,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
           <div ref={postsRef}>
             <hr
-              className={classNames('border-2 translate-y-0.5', {
+              className={classNames('border-2 rounded translate-y-0.5', {
                 'border-blue-500': postHoverState === PostHoverState.TOP,
                 'border-transparent': postHoverState !== PostHoverState.TOP
               })}
@@ -290,15 +289,14 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             ))}
 
             <hr
-              className={classNames('border-2 -translate-y-0.5', {
+              className={classNames('border-2 rounded -translate-y-0.5', {
                 'border-blue-500': postHoverState === PostHoverState.BOTTOM,
                 'border-transparent': postHoverState !== PostHoverState.BOTTOM
               })}
             />
           </div>
 
-          <Card
-            alwaysShowButtons
+          <InputContainer
             content={
               // Ok https://stackoverflow.com/a/64556831/13183186
               <div className="flex">
@@ -318,21 +316,20 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 />
               </div>
             }
-            buttons={
+            button={
               <IconButton
+                icon={<PlusIcon />}
                 onClick={() => {
                   submitCreatePost()
                 }}
-              >
-                <PlusIcon />
-              </IconButton>
+              />
             }
           />
         </div>
       </div>
 
       <hr
-        className={classNames('border-2 translate-x-0.5 h-full', {
+        className={classNames('border-2 rounded translate-x-0.5 h-full', {
           'border-blue-500': columnHoverState === ColumnHoverState.RIGHT,
           'border-transparent': columnHoverState !== ColumnHoverState.RIGHT
         })}

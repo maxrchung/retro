@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
-import Card from 'components/Card'
+import PostContainer from 'components/PostContainer'
 import {
   useMovePost,
   useRemovePost,
@@ -109,7 +109,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   return (
     <div ref={ref} className="py-1">
       <hr
-        className={classNames('border-2 -translate-y-1.5', {
+        className={classNames('border-2 rounded -translate-y-1.5', {
           'border-blue-500': postHoverState === PostHoverState.TOP,
           'border-transparent': postHoverState !== PostHoverState.TOP
         })}
@@ -122,7 +122,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           }
         )}
       >
-        <Card
+        <PostContainer
           content={
             <>
               {isEditing ? (
@@ -167,6 +167,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           buttons={
             <>
               <IconButton
+                icon={isEditing ? <CheckIcon /> : <PencilIcon />}
                 onClick={() => {
                   isEditing
                     ? updatePostContent({
@@ -180,18 +181,18 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     : setEditContent(content)
                   setIsEditing(!isEditing)
                 }}
-              >
-                {isEditing ? <CheckIcon /> : <PencilIcon />}
-              </IconButton>
-              <IconButton onClick={() => confirmRemovePost()}>
-                <TrashIcon />
-              </IconButton>
+              />
+
+              <IconButton
+                icon={<TrashIcon />}
+                onClick={() => confirmRemovePost()}
+              />
             </>
           }
         />
       </div>
       <hr
-        className={classNames('border-2 translate-y-1.5', {
+        className={classNames('border-2 rounded translate-y-1.5', {
           'border-blue-500': postHoverState === PostHoverState.BOTTOM,
           'border-transparent': postHoverState !== PostHoverState.BOTTOM
         })}

@@ -2,7 +2,6 @@ import Column from 'components/Column'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
-import Card from 'components/Card'
 import IconButton from 'components/IconButton'
 import {
   CheckIcon,
@@ -25,6 +24,7 @@ import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
 import { isKeyEnterOnly } from 'utils'
 import Timer from './Timer'
+import InputContainer from './InputContainer'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -132,11 +132,10 @@ export default function Retro(): JSX.Element {
         )}
       </h1>
 
-      <IconButton onClick={() => refetch()}>
-        <RefreshIcon />
-      </IconButton>
+      <IconButton icon={<RefreshIcon />} onClick={() => refetch()} />
 
       <IconButton
+        icon={isEditing ? <CheckIcon /> : <PencilIcon />}
         onClick={() => {
           isEditing
             ? updateRetroName({
@@ -148,18 +147,15 @@ export default function Retro(): JSX.Element {
             : setEditName(name)
           setIsEditing(!isEditing)
         }}
-      >
-        {isEditing ? <CheckIcon /> : <PencilIcon />}
-      </IconButton>
+      />
 
       <IconButton
+        icon={<TrashIcon />}
         onClick={() =>
           confirm('Are you sure you want to delete this retro?') &&
           removeRetro()
         }
-      >
-        <TrashIcon />
-      </IconButton>
+      />
 
       <Timer />
 
@@ -170,8 +166,7 @@ export default function Retro(): JSX.Element {
 
         <div className={'w-80 p-5'}>
           <ColumnHeader>
-            <Card
-              alwaysShowButtons
+            <InputContainer
               content={
                 <input
                   className="p-2 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
@@ -192,10 +187,11 @@ export default function Retro(): JSX.Element {
                   placeholder="Column"
                 />
               }
-              buttons={
-                <IconButton onClick={() => submitCreateColumn()}>
-                  <PlusIcon />
-                </IconButton>
+              button={
+                <IconButton
+                  icon={<PlusIcon />}
+                  onClick={() => submitCreateColumn()}
+                />
               }
             />
           </ColumnHeader>
