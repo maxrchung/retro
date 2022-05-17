@@ -173,6 +173,9 @@ const moveColumn = async (
   args: MutationMoveColumnArgs,
   { client }: ServerContext
 ) => {
+  if (args.oldColumnId === args.targetColumnId) {
+    return false
+  }
   const retro = await getDbRetro(client, args.retroId)
   const oldColumnIndex = retro.columns.findIndex(
     (column) => column.id === args.oldColumnId
@@ -199,6 +202,10 @@ const movePost = async (
   args: MutationMovePostArgs,
   { client }: ServerContext
 ) => {
+  if (args.oldPostId === args.targetPostId) {
+    return false
+  }
+
   const retro = await getDbRetro(client, args.retroId)
   const oldColumn = retro.columns.find(
     (column) => column.id === args.oldColumnId

@@ -80,6 +80,10 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           return
         }
 
+        if (postId === item.postId) {
+          return
+        }
+
         movePost({
           variables: {
             retroId,

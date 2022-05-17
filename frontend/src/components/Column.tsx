@@ -110,6 +110,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           return
         }
 
+        if (columnId === item.columnId) {
+          return
+        }
+
         moveColumn({
           variables: {
             retroId,
