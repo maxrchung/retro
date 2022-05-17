@@ -1,10 +1,18 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['"Amazon Ember"', ...defaultTheme.fontFamily.sans],
+        display: ['"Amazon Ember Display"', ...defaultTheme.fontFamily.sans]
+      }
+    }
   },
   plugins: []
 }

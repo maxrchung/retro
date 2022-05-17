@@ -1,0 +1,19 @@
+/* https://blog.logrocket.com/how-to-use-custom-fonts-tailwind-css/ */
+
+@font-face {
+  font-family: 'Amazon Ember';
+  font-weight: 400;
+  src: local('Amazon Ember'), url('/AmazonEmber_W_Rg.woff2');
+}
+
+@font-face {
+  font-family: 'Amazon Ember';
+  font-weight: 700;
+  src: local('Amazon Ember'), url('/AmazonEmber_W_Rg.woff2');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Display';
+  font-weight: 800;
+  src: local('Amazon Ember Display'), url('/AmazonEmberDisplay_W_He.woff2');
+}
