@@ -16,6 +16,7 @@ import { GRAPHQL_HTTP_URI, GRAPHQL_WEB_SOCKET_URI } from '../constants'
 import Link from 'next/link'
 import Head from 'next/head'
 import GitHubIcon from 'icons/GitHubIcon'
+import IconButton from 'components/IconButton'
 import TwitterIcon from 'icons/TwitterIcon'
 import { HomeIcon } from '@heroicons/react/outline'
 
@@ -60,22 +61,24 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <Head>
         <title>retro</title>
       </Head>
-      <nav className="flex">
+      <nav className="flex justify-between items-center p-3 bg-gray-100">
         <Link href="/">
-          <a>
-            <HomeIcon width={24} />
-          </a>
+          <IconButton icon={<HomeIcon />} label="retro" />
         </Link>
-        <a href="https://github.com/maxrchung/retro">
-          <GitHubIcon />
-        </a>
-        <a href="https://twitter.com/maxrchung">
-          <TwitterIcon />
-        </a>
+        <div className="flex justify-between gap-x-3 align-items-center">
+          <a href="https://github.com/maxrchung/retro">
+            <IconButton icon={<GitHubIcon />} />
+          </a>
+          <a href="https://twitter.com/maxrchung">
+            <IconButton icon={<TwitterIcon />} />
+          </a>
+        </div>
       </nav>
-      <ApolloProvider client={client}>
-        <Component {...pageProps} />
-      </ApolloProvider>
+      <main className="p-3">
+        <ApolloProvider client={client}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </main>
     </>
   )
 }
