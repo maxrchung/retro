@@ -9,8 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Amazon Ember"', ...defaultTheme.fontFamily.sans],
-        display: ['"Amazon Ember Display"', ...defaultTheme.fontFamily.sans]
+        sans: ['"Amazon Ember"', ...defaultTheme.fontFamily.sans]
       }
     }
   },

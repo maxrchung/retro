@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 interface IconButtonProps {
   icon?: JSX.Element
   onClick?: React.MouseEventHandler
-  label?: React.ReactNode
+  label?: string
 }
 
 export default function IconButton({

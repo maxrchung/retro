@@ -13,7 +13,7 @@
 }
 
 @font-face {
-  font-family: 'Amazon Ember Display';
+  font-family: 'Amazon Ember';
   font-weight: 800;
-  src: local('Amazon Ember Display'), url('/AmazonEmberDisplay_W_He.woff2');
+  src: local('Amazon Ember'), url('/AmazonEmber_W_He.woff2');
 }
