@@ -305,7 +305,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               // Ok https://stackoverflow.com/a/64556831/13183186
               <div className="flex">
                 <TextareaAutosize
-                  className="-ml-3 p-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
+                  className="-ml-3 py-1 px-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
                   onKeyDown={(e) => {
                     if (isKeyEnterOnly(e)) {
                       submitCreatePost()

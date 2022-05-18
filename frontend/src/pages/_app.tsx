@@ -18,7 +18,7 @@ import Head from 'next/head'
 import GitHubIcon from 'icons/GitHubIcon'
 import IconButton from 'components/IconButton'
 import TwitterIcon from 'icons/TwitterIcon'
-import { HomeIcon } from '@heroicons/react/outline'
+import RetroIcon from 'icons/RetroIcon'
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_URI
@@ -63,7 +63,10 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <nav className="flex justify-between items-center p-3 bg-gray-100">
         <Link href="/">
-          <IconButton icon={<HomeIcon />} label="retro" />
+          <IconButton
+            icon={<RetroIcon />}
+            label={<span className="">retro</span>}
+          />
         </Link>
         <div className="flex justify-between gap-x-3 align-items-center">
           <a href="https://github.com/maxrchung/retro">
