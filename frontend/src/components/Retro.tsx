@@ -85,7 +85,7 @@ export default function Retro(): JSX.Element {
         <meta name="description" content="A retrospective tool" />
       </Head>
 
-      <div className="flex flex-col gap-y-4">
+      <div className="flex flex-col gap-2">
         <RetroHeader />
 
         <Timer />
