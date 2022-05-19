@@ -10,6 +10,9 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['"Amazon Ember"', ...defaultTheme.fontFamily.sans]
+      },
+      minHeight: {
+        16: '4rem;'
       }
     }
   },

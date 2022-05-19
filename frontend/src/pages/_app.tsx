@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
           </a>
         </div>
       </nav>
-      <main className="p-3">
+      <main className="p-2">
         <ApolloProvider client={client}>
           <Component {...pageProps} />
         </ApolloProvider>

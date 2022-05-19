@@ -95,7 +95,7 @@ export default function Retro(): JSX.Element {
             <Column key={column.id} column={column} index={index} />
           ))}
 
-          <div className={'w-80 p-5'}>
+          <div className={'w-80'}>
             <ColumnHeader>
               <InputContainer
                 content={

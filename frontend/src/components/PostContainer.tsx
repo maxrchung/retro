@@ -20,7 +20,7 @@ export default function PostContainer({
     >
       <div
         className={classNames(
-          'absolute right-0 flex gap-x-1 mr-1 -translate-y-5',
+          'absolute right-0 flex gap-2 mr-2 -translate-y-7',
           {
             invisible: !showButtons
           }
@@ -28,7 +28,7 @@ export default function PostContainer({
       >
         {buttons}
       </div>
-      <div className="p-4">
+      <div className="p-2">
         {/* wat https://stackoverflow.com/a/40612184/13183186 */}
         <div className="flex-1">{content}</div>
       </div>
