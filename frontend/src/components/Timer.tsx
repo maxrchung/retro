@@ -2,6 +2,7 @@ import { BanIcon, ClockIcon, PlusIcon } from '@heroicons/react/outline'
 import { useUpdateTimer } from 'graphql/client'
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from 'state/hooks'
+import IconButton from './IconButton'
 
 const getTimer = (timer: Date, curr: Date): string => {
   if (timer <= curr) {
@@ -57,17 +58,21 @@ export default function Timer(): JSX.Element {
   }
 
   return (
-    <>
-      <div>
+    <div className="flex gap-x-2">
+      <div className="flex items-center gap-x-1">
         <ClockIcon width={24} /> {getTimer(timer, curr)}
       </div>
-      <button onClick={addSeconds(600)}>
-        <PlusIcon width={24} /> 10m
-      </button>
-      <button onClick={addSeconds(60)}>
-        <PlusIcon width={24} /> 1m
-      </button>
-      <button
+      <IconButton
+        onClick={addSeconds(600)}
+        icon={<PlusIcon />}
+        label="10 minutes"
+      />
+      <IconButton
+        onClick={addSeconds(60)}
+        icon={<PlusIcon />}
+        label="1 minute"
+      />
+      <IconButton
         onClick={() => {
           updateTimer({
             variables: {
@@ -76,9 +81,8 @@ export default function Timer(): JSX.Element {
             }
           })
         }}
-      >
-        <BanIcon width={24} />
-      </button>
-    </>
+        icon={<BanIcon />}
+      />
+    </div>
   )
 }

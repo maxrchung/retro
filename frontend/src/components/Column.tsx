@@ -254,13 +254,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               buttons={
                 <>
                   <IconButton
-                    icon={<TrashIcon />}
-                    onClick={() =>
-                      confirm('Are you sure you want to delete this column?') &&
-                      removeColumn()
-                    }
-                  ></IconButton>
-                  <IconButton
                     icon={isEditing ? <CheckIcon /> : <PencilIcon />}
                     onClick={() => {
                       isEditing
@@ -274,7 +267,14 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                         : setEditName(name)
                       setIsEditing(!isEditing)
                     }}
-                  ></IconButton>
+                  />
+                  <IconButton
+                    icon={<TrashIcon />}
+                    onClick={() =>
+                      confirm('Are you sure you want to delete this column?') &&
+                      removeColumn()
+                    }
+                  />
                 </>
               }
             />
