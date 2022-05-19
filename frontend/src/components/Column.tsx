@@ -206,10 +206,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         })}
       />
 
-      <div className="flex flex-col w-80 p-5">
+      <div className="flex flex-col w-80">
         <div
           ref={columnRef}
-          className={classNames('cursor-grab', {
+          className={classNames('cursor-grab bg-gray-100 rounded', {
             'opacity-50 cursor-grabbing': isDragging
           })}
         >

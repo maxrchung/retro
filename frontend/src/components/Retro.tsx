@@ -90,7 +90,7 @@ export default function Retro(): JSX.Element {
 
         <Timer />
 
-        <div className="flex min-h-screen w-max overflow-x-auto">
+        <div className="flex w-max">
           {columns.map((column, index) => (
             <Column key={column.id} column={column} index={index} />
           ))}

@@ -5,6 +5,7 @@ import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline'
 import { useRemoveRetro, useUpdateRetroName } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { isKeyEnterOnly } from 'utils'
+import classNames from 'classnames'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -16,6 +17,7 @@ export default function Retro(): JSX.Element {
 
   const { name } = useAppSelector((state) => state.retro)
   const [isEditing, setIsEditing] = useState(false)
+  const [isOver, setIsOver] = useState(false)
   const [editName, setEditName] = useState(name)
 
   useEffect(() => setEditName(name), [name])
@@ -27,7 +29,11 @@ export default function Retro(): JSX.Element {
   }, [dataRemove])
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div
+      className="flex items-center gap-x-2"
+      onMouseOver={() => setIsOver(true)}
+      onMouseLeave={() => setIsOver(false)}
+    >
       <h1 className="font-bold text-xl">
         {isEditing ? (
           <input
@@ -57,28 +63,34 @@ export default function Retro(): JSX.Element {
         )}
       </h1>
 
-      <IconButton
-        icon={isEditing ? <CheckIcon /> : <PencilIcon />}
-        onClick={() => {
-          isEditing
-            ? updateRetroName({
-                variables: {
-                  retroId,
-                  retroName: editName
-                }
-              })
-            : setEditName(name)
-          setIsEditing(!isEditing)
-        }}
-      />
+      <div
+        className={classNames('flex gap-x-2', {
+          invisible: !isOver
+        })}
+      >
+        <IconButton
+          icon={isEditing ? <CheckIcon /> : <PencilIcon />}
+          onClick={() => {
+            isEditing
+              ? updateRetroName({
+                  variables: {
+                    retroId,
+                    retroName: editName
+                  }
+                })
+              : setEditName(name)
+            setIsEditing(!isEditing)
+          }}
+        />
 
-      <IconButton
-        icon={<TrashIcon />}
-        onClick={() =>
-          confirm('Are you sure you want to delete this retro?') &&
-          removeRetro()
-        }
-      />
+        <IconButton
+          icon={<TrashIcon />}
+          onClick={() =>
+            confirm('Are you sure you want to delete this retro?') &&
+            removeRetro()
+          }
+        />
+      </div>
     </div>
   )
 }

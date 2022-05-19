@@ -120,7 +120,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       />
       <div
         className={classNames(
-          'border-2 border-transparent hover:border-blue-500 cursor-grab bg-gray-100 rounded',
+          'border-2 border-transparent hover:border-blue-500 cursor-grab bg-white rounded',
           {
             'opacity-50 cursor-grabbing': isDragging
           }

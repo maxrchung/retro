@@ -1,4 +1,5 @@
 import { BanIcon, ClockIcon, PlusIcon } from '@heroicons/react/outline'
+import classNames from 'classnames'
 import { useUpdateTimer } from 'graphql/client'
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from 'state/hooks'
@@ -32,9 +33,10 @@ const getTimer = (timer: Date, curr: Date): string => {
 
 export default function Timer(): JSX.Element {
   const { timerEnd, id } = useAppSelector((state) => state.retro)
+  const timer = new Date(timerEnd)
   const [updateTimer] = useUpdateTimer()
 
-  const timer = new Date(timerEnd)
+  const [isOver, setIsOver] = useState(false)
 
   // https://stackoverflow.com/a/59861536
   const [curr, setCurr] = useState(new Date())
@@ -58,31 +60,37 @@ export default function Timer(): JSX.Element {
   }
 
   return (
-    <div className="flex gap-x-2">
+    <div
+      className="flex gap-x-2"
+      onMouseOver={() => setIsOver(true)}
+      onMouseLeave={() => setIsOver(false)}
+    >
       <div className="flex items-center gap-x-1">
         <ClockIcon width={24} /> {getTimer(timer, curr)}
       </div>
-      <IconButton
-        onClick={addSeconds(600)}
-        icon={<PlusIcon />}
-        label="10 minutes"
-      />
-      <IconButton
-        onClick={addSeconds(60)}
-        icon={<PlusIcon />}
-        label="1 minute"
-      />
-      <IconButton
-        onClick={() => {
-          updateTimer({
-            variables: {
-              retroId: id,
-              timerEnd: new Date(0).toISOString()
-            }
-          })
-        }}
-        icon={<BanIcon />}
-      />
+      <div className={classNames('flex gap-x-2', { invisible: !isOver })}>
+        <IconButton
+          onClick={() => {
+            updateTimer({
+              variables: {
+                retroId: id,
+                timerEnd: new Date(0).toISOString()
+              }
+            })
+          }}
+          icon={<BanIcon />}
+        />
+        <IconButton
+          onClick={addSeconds(600)}
+          icon={<PlusIcon />}
+          label="10 minutes"
+        />
+        <IconButton
+          onClick={addSeconds(60)}
+          icon={<PlusIcon />}
+          label="1 minute"
+        />
+      </div>
     </div>
   )
 }
