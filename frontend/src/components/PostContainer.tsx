@@ -28,7 +28,7 @@ export default function PostContainer({
       >
         {buttons}
       </div>
-      <div className="p-2">
+      <div className="p-3">
         {/* wat https://stackoverflow.com/a/40612184/13183186 */}
         <div className="flex-1">{content}</div>
       </div>

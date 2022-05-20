@@ -61,14 +61,14 @@ export default function Timer(): JSX.Element {
 
   return (
     <div
-      className="flex gap-x-2"
+      className="flex gap-3"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
-      <div className="flex items-center gap-x-1">
+      <div className="flex items-center gap-2">
         <ClockIcon width={24} /> {getTimer(timer, curr)}
       </div>
-      <div className={classNames('flex gap-x-2', { invisible: !isOver })}>
+      <div className={classNames('flex gap-2', { invisible: !isOver })}>
         <IconButton
           onClick={() => {
             updateTimer({

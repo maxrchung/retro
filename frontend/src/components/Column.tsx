@@ -209,7 +209,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       <div className="flex flex-col w-80">
         <div
           ref={columnRef}
-          className={classNames('cursor-grab bg-gray-100 rounded mx-1 p-2', {
+          className={classNames('cursor-grab bg-gray-100 rounded mx-1 p-3', {
             'opacity-50 cursor-grabbing': isDragging
           })}
         >
@@ -221,7 +221,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                     <div className="flex">
                       <input
                         autoFocus
-                        className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                        className="-ml-3 p-3 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
                         onKeyDown={(e) => {
                           if (isKeyEnterOnly(e)) {
                             setIsEditing(false)

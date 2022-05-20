@@ -85,7 +85,7 @@ export default function Retro(): JSX.Element {
         <meta name="description" content="A retrospective tool" />
       </Head>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <RetroHeader />
 
         <Timer />
@@ -100,7 +100,7 @@ export default function Retro(): JSX.Element {
               <InputContainer
                 content={
                   <input
-                    className="p-2 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
+                    className="p-3 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
                     onKeyDown={(e) => {
                       if (
                         e.key === 'Enter' &&

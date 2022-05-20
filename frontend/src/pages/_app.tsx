@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
         <Link href="/">
           <IconButton icon={<RetroIcon />} label="retro" />
         </Link>
-        <div className="flex justify-between gap-x-3 align-items-center">
+        <div className="flex justify-between gap-2 align-items-center">
           <a href="https://github.com/maxrchung/retro">
             <IconButton icon={<GitHubIcon />} />
           </a>
@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
           </a>
         </div>
       </nav>
-      <main className="p-2">
+      <main className="p-3">
         <ApolloProvider client={client}>
           <Component {...pageProps} />
         </ApolloProvider>
