@@ -30,7 +30,7 @@ export default function PostContainer({
       </div>
       <div className="p-3">
         {/* wat https://stackoverflow.com/a/40612184/13183186 */}
-        <div className="flex-1">{content}</div>
+        {content}
       </div>
     </div>
   )

@@ -6,7 +6,7 @@ interface HeaderProps {
 
 export default function ColumnHeader(props: HeaderProps): JSX.Element {
   return (
-    <div className="flex flex-col justify-center min-h-16">
+    <div className="flex flex-col justify-center min-h-20">
       {props.children}
     </div>
   )

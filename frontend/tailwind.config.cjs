@@ -12,7 +12,7 @@ module.exports = {
         sans: ['"Amazon Ember"', ...defaultTheme.fontFamily.sans]
       },
       minHeight: {
-        16: '4rem;'
+        20: '5rem;'
       }
     }
   },

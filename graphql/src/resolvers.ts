@@ -112,7 +112,7 @@ const createPost = async (
     id: uid(),
     content: args.postContent
   }
-  column.posts.push(post)
+  column.posts.unshift(post)
   return publishColumns(client, retro)
 }
 

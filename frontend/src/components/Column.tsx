@@ -279,6 +279,37 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             />
           </ColumnHeader>
 
+          <div className="py-1">
+            <InputContainer
+              content={
+                // Ok https://stackoverflow.com/a/64556831/13183186
+                <div className="flex">
+                  <TextArea
+                    onKeyDown={(e) => {
+                      if (isKeyEnterOnly(e)) {
+                        submitCreatePost()
+                        e.preventDefault()
+                      }
+                    }}
+                    onChange={(e) => {
+                      setPost(e.target.value)
+                    }}
+                    placeholder="Post"
+                    value={post}
+                  />
+                </div>
+              }
+              button={
+                <IconButton
+                  icon={<PlusIcon />}
+                  onClick={() => {
+                    submitCreatePost()
+                  }}
+                />
+              }
+            />
+          </div>
+
           <div ref={postsRef}>
             <hr
               className={classNames('border-2 rounded translate-y-0.5', {
@@ -298,35 +329,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
               })}
             />
           </div>
-
-          <InputContainer
-            content={
-              // Ok https://stackoverflow.com/a/64556831/13183186
-              <div className="flex">
-                <TextArea
-                  onKeyDown={(e) => {
-                    if (isKeyEnterOnly(e)) {
-                      submitCreatePost()
-                      e.preventDefault()
-                    }
-                  }}
-                  onChange={(e) => {
-                    setPost(e.target.value)
-                  }}
-                  placeholder="Post"
-                  value={post}
-                />
-              </div>
-            }
-            button={
-              <IconButton
-                icon={<PlusIcon />}
-                onClick={() => {
-                  submitCreatePost()
-                }}
-              />
-            }
-          />
         </div>
       </div>
 

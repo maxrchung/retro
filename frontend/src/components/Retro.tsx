@@ -9,8 +9,6 @@ import {
   useCreateColumn,
   useGetRetro,
   useColumnsUpdated,
-  useRemoveRetro,
-  useUpdateRetroName,
   useNameUpdated,
   useTimerUpdated
 } from 'graphql/client'
@@ -19,6 +17,7 @@ import { actions } from 'state/retroSlice'
 import Timer from './Timer'
 import InputContainer from './InputContainer'
 import RetroHeader from './RetroHeader'
+import TextArea from './TextArea'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -79,7 +78,7 @@ export default function Retro(): JSX.Element {
   }
 
   return (
-    <div className="container break-words text-gray-700 text-base">
+    <div className="break-words text-gray-700 text-base">
       <Head>
         <title>{name} - retro</title>
         <meta name="description" content="A retrospective tool" />
@@ -87,45 +86,46 @@ export default function Retro(): JSX.Element {
 
       <div className="flex flex-col gap-3">
         <RetroHeader />
-
         <Timer />
-
-        <div className="flex w-max">
+        <div className="flex w-full overflow-auto">
           {columns.map((column, index) => (
             <Column key={column.id} column={column} index={index} />
           ))}
 
-          <div className={'w-80'}>
-            <ColumnHeader>
-              <InputContainer
-                content={
-                  <input
-                    className="p-3 w-full rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
-                    onKeyDown={(e) => {
-                      if (
-                        e.key === 'Enter' &&
-                        !e.altKey &&
-                        !e.ctrlKey &&
-                        !e.shiftKey &&
-                        !e.metaKey
-                      ) {
-                        submitCreateColumn()
-                        e.preventDefault()
-                      }
-                    }}
-                    onChange={(e) => setColumnName(e.target.value)}
-                    value={columnName}
-                    placeholder="Column"
-                  />
-                }
-                button={
-                  <IconButton
-                    icon={<PlusIcon />}
-                    onClick={() => submitCreateColumn()}
-                  />
-                }
-              />
-            </ColumnHeader>
+          <div className="flex flex-col w-80 mx-1">
+            <div className="bg-gray-100 rounded mx-1 p-3">
+              <ColumnHeader>
+                <InputContainer
+                  content={
+                    <div className="flex">
+                      <TextArea
+                        onKeyDown={(e) => {
+                          if (
+                            e.key === 'Enter' &&
+                            !e.altKey &&
+                            !e.ctrlKey &&
+                            !e.shiftKey &&
+                            !e.metaKey
+                          ) {
+                            submitCreateColumn()
+                            e.preventDefault()
+                          }
+                        }}
+                        onChange={(e) => setColumnName(e.target.value)}
+                        value={columnName}
+                        placeholder="Column"
+                      />
+                    </div>
+                  }
+                  button={
+                    <IconButton
+                      icon={<PlusIcon />}
+                      onClick={() => submitCreateColumn()}
+                    />
+                  }
+                />
+              </ColumnHeader>
+            </div>
           </div>
         </div>
       </div>
