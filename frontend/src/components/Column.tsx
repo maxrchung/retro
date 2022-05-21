@@ -20,13 +20,13 @@ import {
   useUpdateColumnName
 } from 'graphql/client'
 import * as Types from 'graphql/types'
-import TextareaAutosize from 'react-textarea-autosize'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
 import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
 import { ColumnHoverState, getColumnHoverState } from '../utils'
 import InputContainer from './InputContainer'
+import TextArea from './TextArea'
 
 interface ColumnProps {
   column: Types.Column
@@ -219,9 +219,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 <>
                   {isEditing ? (
                     <div className="flex">
-                      <input
+                      <TextArea
                         autoFocus
-                        className="-ml-3 p-3 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
                         onKeyDown={(e) => {
                           if (isKeyEnterOnly(e)) {
                             setIsEditing(false)
@@ -304,8 +303,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             content={
               // Ok https://stackoverflow.com/a/64556831/13183186
               <div className="flex">
-                <TextareaAutosize
-                  className="-ml-3 py-1 px-2 flex-1 rounded focus:outline-none border-2 border-blue-500 focus:border-blue-300 hover:border-blue-300 resize-none"
+                <TextArea
                   onKeyDown={(e) => {
                     if (isKeyEnterOnly(e)) {
                       submitCreatePost()

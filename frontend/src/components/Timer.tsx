@@ -82,9 +82,9 @@ export default function Timer(): JSX.Element {
         />
 
         <IconButton
-          onClick={addSeconds(60)}
+          onClick={addSeconds(600)}
           icon={<PlusIcon />}
-          label="1 min"
+          label="10 min"
         />
         <IconButton
           onClick={addSeconds(300)}
@@ -92,9 +92,9 @@ export default function Timer(): JSX.Element {
           label="5 min"
         />
         <IconButton
-          onClick={addSeconds(600)}
+          onClick={addSeconds(60)}
           icon={<PlusIcon />}
-          label="10 min"
+          label="1 min"
         />
       </div>
     </div>
