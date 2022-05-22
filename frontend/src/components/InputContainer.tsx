@@ -14,7 +14,7 @@ export default function InputContainer({
   return (
     <div className={'flex justify-between items-center gap-2'}>
       <div className="flex-1">{content}</div>
-      <div>{button}</div>
+      {button}
     </div>
   )
 }
