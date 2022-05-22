@@ -88,8 +88,8 @@ export default function Retro(): JSX.Element {
         <RetroHeader />
         <Timer />
 
-        {/* p-4 -m-4 wacky hack to handle overflow-auto button clipping */}
-        <div className="overflow-auto p-4 -m-4 mr-0 mb-0">
+        {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
+        <div className="overflow-auto px-1 py-4 -mt-4">
           <div className="flex">
             {columns.map((column, index) => (
               <Column key={column.id} column={column} index={index} />
