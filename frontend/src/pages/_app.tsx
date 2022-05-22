@@ -62,7 +62,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
         <title>retro</title>
       </Head>
       <div className="flex flex-col overflow-hidden flex-auto">
-        <nav className="flex justify-between items-center p-3 bg-gray-100 flex-auto">
+        <nav className="flex justify-between items-center p-3 bg-gray-100">
           <Link href="/">
             <IconButton icon={<RetroIcon />} label="retro" />
           </Link>
