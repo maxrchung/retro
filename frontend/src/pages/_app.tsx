@@ -61,8 +61,8 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <Head>
         <title>retro</title>
       </Head>
-      <div className="w-full flex flex-auto flex-col overflow-hidden">
-        <nav className="flex justify-between items-center p-3 bg-gray-100">
+      <div className="flex flex-col overflow-hidden flex-auto">
+        <nav className="flex justify-between items-center p-3 bg-gray-100 flex-auto">
           <Link href="/">
             <IconButton icon={<RetroIcon />} label="retro" />
           </Link>
@@ -75,7 +75,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
             </a>
           </div>
         </nav>
-        <main className="p-3 flex flex-auto flex-col overflow-hidden">
+        <main className="p-3 flex overflow-hidden flex-auto">
           <ApolloProvider client={client}>
             <Component {...pageProps} />
           </ApolloProvider>
