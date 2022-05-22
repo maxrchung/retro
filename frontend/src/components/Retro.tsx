@@ -78,7 +78,7 @@ export default function Retro(): JSX.Element {
   }
 
   return (
-    <div className="break-words text-gray-700 text-base">
+    <div className="break-words text-gray-700 text-base flex flex-col flex-1">
       <Head>
         <title>{name} - retro</title>
         <meta name="description" content="A retrospective tool" />
@@ -87,7 +87,8 @@ export default function Retro(): JSX.Element {
       <div className="flex flex-col gap-3">
         <RetroHeader />
         <Timer />
-        <div className="flex w-full overflow-auto">
+        {/* p-3 -m-3 to handle button clipping from overflow-auto */}
+        <div className="flex w-full p-3 -m-3">
           {columns.map((column, index) => (
             <Column key={column.id} column={column} index={index} />
           ))}
