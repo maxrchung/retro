@@ -68,7 +68,11 @@ export default function Timer(): JSX.Element {
       <div className="flex items-center gap-2">
         <ClockIcon width={24} /> {getTimer(timer, curr)}
       </div>
-      <div className={classNames('flex gap-2', { invisible: !isOver })}>
+      <div
+        className={classNames('flex gap-2 items-center', {
+          invisible: !isOver
+        })}
+      >
         <IconButton
           onClick={() => {
             updateTimer({
@@ -80,7 +84,6 @@ export default function Timer(): JSX.Element {
           }}
           icon={<BanIcon />}
         />
-
         <IconButton
           onClick={addSeconds(600)}
           icon={<PlusIcon />}
