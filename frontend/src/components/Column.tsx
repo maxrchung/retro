@@ -198,7 +198,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   dragRef(dropPostRef(dropColumnRef(columnRef)))
 
   return (
-    <div className="flex">
+    <div className="flex" ref={columnRef}>
       <hr
         className={classNames('border-2 rounded -translate-x-0.5 h-full', {
           'border-blue-500': columnHoverState === ColumnHoverState.LEFT,
@@ -207,7 +207,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       />
 
       <div
-        ref={columnRef}
         className={classNames(
           'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 p-3',
           {
