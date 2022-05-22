@@ -95,6 +95,7 @@ export default function Retro(): JSX.Element {
               <Column key={column.id} column={column} index={index} />
             ))}
 
+            {/* flex is needed for proper column width */}
             <div className="flex">
               <div className="flex flex-col w-80 mx-1">
                 <div className="bg-gray-100 rounded mx-1 p-3">
