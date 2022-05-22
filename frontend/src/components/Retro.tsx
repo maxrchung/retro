@@ -78,54 +78,57 @@ export default function Retro(): JSX.Element {
   }
 
   return (
-    <div className="break-words text-gray-700 text-base flex flex-col flex-1">
+    <div className="break-words text-gray-700 text-base flex flex-col flex-auto overflow-hidden">
       <Head>
         <title>{name} - retro</title>
         <meta name="description" content="A retrospective tool" />
       </Head>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-auto overflow-hidden">
         <RetroHeader />
         <Timer />
-        {/* p-3 -m-3 to handle button clipping from overflow-auto */}
-        <div className="flex w-full p-3 -m-3">
-          {columns.map((column, index) => (
-            <Column key={column.id} column={column} index={index} />
-          ))}
 
-          <div className="flex flex-col w-80 mx-1">
-            <div className="bg-gray-100 rounded mx-1 p-3">
-              <ColumnHeader>
-                <InputContainer
-                  content={
-                    <div className="flex">
-                      <TextArea
-                        onKeyDown={(e) => {
-                          if (
-                            e.key === 'Enter' &&
-                            !e.altKey &&
-                            !e.ctrlKey &&
-                            !e.shiftKey &&
-                            !e.metaKey
-                          ) {
-                            submitCreateColumn()
-                            e.preventDefault()
-                          }
-                        }}
-                        onChange={(e) => setColumnName(e.target.value)}
-                        value={columnName}
-                        placeholder="Column"
+        <div className="flex flex-col flex-auto overflow-auto">
+          {/* p-3 -m-3 to handle button clipping from overflow-auto */}
+          <div className="flex flex-auto w-full p-3 -m-3">
+            {columns.map((column, index) => (
+              <Column key={column.id} column={column} index={index} />
+            ))}
+
+            <div className="flex flex-col w-80 mx-1">
+              <div className="bg-gray-100 rounded mx-1 p-3">
+                <ColumnHeader>
+                  <InputContainer
+                    content={
+                      <div className="flex">
+                        <TextArea
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === 'Enter' &&
+                              !e.altKey &&
+                              !e.ctrlKey &&
+                              !e.shiftKey &&
+                              !e.metaKey
+                            ) {
+                              submitCreateColumn()
+                              e.preventDefault()
+                            }
+                          }}
+                          onChange={(e) => setColumnName(e.target.value)}
+                          value={columnName}
+                          placeholder="Column"
+                        />
+                      </div>
+                    }
+                    button={
+                      <IconButton
+                        icon={<PlusIcon />}
+                        onClick={() => submitCreateColumn()}
                       />
-                    </div>
-                  }
-                  button={
-                    <IconButton
-                      icon={<PlusIcon />}
-                      onClick={() => submitCreateColumn()}
-                    />
-                  }
-                />
-              </ColumnHeader>
+                    }
+                  />
+                </ColumnHeader>
+              </div>
             </div>
           </div>
         </div>

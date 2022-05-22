@@ -17,3 +17,20 @@
   font-weight: 800;
   src: local('Amazon Ember'), url('/AmazonEmber_W_He.woff2');
 }
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#__next {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+}
