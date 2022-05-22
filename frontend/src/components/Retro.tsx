@@ -88,46 +88,48 @@ export default function Retro(): JSX.Element {
         <RetroHeader />
         <Timer />
 
-        {/* Some wacky padding/margin hack to handle button clipping from overflow-auto  */}
+        {/* p-4 -m-4 wacky hack to handle overflow-auto button clipping */}
         <div className="overflow-auto p-4 -m-4 mr-0 mb-0">
           <div className="flex">
             {columns.map((column, index) => (
               <Column key={column.id} column={column} index={index} />
             ))}
 
-            <div className="flex flex-col w-80 mx-1">
-              <div className="bg-gray-100 rounded mx-1 p-3">
-                <ColumnHeader>
-                  <InputContainer
-                    content={
-                      <div className="flex">
-                        <TextArea
-                          onKeyDown={(e) => {
-                            if (
-                              e.key === 'Enter' &&
-                              !e.altKey &&
-                              !e.ctrlKey &&
-                              !e.shiftKey &&
-                              !e.metaKey
-                            ) {
-                              submitCreateColumn()
-                              e.preventDefault()
-                            }
-                          }}
-                          onChange={(e) => setColumnName(e.target.value)}
-                          value={columnName}
-                          placeholder="Column"
+            <div className="flex">
+              <div className="flex flex-col w-80 mx-1">
+                <div className="bg-gray-100 rounded mx-1 p-3">
+                  <ColumnHeader>
+                    <InputContainer
+                      content={
+                        <div className="flex">
+                          <TextArea
+                            onKeyDown={(e) => {
+                              if (
+                                e.key === 'Enter' &&
+                                !e.altKey &&
+                                !e.ctrlKey &&
+                                !e.shiftKey &&
+                                !e.metaKey
+                              ) {
+                                submitCreateColumn()
+                                e.preventDefault()
+                              }
+                            }}
+                            onChange={(e) => setColumnName(e.target.value)}
+                            value={columnName}
+                            placeholder="Column"
+                          />
+                        </div>
+                      }
+                      button={
+                        <IconButton
+                          icon={<PlusIcon />}
+                          onClick={() => submitCreateColumn()}
                         />
-                      </div>
-                    }
-                    button={
-                      <IconButton
-                        icon={<PlusIcon />}
-                        onClick={() => submitCreateColumn()}
-                      />
-                    }
-                  />
-                </ColumnHeader>
+                      }
+                    />
+                  </ColumnHeader>
+                </div>
               </div>
             </div>
           </div>
