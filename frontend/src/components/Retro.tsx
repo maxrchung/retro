@@ -121,6 +121,7 @@ export default function Retro(): JSX.Element {
                         <IconButton
                           icon={<PlusSmIcon />}
                           onClick={() => submitCreateColumn()}
+                          title="Create column"
                         />
                       }
                     />

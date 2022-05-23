@@ -27,6 +27,7 @@ export default function Home(): JSX.Element {
       <IconButton
         icon={<PlusSmIcon />}
         onClick={() => !loading && createRetro()}
+        title="Create retro"
       />
     </div>
   )

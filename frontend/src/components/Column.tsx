@@ -198,7 +198,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   dragRef(dropPostRef(dropColumnRef(columnRef)))
 
   return (
-    <div className="flex" ref={columnRef}>
+    <div className="flex items-start" ref={columnRef}>
       <hr
         className={classNames('border-2 rounded -translate-x-0.5 h-full', {
           'border-blue-500': columnHoverState === ColumnHoverState.LEFT,
@@ -208,7 +208,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
       <div
         className={classNames(
-          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 p-3',
+          'content-start flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 p-3',
           {
             'opacity-50 cursor-grabbing': isDragging
           }
@@ -267,6 +267,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                       : setEditName(name)
                     setIsEditing(!isEditing)
                   }}
+                  title={isEditing ? 'Edit column name' : 'Confirm column name'}
                 />
                 <IconButton
                   icon={<TrashIcon />}
@@ -274,6 +275,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                     confirm('Are you sure you want to delete this column?') &&
                     removeColumn()
                   }
+                  title="Delete column"
                 />
               </>
             }
@@ -306,6 +308,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 onClick={() => {
                   submitCreatePost()
                 }}
+                title="Create column"
               />
             }
           />

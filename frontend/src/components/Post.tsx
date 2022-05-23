@@ -184,11 +184,13 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     : setEditContent(content)
                   setIsEditing(!isEditing)
                 }}
+                title={isEditing ? 'Edit post' : 'Confirm post'}
               />
 
               <IconButton
                 icon={<TrashIcon />}
                 onClick={() => confirmRemovePost()}
+                title="Delete post"
               />
             </>
           }

@@ -81,6 +81,7 @@ export default function Retro(): JSX.Element {
               : setEditName(name)
             setIsEditing(!isEditing)
           }}
+          title={isEditing ? 'Edit retro name' : 'Confirm retro name'}
         />
 
         <IconButton
@@ -89,6 +90,7 @@ export default function Retro(): JSX.Element {
             confirm('Are you sure you want to delete this retro?') &&
             removeRetro()
           }
+          title="Delete retro"
         />
       </div>
     </div>

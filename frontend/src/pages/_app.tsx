@@ -64,14 +64,14 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <div className="flex flex-col overflow-hidden flex-auto break-words text-gray-700 text-base">
         <nav className="flex justify-between items-center p-3 bg-gray-100">
           <Link href="/">
-            <IconButton icon={<RetroIcon />} label="retro" />
+            <IconButton icon={<RetroIcon />} label="retro" title="Home" />
           </Link>
           <div className="flex justify-between gap-2 align-items-center">
             <a href="https://github.com/maxrchung/retro">
-              <IconButton icon={<GitHubIcon />} />
+              <IconButton icon={<GitHubIcon />} title="GitHub" />
             </a>
             <a href="https://twitter.com/maxrchung">
-              <IconButton icon={<TwitterIcon />} />
+              <IconButton icon={<TwitterIcon />} title="Twitter" />
             </a>
           </div>
         </nav>
