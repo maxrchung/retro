@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../state/hooks'
 import IconButton from 'components/IconButton'
-import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline'
+import {
+  CheckIcon,
+  PencilIcon,
+  RefreshIcon,
+  TrashIcon
+} from '@heroicons/react/outline'
 import { useRemoveRetro, useUpdateRetroName } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { isKeyEnterOnly } from 'utils'
@@ -69,6 +74,14 @@ export default function Retro(): JSX.Element {
         })}
       >
         <IconButton
+          icon={<RefreshIcon />}
+          onClick={() => {
+            router.reload()
+          }}
+          title="Refresh retro"
+        />
+
+        <IconButton
           icon={isEditing ? <CheckIcon /> : <PencilIcon />}
           onClick={() => {
             isEditing
@@ -81,7 +94,7 @@ export default function Retro(): JSX.Element {
               : setEditName(name)
             setIsEditing(!isEditing)
           }}
-          title={isEditing ? 'Edit retro name' : 'Confirm retro name'}
+          title={isEditing ? 'Confirm retro name' : 'Edit retro name'}
         />
 
         <IconButton

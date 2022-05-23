@@ -82,7 +82,7 @@ export default function Retro(): JSX.Element {
     <div className="flex overflow-hidden flex-auto">
       <Head>
         <title>{name} - retro</title>
-        <meta name="description" content="A retrospective tool" />
+        <meta name="description" content="A simple retrospective tool." />
       </Head>
 
       <div className="flex flex-col gap-3 overflow-hidden flex-auto">

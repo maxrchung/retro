@@ -184,7 +184,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     : setEditContent(content)
                   setIsEditing(!isEditing)
                 }}
-                title={isEditing ? 'Edit post' : 'Confirm post'}
+                title={isEditing ? 'Confirm post' : 'Edit post'}
               />
 
               <IconButton

@@ -267,7 +267,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                       : setEditName(name)
                     setIsEditing(!isEditing)
                   }}
-                  title={isEditing ? 'Edit column name' : 'Confirm column name'}
+                  title={isEditing ? 'Confirm column name' : 'Edit column name'}
                 />
                 <IconButton
                   icon={<TrashIcon />}
