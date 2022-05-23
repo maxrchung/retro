@@ -18,6 +18,7 @@ import Timer from './Timer'
 import InputContainer from './InputContainer'
 import RetroHeader from './RetroHeader'
 import TextArea from './TextArea'
+import { isKeyEnterOnly } from 'utils'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -105,13 +106,7 @@ export default function Retro(): JSX.Element {
                         <div className="flex">
                           <TextArea
                             onKeyDown={(e) => {
-                              if (
-                                e.key === 'Enter' &&
-                                !e.altKey &&
-                                !e.ctrlKey &&
-                                !e.shiftKey &&
-                                !e.metaKey
-                              ) {
+                              if (isKeyEnterOnly(e)) {
                                 submitCreateColumn()
                                 e.preventDefault()
                               }
