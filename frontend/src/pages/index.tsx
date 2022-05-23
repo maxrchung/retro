@@ -14,12 +14,12 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-full -translate-y-16">
+    <div className="flex flex-col justify-center items-center h-full -translate-y-14">
       <div className="flex flex-row items-center">
-        <div className="h-14 w-14">
+        <div className="h-12 w-12">
           <RetroIcon />
         </div>
-        <h1 className="font-bold text-5xl">retro</h1>
+        <h1 className="font-bold text-4xl">retro</h1>
       </div>
 
       <p className="mb-5 mt-2">A simple retrospective tool</p>

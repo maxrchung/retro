@@ -3,7 +3,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import IconButton from 'components/IconButton'
-import { PlusSmIcon, TrashIcon } from '@heroicons/react/outline'
+import { PlusSmIcon } from '@heroicons/react/outline'
 import ColumnHeader from 'components/ColumnHeader'
 import {
   useCreateColumn,
@@ -78,7 +78,7 @@ export default function Retro(): JSX.Element {
   }
 
   return (
-    <div className="break-words text-gray-700 text-base flex overflow-hidden flex-auto">
+    <div className="flex overflow-hidden flex-auto">
       <Head>
         <title>{name} - retro</title>
         <meta name="description" content="A retrospective tool" />
