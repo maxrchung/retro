@@ -3,7 +3,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import IconButton from 'components/IconButton'
-import { PlusIcon, TrashIcon } from '@heroicons/react/outline'
+import { PlusSmIcon, TrashIcon } from '@heroicons/react/outline'
 import ColumnHeader from 'components/ColumnHeader'
 import {
   useCreateColumn,
@@ -124,7 +124,7 @@ export default function Retro(): JSX.Element {
                       }
                       button={
                         <IconButton
-                          icon={<PlusIcon />}
+                          icon={<PlusSmIcon />}
                           onClick={() => submitCreateColumn()}
                         />
                       }

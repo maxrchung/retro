@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import {
   CheckIcon,
   PencilIcon,
-  PlusIcon,
+  PlusSmIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
@@ -302,7 +302,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             }
             button={
               <IconButton
-                icon={<PlusIcon />}
+                icon={<PlusSmIcon />}
                 onClick={() => {
                   submitCreatePost()
                 }}

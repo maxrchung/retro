@@ -1,4 +1,4 @@
-import { BanIcon, ClockIcon, PlusIcon } from '@heroicons/react/outline'
+import { BanIcon, ClockIcon, PlusSmIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { useUpdateTimer } from 'graphql/client'
 import React, { useEffect, useState } from 'react'
@@ -84,17 +84,17 @@ export default function Timer(): JSX.Element {
         />
         <IconButton
           onClick={addSeconds(600)}
-          icon={<PlusIcon />}
+          icon={<PlusSmIcon />}
           label="10 min"
         />
         <IconButton
           onClick={addSeconds(300)}
-          icon={<PlusIcon />}
+          icon={<PlusSmIcon />}
           label="5 min"
         />
         <IconButton
           onClick={addSeconds(60)}
-          icon={<PlusIcon />}
+          icon={<PlusSmIcon />}
           label="1 min"
         />
       </div>
