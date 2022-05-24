@@ -272,8 +272,9 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 <IconButton
                   icon={<TrashIcon />}
                   onClick={() =>
-                    confirm('Are you sure you want to delete this column?') &&
-                    removeColumn()
+                    confirm(
+                      'Are you sure you want to delete this column? All posts inside the column will also be deleted.'
+                    ) && removeColumn()
                   }
                   title="Delete column"
                 />
