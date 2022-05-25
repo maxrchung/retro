@@ -85,14 +85,14 @@ export default function Retro(): JSX.Element {
         <meta name="description" content="A simple retrospective tool." />
       </Head>
 
-      <div className="flex flex-col gap-3 overflow-hidden flex-auto">
-        <div className="flex justify-between gap-3">
+      <div className="flex flex-col overflow-hidden">
+        <div className="flex justify-between gap-3 p-3">
           <RetroHeader />
           <Timer />
         </div>
 
         {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
-        <div className="overflow-auto px-1 py-4 -mt-4">
+        <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3">
           <div className="flex">
             {columns.map((column, index) => (
               <Column key={column.id} column={column} index={index} />

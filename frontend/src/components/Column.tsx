@@ -208,7 +208,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
       <div
         className={classNames(
-          'content-start flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 p-3',
+          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full',
           {
             'opacity-50 cursor-grabbing': isDragging
           }
@@ -283,7 +283,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           />
         </ColumnHeader>
 
-        <div className="py-1">
+        <div className="py-1 px-3">
           <InputContainer
             content={
               // Ok https://stackoverflow.com/a/64556831/13183186
@@ -315,7 +315,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           />
         </div>
 
-        <div ref={postsRef}>
+        <div className="px-3 overflow-auto" ref={postsRef}>
           <hr
             className={classNames('border-2 rounded translate-y-0.5', {
               'border-blue-500': postHoverState === PostHoverState.TOP,

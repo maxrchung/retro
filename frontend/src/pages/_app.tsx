@@ -75,7 +75,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
             </a>
           </div>
         </nav>
-        <main className="p-3 flex flex-col overflow-hidden flex-auto">
+        <main className="flex flex-col overflow-hidden">
           <ApolloProvider client={client}>
             <Component {...pageProps} />
           </ApolloProvider>
