@@ -86,8 +86,10 @@ export default function Retro(): JSX.Element {
       </Head>
 
       <div className="flex flex-col gap-3 overflow-hidden flex-auto">
-        <RetroHeader />
-        <Timer />
+        <div className="flex justify-between gap-3">
+          <RetroHeader />
+          <Timer />
+        </div>
 
         {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
         <div className="overflow-auto px-1 py-4 -mt-4">

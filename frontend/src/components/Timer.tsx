@@ -59,30 +59,15 @@ export default function Timer(): JSX.Element {
 
   return (
     <div
-      className="flex gap-3"
+      className="flex gap-3 w-1/2 justify-end"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
-      <div className="flex items-center gap-2">
-        <ClockIcon width={24} /> {getTimer(timer, curr)}
-      </div>
       <div
         className={classNames('flex gap-2 items-center', {
           invisible: !isOver
         })}
       >
-        <IconButton
-          onClick={() => {
-            updateTimer({
-              variables: {
-                retroId: id,
-                timerEnd: new Date(0).toISOString()
-              }
-            })
-          }}
-          icon={<BanIcon />}
-          title="Cancel timer"
-        />
         <IconButton
           onClick={addSeconds(600)}
           icon={<PlusSmIcon />}
@@ -101,6 +86,21 @@ export default function Timer(): JSX.Element {
           label="1"
           title="Add 1 minute"
         />
+        <IconButton
+          onClick={() => {
+            updateTimer({
+              variables: {
+                retroId: id,
+                timerEnd: new Date(0).toISOString()
+              }
+            })
+          }}
+          icon={<BanIcon />}
+          title="Cancel timer"
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <ClockIcon width={24} /> {getTimer(timer, curr)}
       </div>
     </div>
   )

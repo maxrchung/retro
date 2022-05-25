@@ -11,6 +11,7 @@ import { useRemoveRetro, useUpdateRetroName } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { isKeyEnterOnly } from 'utils'
 import classNames from 'classnames'
+import TextArea from './TextArea'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -35,38 +36,38 @@ export default function Retro(): JSX.Element {
 
   return (
     <div
-      className="flex items-center gap-3"
+      className="flex items-center gap-3 w-1/2"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
-      <h1 className="font-bold text-xl">
-        {isEditing ? (
-          <input
-            autoFocus
-            className="-ml-3 p-2 flex-1 rounded border-2 border-blue-500 focus:outline-none focus:border-blue-300 hover:border-blue-300"
-            onKeyDown={(e) => {
-              if (isKeyEnterOnly(e)) {
-                setIsEditing(false)
-                updateRetroName({
-                  variables: {
-                    retroId,
-                    retroName: editName
-                  }
-                })
-              } else if (e.key === 'Escape') {
-                setIsEditing(false)
-                setEditName(name)
-              }
-            }}
-            onChange={(e) => setEditName(e.target.value)}
-            value={editName}
-          />
-        ) : (
-          <span className="cursor-text" onClick={() => setIsEditing(true)}>
-            {editName}
-          </span>
-        )}
-      </h1>
+      {isEditing ? (
+        <TextArea
+          autoFocus
+          onKeyDown={(e) => {
+            if (isKeyEnterOnly(e)) {
+              setIsEditing(false)
+              updateRetroName({
+                variables: {
+                  retroId,
+                  retroName: editName
+                }
+              })
+            } else if (e.key === 'Escape') {
+              setIsEditing(false)
+              setEditName(name)
+            }
+          }}
+          onChange={(e) => setEditName(e.target.value)}
+          value={editName}
+        />
+      ) : (
+        <h1
+          className="font-bold text-xl cursor-text"
+          onClick={() => setIsEditing(true)}
+        >
+          {editName}
+        </h1>
+      )}
 
       <div
         className={classNames('flex gap-2', {
