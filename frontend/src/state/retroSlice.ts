@@ -7,13 +7,34 @@ interface RetroState {
 
 const initialState: RetroState = {
   retro: {
-    id: '',
-    name: '',
-    columns: [],
-    createdAt: '',
-    lastUpdated: '',
-    lastViewed: '',
-    timerEnd: ''
+    id: 'a',
+    name: 'My simple retro',
+    columns: [
+      {
+        id: 'b',
+        name: 'What went well',
+        posts: []
+      },
+      {
+        id: 'c',
+        name: 'What to improve',
+        posts: []
+      },
+      {
+        id: 'd',
+        name: 'Action items',
+        posts: [
+          {
+            id: '',
+            content: 'Update the retro :)'
+          }
+        ]
+      }
+    ],
+    createdAt: '0',
+    lastUpdated: '0',
+    lastViewed: '0',
+    timerEnd: '0'
   }
 }
 

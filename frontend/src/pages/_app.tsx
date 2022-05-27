@@ -19,6 +19,8 @@ import GitHubIcon from 'icons/GitHubIcon'
 import IconButton from 'components/IconButton'
 import TwitterIcon from 'icons/TwitterIcon'
 import RetroIcon from 'icons/RetroIcon'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_URI
@@ -57,7 +59,7 @@ const client = new ApolloClient({
 // https://nextjs.org/docs/advanced-features/custom-app
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <Head>
         <title>retro</title>
       </Head>
@@ -81,6 +83,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
           </ApolloProvider>
         </main>
       </div>
-    </>
+    </DndProvider>
   )
 }
