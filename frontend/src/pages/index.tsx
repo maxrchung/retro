@@ -23,21 +23,23 @@ export default function Home(): JSX.Element {
       <div className="opacity-20">
         <RetroContent />
       </div>
-      <div className="fixed flex flex-col justify-center items-center h-full w-full -translate-y-14">
-        <div className="flex flex-row items-center">
-          <div className="h-12 w-12">
-            <RetroIcon />
+      <div className="fixed top-16 flex flex-col justify-center h-full w-full">
+        <div className="flex flex-col items-center -translate-y-16">
+          <div className="flex flex-row items-center">
+            <div className="h-12 w-12">
+              <RetroIcon />
+            </div>
+            <h1 className="font-bold text-4xl">retro</h1>
           </div>
-          <h1 className="font-bold text-4xl">retro</h1>
+
+          <p className="mb-3">A simple retrospective tool.</p>
+
+          <IconButton
+            icon={<PlusSmIcon />}
+            onClick={() => !loading && createRetro()}
+            title="Create retro"
+          />
         </div>
-
-        <p className="mb-3">A simple retrospective tool.</p>
-
-        <IconButton
-          icon={<PlusSmIcon />}
-          onClick={() => !loading && createRetro()}
-          title="Create retro"
-        />
       </div>
     </Provider>
   )
