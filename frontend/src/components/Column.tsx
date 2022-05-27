@@ -208,7 +208,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
       <div
         className={classNames(
-          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-content',
+          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full',
           {
             'opacity-50 cursor-grabbing': isDragging
           }

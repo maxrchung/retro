@@ -34,14 +34,14 @@ export default function RetroContent(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden flex-auto">
       <div className="flex justify-between gap-3 p-3">
         <RetroHeader />
         <Timer />
       </div>
 
       {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
-      <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3">
+      <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3 flex-auto">
         <div className="flex">
           {columns.map((column, index) => (
             <Column key={column.id} column={column} index={index} />
