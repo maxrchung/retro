@@ -213,7 +213,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           }
         )}
       >
-        a
         <ColumnHeader>
           <PostContainer
             content={
