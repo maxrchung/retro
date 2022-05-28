@@ -208,7 +208,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
 
       <div
         className={classNames(
-          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full',
+          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full pt-3',
           {
             'opacity-50 cursor-grabbing': isDragging
           }
@@ -315,7 +315,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           />
         </div>
 
-        <div className="px-3 overflow-auto" ref={postsRef}>
+        <div className="px-3 overflow-auto pt-3" ref={postsRef}>
           <hr
             className={classNames('border-2 rounded translate-y-0.5', {
               'border-blue-500': postHoverState === PostHoverState.TOP,
