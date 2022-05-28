@@ -92,7 +92,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     () => ({
       type: ItemTypes.Column,
       item: { columnId },
-      canDrag: !isEditing,
       collect: (monitor) => ({
         isDragging: monitor.isDragging()
       })
@@ -214,6 +213,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           }
         )}
       >
+        a
         <ColumnHeader>
           <PostContainer
             content={
@@ -282,7 +282,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             }
           />
         </ColumnHeader>
-
         <div className="py-1 px-3">
           <InputContainer
             content={
@@ -314,7 +313,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             }
           />
         </div>
-
         <div className="px-3 overflow-auto pt-3" ref={postsRef}>
           <hr
             className={classNames('border-2 rounded translate-y-0.5', {

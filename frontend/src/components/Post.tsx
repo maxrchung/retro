@@ -62,7 +62,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
     () => ({
       type: ItemTypes.Post,
       item: { postId, columnId },
-      canDrag: !isEditing,
       collect: (monitor) => ({
         isDragging: monitor.isDragging()
       })
