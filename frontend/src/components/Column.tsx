@@ -45,6 +45,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: retroId } = useAppSelector((state) => state.retro)
 
   const columnRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
   const postsRef = useRef<HTMLDivElement>(null)
   const [editName, setEditName] = useState(name)
   const [post, setPost] = useState('')
@@ -84,7 +85,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
     }
   }
 
-  const [{ isDragging }, dragRef] = useDrag<
+  const [{ isDragging }, dragRef, dragPreview] = useDrag<
     ColumnDragItem,
     void,
     { isDragging: boolean }
@@ -195,6 +196,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   )
 
   dragRef(dropPostRef(dropColumnRef(columnRef)))
+  dragPreview(previewRef, { captureDraggingState: true })
 
   return (
     <div className="flex items-start" ref={columnRef}>
@@ -206,6 +208,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       />
 
       <div
+        ref={previewRef}
         className={classNames(
           'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full pt-3',
           {
@@ -215,6 +218,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       >
         <ColumnHeader>
           <PostContainer
+            isDragging={isDragging}
             content={
               <>
                 {isEditing ? (

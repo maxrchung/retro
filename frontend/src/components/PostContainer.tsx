@@ -4,11 +4,13 @@ import React, { useState } from 'react'
 interface PostContainerProps {
   content: JSX.Element
   buttons: JSX.Element
+  isDragging: boolean
 }
 
 export default function PostContainer({
   content,
-  buttons
+  buttons,
+  isDragging
 }: PostContainerProps): JSX.Element {
   const [showButtons, setShowButtons] = useState(false)
 
@@ -22,7 +24,8 @@ export default function PostContainer({
         className={classNames(
           'absolute right-0 flex gap-2 mr-2 -translate-y-6',
           {
-            invisible: !showButtons
+            invisible: !showButtons,
+            hidden: isDragging
           }
         )}
       >

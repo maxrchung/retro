@@ -32,6 +32,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: retroId } = useAppSelector((state) => state.retro)
 
   const ref = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
   const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
@@ -54,7 +55,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const [movePost] = useMovePost()
   const [updatePostContent] = useUpdatePostContent()
 
-  const [{ isDragging }, dragRef] = useDrag<
+  const [{ isDragging }, dragRef, dragPreview] = useDrag<
     PostDragItem,
     void,
     { isDragging: boolean }
@@ -108,6 +109,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   )
 
   dragRef(dropRef(ref))
+  dragPreview(previewRef, { captureDraggingState: true })
 
   return (
     <div ref={ref} className="py-1">
@@ -118,6 +120,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
         })}
       />
       <div
+        ref={previewRef}
         className={classNames(
           'border-2 border-transparent hover:border-blue-500 cursor-grab bg-white rounded',
           {
@@ -126,6 +129,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
         )}
       >
         <PostContainer
+          isDragging={isDragging}
           content={
             <>
               {isEditing ? (
