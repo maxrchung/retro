@@ -2,6 +2,7 @@ import { uid } from 'uid'
 import { RETRO_TABLE } from './constants'
 import { Retro } from './types'
 import { DynamoDBDocument, UpdateCommandOutput } from '@aws-sdk/lib-dynamodb'
+import { UserInputError } from 'apollo-server'
 
 export const getDbRetro = async (
   client: DynamoDBDocument,
@@ -15,7 +16,7 @@ export const getDbRetro = async (
   })
 
   if (!response.Item) {
-    throw new Error("Couldn't find retro")
+    throw new UserInputError('Retro not found')
   }
 
   client.update({

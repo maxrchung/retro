@@ -1,4 +1,4 @@
-import { PubSub, withFilter } from 'apollo-server'
+import { PubSub, UserInputError, withFilter } from 'apollo-server'
 import { uid } from 'uid'
 import { ServerContext } from './server'
 import {
@@ -89,7 +89,17 @@ const createColumn = async (
   args: MutationCreateColumnArgs,
   { client }: ServerContext
 ) => {
+  if (args.columnName.length > 1000) {
+    throw new UserInputError(
+      'Create column: Column name has a limit of 1000 characters'
+    )
+  }
   const retro = await getDbRetro(client, args.retroId)
+  if (retro.columns.length > 1000) {
+    throw new UserInputError(
+      'Create column: Retros have a limit of 1000 columns'
+    )
+  }
   retro.columns.push({
     id: uid(),
     name: args.columnName,
@@ -103,10 +113,18 @@ const createPost = async (
   args: MutationCreatePostArgs,
   { client }: ServerContext
 ) => {
+  if (args.postContent.length > 1000) {
+    throw new UserInputError(
+      'Create post: Posts have a limit of 1000 characters'
+    )
+  }
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    return false
+    throw new UserInputError('Create post: Column not found')
+  }
+  if (column.posts.length > 1000) {
+    throw new UserInputError('Create post: Columns have a limit of 1000 posts')
   }
   const post = {
     id: uid(),
@@ -121,6 +139,11 @@ const updateRetroName = async (
   args: MutationUpdateRetroNameArgs,
   { client }: ServerContext
 ) => {
+  if (args.retroName.length > 1000) {
+    throw new UserInputError(
+      'Update retro name: Retro name has a limit of 1000 characters'
+    )
+  }
   const retro = await getDbRetro(client, args.retroId)
   retro.name = args.retroName
   return publishName(client, retro)
@@ -141,10 +164,15 @@ const updateColumnName = async (
   args: MutationUpdateColumnNameArgs,
   { client }: ServerContext
 ) => {
+  if (args.columnName.length > 1000) {
+    throw new UserInputError(
+      'Update column name: Column name has a limit of 1000 characters'
+    )
+  }
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    return false
+    throw new UserInputError('Update column name: Column not found')
   }
   column.name = args.columnName
   return publishColumns(client, retro)
@@ -158,11 +186,11 @@ const updatePostContent = async (
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    return false
+    throw new UserInputError('Update post: Column not found')
   }
   const post = column.posts.find((post) => post.id === args.postId)
   if (!post) {
-    return false
+    throw new UserInputError('Update post: Post not found')
   }
   post.content = args.postContent
   return publishColumns(client, retro)
@@ -181,7 +209,7 @@ const moveColumn = async (
     (column) => column.id === args.oldColumnId
   )
   if (oldColumnIndex < 0) {
-    return false
+    throw new UserInputError('Move column: Column not found')
   }
   const oldColumn = retro.columns.splice(oldColumnIndex, 1)[0]
 
@@ -211,13 +239,13 @@ const movePost = async (
     (column) => column.id === args.oldColumnId
   )
   if (!oldColumn) {
-    return false
+    throw new UserInputError('Move post: Column not found')
   }
   const oldPostIndex = oldColumn.posts.findIndex(
     (post) => post.id === args.oldPostId
   )
   if (oldPostIndex < 0) {
-    return false
+    throw new UserInputError('Move post: Post not found')
   }
   const oldPost = oldColumn.posts.splice(oldPostIndex, 1)[0]
 
@@ -225,7 +253,7 @@ const movePost = async (
     (column) => column.id === args.targetColumnId
   )
   if (!targetColumn) {
-    return false
+    throw new UserInputError('Move post: Column not found')
   }
 
   if (args.targetPostId && args.targetPostId.length > 0) {
@@ -263,7 +291,7 @@ const removeColumn = async (
     (column) => column.id === args.columnId
   )
   if (columnIndex < 0) {
-    return false
+    throw new UserInputError('Remove column: Column not found')
   }
   retro.columns.splice(columnIndex, 1)
   return publishColumns(client, retro)
@@ -277,11 +305,11 @@ const removePost = async (
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    return false
+    throw new UserInputError('Remove post: Column not found')
   }
   const postIndex = column.posts.findIndex((post) => post.id === args.postId)
   if (postIndex < 0) {
-    return false
+    throw new UserInputError('Remove post: Post not found')
   }
   column.posts.splice(postIndex, 1)
   return publishColumns(client, retro)
