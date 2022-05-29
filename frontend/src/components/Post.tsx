@@ -129,7 +129,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
         )}
       >
         <PostContainer
-          isDragging={isDragging}
           content={
             <>
               {isEditing ? (

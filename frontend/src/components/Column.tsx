@@ -210,7 +210,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       <div
         ref={previewRef}
         className={classNames(
-          'flex flex-col w-80 cursor-grab bg-gray-100 rounded mx-1 h-full pt-3',
+          'flex flex-col w-80 cursor-grab border-2 border-transparent hover:border-blue-500 bg-gray-100 rounded mx-1 h-full pt-3',
           {
             'opacity-50 cursor-grabbing': isDragging
           }
@@ -218,7 +218,6 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       >
         <ColumnHeader>
           <PostContainer
-            isDragging={isDragging}
             content={
               <>
                 {isEditing ? (
