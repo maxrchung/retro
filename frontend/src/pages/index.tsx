@@ -15,8 +15,8 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <div className="relative flex flex-auto">
-      <div className="opacity-20">
+    <div className="relative flex flex-auto overflow-hidden">
+      <div className="opacity-20 flex flex-auto">
         <Retro />
       </div>
 
