@@ -1,66 +1,88 @@
-import Head from 'next/head'
-import React, { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../state/hooks'
-import {
-  useGetRetro,
-  useColumnsUpdated,
-  useNameUpdated,
-  useTimerUpdated
-} from 'graphql/client'
+import { PlusSmIcon } from '@heroicons/react/outline'
+import { useCreateColumn } from 'graphql/client'
 import { useRouter } from 'next/router'
-import { actions } from 'state/retroSlice'
-import RetroContent from './RetroContent'
+import React, { useState } from 'react'
+import { useAppSelector } from 'state/hooks'
+import { isKeyEnterOnly } from 'utils'
+import Column from './Column'
+import ColumnHeader from './ColumnHeader'
+import IconButton from './IconButton'
+import InputContainer from './InputContainer'
+import RetroHeader from './RetroHeader'
+import TextArea from './TextArea'
+import Timer from './Timer'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
   const { id } = router.query
   const retroId = id as string
+  const [columnName, setColumnName] = useState('')
 
-  const dispatch = useAppDispatch()
-  // No point to fetch if retroId is not set
-  const { data: dataGet } = useGetRetro({ retroId }, !retroId)
-  const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
-  const { data: dataName } = useNameUpdated({ retroId }, !retroId)
-  const { data: dataTimer } = useTimerUpdated({ retroId }, !retroId)
+  const { columns } = useAppSelector((state) => state.retro)
 
-  const { name } = useAppSelector((state) => state.retro)
+  const [createColumn] = useCreateColumn({
+    retroId,
+    columnName
+  })
 
-  useEffect(() => {
-    if (dataGet) {
-      dispatch(actions.updateRetro(dataGet.getRetro))
+  const submitCreateColumn = () => {
+    if (columnName.length > 0) {
+      createColumn()
+      setColumnName('')
     }
-  }, [dataGet])
-
-  useEffect(() => {
-    if (dataColumns) {
-      dispatch(actions.updateColumns(dataColumns.columnsUpdated.columns))
-    }
-  }, [dataColumns])
-
-  useEffect(() => {
-    if (dataName) {
-      dispatch(actions.updateName(dataName.nameUpdated.name))
-    }
-  }, [dataName])
-
-  useEffect(() => {
-    if (dataTimer) {
-      dispatch(actions.updateTimer(dataTimer.timerUpdated.timerEnd))
-    }
-  }, [dataTimer])
-
-  if (!dataGet) {
-    return <></>
   }
 
   return (
-    <div className="flex overflow-hidden flex-auto flex-col">
-      <Head>
-        <title>{name} - retro</title>
-        <meta name="description" content="A simple retrospective tool." />
-      </Head>
+    <div className="flex flex-col overflow-hidden flex-auto">
+      <div className="flex justify-between gap-3 p-3">
+        <RetroHeader />
+        <Timer />
+      </div>
 
-      <RetroContent />
+      {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
+      <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3 flex-auto">
+        <div className="flex">
+          {columns.map((column, index) => (
+            <Column key={column.id} column={column} index={index} />
+          ))}
+
+          {/* flex is needed for proper column width */}
+          <div className="flex">
+            <div className="flex flex-col w-80 mx-1">
+              <div className=" rounded mx-1">
+                <ColumnHeader>
+                  <div className="p-3">
+                    <InputContainer
+                      content={
+                        <div className="flex">
+                          <TextArea
+                            onKeyDown={(e) => {
+                              if (isKeyEnterOnly(e)) {
+                                submitCreateColumn()
+                                e.preventDefault()
+                              }
+                            }}
+                            onChange={(e) => setColumnName(e.target.value)}
+                            value={columnName}
+                            placeholder="Column"
+                          />
+                        </div>
+                      }
+                      button={
+                        <IconButton
+                          icon={<PlusSmIcon />}
+                          onClick={() => submitCreateColumn()}
+                          title="Create column"
+                        />
+                      }
+                    />
+                  </div>
+                </ColumnHeader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

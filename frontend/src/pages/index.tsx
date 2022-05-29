@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import IconButton from 'components/IconButton'
 import { PlusSmIcon } from '@heroicons/react/outline'
 import RetroIcon from 'icons/RetroIcon'
-import RetroContent from 'components/RetroContent'
+import Retro from 'components/Retro'
 
 export default function Home(): JSX.Element {
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function Home(): JSX.Element {
   return (
     <div className="relative flex flex-auto">
       <div className="opacity-20">
-        <RetroContent />
+        <Retro />
       </div>
 
       <div className="absolute flex flex-col justify-center h-full w-full">
