@@ -61,6 +61,10 @@ export const retroSlice = createSlice({
     },
     clearErrors: (state) => {
       state.errors = []
+    },
+    resetState: (state) => {
+      state.retro = initialState.retro
+      state.errors = initialState.errors
     }
   }
 })
