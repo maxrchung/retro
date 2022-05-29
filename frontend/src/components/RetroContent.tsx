@@ -19,7 +19,6 @@ export default function RetroContent(): JSX.Element {
   const [columnName, setColumnName] = useState('')
 
   const { columns } = useAppSelector((state) => state.retro)
-  console.log(columns)
 
   const [createColumn] = useCreateColumn({
     retroId,

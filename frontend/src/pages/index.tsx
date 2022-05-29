@@ -4,10 +4,6 @@ import { useRouter } from 'next/router'
 import IconButton from 'components/IconButton'
 import { PlusSmIcon } from '@heroicons/react/outline'
 import RetroIcon from 'icons/RetroIcon'
-import { Provider } from 'react-redux'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import store from 'state/store'
 import RetroContent from 'components/RetroContent'
 
 export default function Home(): JSX.Element {
@@ -19,12 +15,13 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <Provider store={store}>
+    <div className="relative flex flex-auto">
       <div className="opacity-20">
         <RetroContent />
       </div>
-      <div className="fixed top-16 flex flex-col justify-center h-full w-full">
-        <div className="flex flex-col items-center -translate-y-16">
+
+      <div className="absolute flex flex-col justify-center h-full w-full">
+        <div className="flex flex-col items-center">
           <div className="flex flex-row items-center">
             <div className="h-12 w-12">
               <RetroIcon />
@@ -41,6 +38,6 @@ export default function Home(): JSX.Element {
           />
         </div>
       </div>
-    </Provider>
+    </div>
   )
 }

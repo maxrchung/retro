@@ -5,10 +5,10 @@ import { actions } from 'state/retroSlice'
 import IconButton from './IconButton'
 
 export default function ErrorBar(): JSX.Element {
-  const error = useAppSelector((state) => state.error)
+  const errors = useAppSelector((state) => state.errors)
   const dispatch = useAppDispatch()
 
-  if (!error || error.length === 0) {
+  if (errors.length === 0) {
     return <></>
   }
 
@@ -18,13 +18,17 @@ export default function ErrorBar(): JSX.Element {
         <div>
           <ExclamationCircleIcon className="h-6 w-6" />
         </div>
-        {error}
+        <ul>
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
       </div>
       <IconButton
         isError
-        title="Clear error"
+        title="Clear errors"
         icon={<XIcon />}
-        onClick={() => dispatch(actions.clearError())}
+        onClick={() => dispatch(actions.clearErrors())}
       />
     </div>
   )

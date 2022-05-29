@@ -3,16 +3,6 @@ import '../styles.css'
 import { AppProps } from 'next/app'
 import React from 'react'
 import 'tailwindcss/tailwind.css'
-import {
-  ApolloClient,
-  ApolloProvider,
-  HttpLink,
-  InMemoryCache,
-  split
-} from '@apollo/client'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { GRAPHQL_HTTP_URI, GRAPHQL_WEB_SOCKET_URI } from '../constants'
 import Link from 'next/link'
 import Head from 'next/head'
 import GitHubIcon from 'icons/GitHubIcon'
@@ -21,43 +11,12 @@ import TwitterIcon from 'icons/TwitterIcon'
 import RetroIcon from 'icons/RetroIcon'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-
-const httpLink = new HttpLink({
-  uri: GRAPHQL_HTTP_URI
-})
-
-// https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
-const webSocketLink = process.browser
-  ? new WebSocketLink({
-      uri: GRAPHQL_WEB_SOCKET_URI,
-      options: {
-        reconnect: true
-      }
-    })
-  : null
-
-// https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended
-const splitLink = process.browser
-  ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query)
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        )
-      },
-      webSocketLink as WebSocketLink,
-      httpLink
-    )
-  : httpLink
-
-const client = new ApolloClient({
-  link: splitLink,
-  cache: new InMemoryCache()
-})
+import { Provider } from 'react-redux'
+import store from 'state/store'
+import ApolloWrapper from 'components/ApolloWrapper'
 
 // https://nextjs.org/docs/advanced-features/custom-app
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App(props: AppProps): JSX.Element {
   return (
     <DndProvider backend={HTML5Backend}>
       <Head>
@@ -78,9 +37,9 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
           </div>
         </nav>
         <main className="flex flex-col overflow-hidden flex-auto">
-          <ApolloProvider client={client}>
-            <Component {...pageProps} />
-          </ApolloProvider>
+          <Provider store={store}>
+            <ApolloWrapper {...props} />
+          </Provider>
         </main>
       </div>
     </DndProvider>

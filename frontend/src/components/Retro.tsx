@@ -18,7 +18,7 @@ export default function Retro(): JSX.Element {
 
   const dispatch = useAppDispatch()
   // No point to fetch if retroId is not set
-  const { error, data: dataGet } = useGetRetro({ retroId }, !retroId)
+  const { data: dataGet } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataName } = useNameUpdated({ retroId }, !retroId)
   const { data: dataTimer } = useTimerUpdated({ retroId }, !retroId)
@@ -48,10 +48,6 @@ export default function Retro(): JSX.Element {
       dispatch(actions.updateTimer(dataTimer.timerUpdated.timerEnd))
     }
   }, [dataTimer])
-
-  if (error) {
-    return <>{`Failed to load retro: ${error.message}`}</>
-  }
 
   if (!dataGet) {
     return <></>
