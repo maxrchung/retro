@@ -102,7 +102,7 @@ export default function Retro(): JSX.Element {
           icon={<TrashIcon />}
           onClick={() =>
             confirm(
-              'Are you sure you want to delete this retro? All columns and posts inside the retro will also be deleted.'
+              'Are you sure you want to delete this retro? All columns and posts inside the retro will be deleted.'
             ) && removeRetro()
           }
           title="Delete retro"

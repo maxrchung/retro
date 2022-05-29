@@ -28,7 +28,7 @@ export default function PostContainer({
       >
         {buttons}
       </div>
-      <div className="p-3">
+      <div className="px-3 py-4">
         {/* wat https://stackoverflow.com/a/40612184/13183186 */}
         {content}
       </div>

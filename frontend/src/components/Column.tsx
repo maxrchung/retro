@@ -210,80 +210,82 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       <div
         ref={previewRef}
         className={classNames(
-          'flex flex-col w-80 cursor-grab border-2 border-transparent hover:border-blue-500 bg-gray-100 rounded mx-1 h-full pt-3',
+          'flex flex-col w-80 cursor-grab border-2 border-transparent hover:border-blue-500 bg-gray-100 rounded mx-1 h-full',
           {
             'opacity-50 cursor-grabbing': isDragging
           }
         )}
       >
-        <ColumnHeader>
-          <PostContainer
-            content={
-              <>
-                {isEditing ? (
-                  <div className="flex">
-                    <TextArea
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (isKeyEnterOnly(e)) {
-                          setIsEditing(false)
-                          updateColumnName({
-                            variables: {
-                              retroId,
-                              columnId,
-                              columnName: editName
-                            }
-                          })
-                        } else if (e.key === 'Escape') {
-                          setIsEditing(false)
-                          setEditName(name)
-                        }
-                      }}
-                      onChange={(e) => setEditName(e.target.value)}
-                      value={editName}
-                    />
-                  </div>
-                ) : (
-                  <span
-                    className="cursor-text"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    {editName}
-                  </span>
-                )}
-              </>
-            }
-            buttons={
-              <>
-                <IconButton
-                  icon={isEditing ? <CheckIcon /> : <PencilIcon />}
-                  onClick={() => {
-                    isEditing
-                      ? updateColumnName({
+        <ColumnHeader
+          content={
+            <>
+              {isEditing ? (
+                <div className="flex flex-auto">
+                  <TextArea
+                    autoFocus
+                    onFocus={(e) =>
+                      // ? https://stackoverflow.com/questions/10158190/how-to-set-cursor-at-the-end-in-a-textarea
+                      (e.target.selectionStart = e.target.value.length)
+                    }
+                    onKeyDown={(e) => {
+                      if (isKeyEnterOnly(e)) {
+                        setIsEditing(false)
+                        updateColumnName({
                           variables: {
                             retroId,
                             columnId,
                             columnName: editName
                           }
                         })
-                      : setEditName(name)
-                    setIsEditing(!isEditing)
-                  }}
-                  title={isEditing ? 'Confirm column name' : 'Edit column name'}
-                />
-                <IconButton
-                  icon={<TrashIcon />}
-                  onClick={() =>
-                    confirm(
-                      'Are you sure you want to delete this column? All posts inside the column will also be deleted.'
-                    ) && removeColumn()
-                  }
-                  title="Delete column"
-                />
-              </>
-            }
-          />
-        </ColumnHeader>
+                      } else if (e.key === 'Escape') {
+                        setIsEditing(false)
+                        setEditName(name)
+                      }
+                    }}
+                    onChange={(e) => setEditName(e.target.value)}
+                    value={editName}
+                  />
+                </div>
+              ) : (
+                <span
+                  className="cursor-text px-3"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {editName}
+                </span>
+              )}
+            </>
+          }
+          buttons={
+            <>
+              <IconButton
+                icon={isEditing ? <CheckIcon /> : <PencilIcon />}
+                onClick={() => {
+                  isEditing
+                    ? updateColumnName({
+                        variables: {
+                          retroId,
+                          columnId,
+                          columnName: editName
+                        }
+                      })
+                    : setEditName(name)
+                  setIsEditing(!isEditing)
+                }}
+                title={isEditing ? 'Confirm column name' : 'Edit column name'}
+              />
+              <IconButton
+                icon={<TrashIcon />}
+                onClick={() =>
+                  confirm(
+                    'Are you sure you want to delete this column? All posts inside the column will be deleted.'
+                  ) && removeColumn()
+                }
+                title="Delete column"
+              />
+            </>
+          }
+        />
         <div className="py-1 px-3">
           <InputContainer
             content={

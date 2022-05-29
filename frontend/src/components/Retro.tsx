@@ -47,38 +47,32 @@ export default function Retro(): JSX.Element {
           ))}
 
           {/* flex is needed for proper column width */}
-          <div className="flex">
-            <div className="flex flex-col w-80 mx-1">
-              <div className=" rounded mx-1">
-                <ColumnHeader>
-                  <div className="p-3">
-                    <InputContainer
-                      content={
-                        <div className="flex">
-                          <TextArea
-                            onKeyDown={(e) => {
-                              if (isKeyEnterOnly(e)) {
-                                submitCreateColumn()
-                                e.preventDefault()
-                              }
-                            }}
-                            onChange={(e) => setColumnName(e.target.value)}
-                            value={columnName}
-                            placeholder="Column"
-                          />
-                        </div>
-                      }
-                      button={
-                        <IconButton
-                          icon={<PlusSmIcon />}
-                          onClick={() => submitCreateColumn()}
-                          title="Create column"
-                        />
-                      }
+          <div className="flex flex-col w-80">
+            <div className="p-3 mt-3">
+              <InputContainer
+                content={
+                  <div className="flex">
+                    <TextArea
+                      onKeyDown={(e) => {
+                        if (isKeyEnterOnly(e)) {
+                          submitCreateColumn()
+                          e.preventDefault()
+                        }
+                      }}
+                      onChange={(e) => setColumnName(e.target.value)}
+                      value={columnName}
+                      placeholder="Column"
                     />
                   </div>
-                </ColumnHeader>
-              </div>
+                }
+                button={
+                  <IconButton
+                    icon={<PlusSmIcon />}
+                    onClick={() => submitCreateColumn()}
+                    title="Create column"
+                  />
+                }
+              />
             </div>
           </div>
         </div>
