@@ -3,6 +3,8 @@ import { uid } from 'uid'
 import { ServerContext } from './server'
 import {
   ColumnMoveDirection,
+  MutationClearColumnArgs,
+  MutationClearRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationMoveColumnArgs,
@@ -315,6 +317,30 @@ const removePost = async (
   return publishColumns(client, retro)
 }
 
+const clearRetro = async (
+  parent: unknown,
+  args: MutationClearRetroArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  retro.columns.forEach((column) => (column.posts = []))
+  return publishColumns(client, retro)
+}
+
+const clearColumn = async (
+  parent: unknown,
+  args: MutationClearColumnArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  const column = retro.columns.find((column) => column.id === args.columnId)
+  if (!column) {
+    throw new UserInputError('Clear column: Column not found')
+  }
+  column.posts = []
+  return publishColumns(client, retro)
+}
+
 const resolvers: Resolvers<ServerContext> = {
   Subscription: {
     columnsUpdated: {
@@ -342,7 +368,9 @@ const resolvers: Resolvers<ServerContext> = {
     movePost,
     removeRetro,
     removeColumn,
-    removePost
+    removePost,
+    clearRetro,
+    clearColumn
   }
 }
 
