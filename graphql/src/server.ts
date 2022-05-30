@@ -12,21 +12,12 @@ export interface ServerContext {
 const server = new ApolloServer({
   typeDefs: schema,
   subscriptions: {
-    onConnect: (connectionParams, webSocket, context) => {
+    onConnect: () => {
       console.log('Connected!')
     },
-    onDisconnect: (webSocket, context) => {
+    onDisconnect: () => {
       console.log('Disconnected!')
     }
-  },
-  // https://stackoverflow.com/a/61152192
-  formatError: (err) => {
-    console.error(err)
-    return err
-  },
-  formatResponse: (response) => {
-    console.log(response)
-    return response
   },
   resolvers,
   context: {
@@ -35,10 +26,24 @@ const server = new ApolloServer({
         endpoint: DYNAMODB_ENDPOINT
       })
     )
-  }
+  },
+  // Plugin example https://stackoverflow.com/a/63355900
+  plugins: [
+    {
+      requestDidStart(requestContext) {
+        console.log('Request', JSON.stringify(requestContext.request))
+        return {
+          willSendResponse(requestContext) {
+            console.log(
+              'Response',
+              JSON.stringify(requestContext.response, null, 2)
+            )
+          }
+        }
+      }
+    }
+  ]
 })
-
-server.installSubscriptionHandlers
 
 server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server is running on ${url}`)
