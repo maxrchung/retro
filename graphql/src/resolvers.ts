@@ -91,6 +91,10 @@ const createColumn = async (
   args: MutationCreateColumnArgs,
   { client }: ServerContext
 ) => {
+  if (args.columnName.length === 0) {
+    throw new UserInputError('Create column: Column name cannot be empty')
+  }
+
   if (args.columnName.length > 1000) {
     throw new UserInputError(
       'Create column: Column name has a limit of 1000 characters'
@@ -115,6 +119,10 @@ const createPost = async (
   args: MutationCreatePostArgs,
   { client }: ServerContext
 ) => {
+  if (args.postContent.length === 0) {
+    throw new UserInputError('Create post: Post cannot be empty')
+  }
+
   if (args.postContent.length > 1000) {
     throw new UserInputError(
       'Create post: Posts have a limit of 1000 characters'
@@ -141,6 +149,10 @@ const updateRetroName = async (
   args: MutationUpdateRetroNameArgs,
   { client }: ServerContext
 ) => {
+  if (args.retroName.length === 0) {
+    throw new UserInputError('Update retro name: Retro name cannot be empty')
+  }
+
   if (args.retroName.length > 1000) {
     throw new UserInputError(
       'Update retro name: Retro name has a limit of 1000 characters'
@@ -166,6 +178,10 @@ const updateColumnName = async (
   args: MutationUpdateColumnNameArgs,
   { client }: ServerContext
 ) => {
+  if (args.columnName.length === 0) {
+    throw new UserInputError('Update column name: Column name cannot be empty')
+  }
+
   if (args.columnName.length > 1000) {
     throw new UserInputError(
       'Update column name: Column name has a limit of 1000 characters'
@@ -185,6 +201,16 @@ const updatePostContent = async (
   args: MutationUpdatePostContentArgs,
   { client }: ServerContext
 ) => {
+  if (args.postContent.length === 0) {
+    throw new UserInputError('Update post: Post cannot be empty')
+  }
+
+  if (args.postContent.length > 1000) {
+    throw new UserInputError(
+      'Update post: Posts have a limit of 1000 characters'
+    )
+  }
+
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
@@ -218,6 +244,9 @@ const moveColumn = async (
   const targetColumnIndex = retro.columns.findIndex(
     (column) => column.id === args.targetColumnId
   )
+  if (targetColumnIndex < 0) {
+    throw new UserInputError('Move column: Column not found')
+  }
   retro.columns.splice(
     targetColumnIndex +
       (args.columnMoveDirection === ColumnMoveDirection.Left ? 0 : 1),
@@ -262,6 +291,9 @@ const movePost = async (
     const targetPostIndex = targetColumn.posts.findIndex(
       (post) => post.id === args.targetPostId
     )
+    if (targetPostIndex < 0) {
+      throw new UserInputError('Move post: Post not found')
+    }
     targetColumn.posts.splice(
       targetPostIndex +
         (args.postMoveDirection === PostMoveDirection.Top ? 0 : 1),
