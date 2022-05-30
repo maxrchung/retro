@@ -2,17 +2,18 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import {
+  BackspaceIcon,
   CheckIcon,
   PencilIcon,
   PlusSmIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
-import PostContainer from 'components/PostContainer'
 import ColumnHeader from 'components/ColumnHeader'
 import { useAppSelector } from 'state/hooks'
 import Post, { PostDragItem } from 'components/Post'
 import {
+  useClearColumn,
   useCreatePost,
   useMoveColumn,
   useMovePost,
@@ -59,6 +60,11 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   useEffect(() => setEditName(name), [name])
 
   const [removeColumn] = useRemoveColumn({
+    retroId,
+    columnId
+  })
+
+  const [clearColumn] = useClearColumn({
     retroId,
     columnId
   })
@@ -275,10 +281,19 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 title={isEditing ? 'Confirm column name' : 'Edit column name'}
               />
               <IconButton
+                icon={<BackspaceIcon />}
+                onClick={() =>
+                  confirm(
+                    'Are you sure you want to clear this column? All posts in the column will be deleted.'
+                  ) && clearColumn()
+                }
+                title="Clear column"
+              />
+              <IconButton
                 icon={<TrashIcon />}
                 onClick={() =>
                   confirm(
-                    'Are you sure you want to delete this column? All posts inside the column will be deleted.'
+                    'Are you sure you want to delete this column? All posts in the column will be deleted.'
                   ) && removeColumn()
                 }
                 title="Delete column"

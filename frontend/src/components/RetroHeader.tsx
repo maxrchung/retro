@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../state/hooks'
 import IconButton from 'components/IconButton'
 import {
+  BackspaceIcon,
   CheckIcon,
   PencilIcon,
   RefreshIcon,
   TrashIcon
 } from '@heroicons/react/outline'
-import { useRemoveRetro, useUpdateRetroName } from 'graphql/client'
+import {
+  useClearRetro,
+  useRemoveRetro,
+  useUpdateRetroName
+} from 'graphql/client'
 import { useRouter } from 'next/router'
 import { isKeyEnterOnly } from 'utils'
 import classNames from 'classnames'
@@ -20,6 +25,7 @@ export default function Retro(): JSX.Element {
 
   const [removeRetro, { data: dataRemove }] = useRemoveRetro({ retroId })
   const [updateRetroName] = useUpdateRetroName()
+  const [clearRetro] = useClearRetro({ retroId })
 
   const { name } = useAppSelector((state) => state.retro)
   const [isEditing, setIsEditing] = useState(false)
@@ -96,6 +102,16 @@ export default function Retro(): JSX.Element {
             setIsEditing(!isEditing)
           }}
           title={isEditing ? 'Confirm retro name' : 'Edit retro name'}
+        />
+
+        <IconButton
+          icon={<BackspaceIcon />}
+          onClick={() =>
+            confirm(
+              'Are you sure you want to clear this retro? All posts in the retro will be deleted.'
+            ) && clearRetro()
+          }
+          title="Clear retro"
         />
 
         <IconButton
