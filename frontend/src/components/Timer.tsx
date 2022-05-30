@@ -5,6 +5,11 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector } from 'state/hooks'
 import IconButton from './IconButton'
 
+export enum TimerOrientation {
+  RIGHT,
+  LEFT
+}
+
 const getTimer = (timer: Date, curr: Date): string => {
   if (timer <= curr) {
     return '00:00'
@@ -31,7 +36,11 @@ const getTimer = (timer: Date, curr: Date): string => {
   return minutes + ':' + seconds
 }
 
-export default function Timer(): JSX.Element {
+interface TimerProps {
+  orientation: TimerOrientation
+}
+
+export default function Timer({ orientation }: TimerProps): JSX.Element {
   const { timerEnd, id } = useAppSelector((state) => state.retro)
   const timer = new Date(timerEnd)
   const [updateTimer] = useUpdateTimer()
@@ -57,9 +66,9 @@ export default function Timer(): JSX.Element {
     })
   }
 
-  return (
+  return orientation === TimerOrientation.RIGHT ? (
     <div
-      className="flex gap-3 w-1/2 justify-end"
+      className="flex gap-3 flex-auto justify-end"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
@@ -101,6 +110,52 @@ export default function Timer(): JSX.Element {
       </div>
       <div className="flex items-center gap-2">
         <ClockIcon width={24} /> {getTimer(timer, curr)}
+      </div>
+    </div>
+  ) : (
+    <div
+      className="flex gap-3 w-full"
+      onMouseOver={() => setIsOver(true)}
+      onMouseLeave={() => setIsOver(false)}
+    >
+      <div className="flex items-center gap-2">
+        <ClockIcon width={24} /> {getTimer(timer, curr)}
+      </div>
+      <div
+        className={classNames('flex gap-2 items-center', {
+          invisible: !isOver
+        })}
+      >
+        <IconButton
+          onClick={() => {
+            updateTimer({
+              variables: {
+                retroId: id,
+                timerEnd: new Date(0).toISOString()
+              }
+            })
+          }}
+          icon={<BanIcon />}
+          title="Cancel timer"
+        />
+        <IconButton
+          onClick={addSeconds(60)}
+          icon={<PlusSmIcon />}
+          label="1"
+          title="Add 1 minute"
+        />
+        <IconButton
+          onClick={addSeconds(300)}
+          icon={<PlusSmIcon />}
+          label="5"
+          title="Add 5 minutes"
+        />
+        <IconButton
+          onClick={addSeconds(600)}
+          icon={<PlusSmIcon />}
+          label="10"
+          title="Add 10 minutes"
+        />
       </div>
     </div>
   )

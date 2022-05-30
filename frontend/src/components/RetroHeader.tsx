@@ -41,7 +41,7 @@ export default function Retro(): JSX.Element {
 
   return (
     <div
-      className="flex items-center gap-3 w-1/2"
+      className="flex items-center gap-3 w-full md:w-1/2 "
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >

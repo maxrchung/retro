@@ -9,7 +9,7 @@ import IconButton from './IconButton'
 import InputContainer from './InputContainer'
 import RetroHeader from './RetroHeader'
 import TextArea from './TextArea'
-import Timer from './Timer'
+import Timer, { TimerOrientation } from './Timer'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -33,9 +33,17 @@ export default function Retro(): JSX.Element {
 
   return (
     <div className="flex flex-col overflow-hidden flex-auto">
-      <div className="flex justify-between gap-3 p-3">
-        <RetroHeader />
-        <Timer />
+      <div className="flex flex-col gap-3 p-3">
+        <div className="flex justify-between gap-3">
+          <RetroHeader />
+          <div className="hidden md:flex md:w-1/2 justify-end">
+            <Timer orientation={TimerOrientation.RIGHT} />
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <Timer orientation={TimerOrientation.LEFT} />
+        </div>
       </div>
 
       {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
