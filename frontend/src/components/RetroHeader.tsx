@@ -44,7 +44,6 @@ export default function Retro(): JSX.Element {
       className="flex items-center gap-3 w-1/2"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
-      onTouchEnd={() => console.log('touch leave')}
     >
       {isEditing ? (
         <TextArea
