@@ -48,7 +48,7 @@ export default function Retro(): JSX.Element {
 
           {/* flex is needed for proper column width */}
           <div className="flex flex-col w-80">
-            <div className="p-3 mt-3">
+            <div className="p-3 mt-6 border-2 border-transparent">
               <InputContainer
                 content={
                   <div className="flex">
