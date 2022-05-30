@@ -149,10 +149,6 @@ const updateRetroName = async (
   args: MutationUpdateRetroNameArgs,
   { client }: ServerContext
 ) => {
-  if (args.retroName.length === 0) {
-    throw new UserInputError('Update retro name: Retro name cannot be empty')
-  }
-
   if (args.retroName.length > 1000) {
     throw new UserInputError(
       'Update retro name: Retro name has a limit of 1000 characters'
@@ -178,10 +174,6 @@ const updateColumnName = async (
   args: MutationUpdateColumnNameArgs,
   { client }: ServerContext
 ) => {
-  if (args.columnName.length === 0) {
-    throw new UserInputError('Update column name: Column name cannot be empty')
-  }
-
   if (args.columnName.length > 1000) {
     throw new UserInputError(
       'Update column name: Column name has a limit of 1000 characters'
@@ -201,10 +193,6 @@ const updatePostContent = async (
   args: MutationUpdatePostContentArgs,
   { client }: ServerContext
 ) => {
-  if (args.postContent.length === 0) {
-    throw new UserInputError('Update post: Post cannot be empty')
-  }
-
   if (args.postContent.length > 1000) {
     throw new UserInputError(
       'Update post: Posts have a limit of 1000 characters'

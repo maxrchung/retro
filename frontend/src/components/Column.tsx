@@ -85,10 +85,8 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   })
 
   const submitCreatePost = () => {
-    if (post.length > 0) {
-      createPost()
-      setPost('')
-    }
+    createPost()
+    setPost('')
   }
 
   const [{ isDragging }, dragRef, dragPreview] = useDrag<

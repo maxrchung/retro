@@ -13,7 +13,7 @@ export default function ErrorBar(): JSX.Element {
   }
 
   return (
-    <div className="flex m-3 p-3 rounded border-2 text-red-400 border-red-400 justify-between items-center gap-3">
+    <div className="flex m-3 mb-0 p-3 rounded border-2 text-red-400 border-red-400 justify-between items-center gap-3">
       <div className="flex gap-2 items-center">
         <div>
           <ExclamationCircleIcon className="h-6 w-6" />

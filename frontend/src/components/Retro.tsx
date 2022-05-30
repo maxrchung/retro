@@ -25,10 +25,8 @@ export default function Retro(): JSX.Element {
   })
 
   const submitCreateColumn = () => {
-    if (columnName.length > 0) {
-      createColumn()
-      setColumnName('')
-    }
+    createColumn()
+    setColumnName('')
   }
 
   return (

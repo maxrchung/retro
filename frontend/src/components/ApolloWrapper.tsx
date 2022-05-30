@@ -31,21 +31,6 @@ const webSocketLink = process.browser
     })
   : null
 
-// https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended
-const splitLink = process.browser
-  ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query)
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        )
-      },
-      webSocketLink as WebSocketLink,
-      httpLink
-    )
-  : httpLink
-
 export default function ApolloWrapper({
   Component,
   pageProps
@@ -56,15 +41,13 @@ export default function ApolloWrapper({
     const errors = []
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message }) =>
-        errors.push(
-          message.length > 0 ? `[Error] ${message}` : 'Internal server error'
-        )
+        errors.push(message.length > 0 ? message : 'Internal server error')
       )
     }
     if (networkError) {
       errors.push(
         networkError.message.length > 0
-          ? `[Network error] ${networkError.message}`
+          ? networkError.message
           : 'Internal server error'
       )
     }
@@ -76,6 +59,22 @@ export default function ApolloWrapper({
       response.errors = undefined
     }
   })
+
+  // https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended
+  const splitLink = process.browser
+    ? split(
+        ({ query }) => {
+          const definition = getMainDefinition(query)
+          dispatch(actions.clearErrors())
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          )
+        },
+        webSocketLink as WebSocketLink,
+        httpLink
+      )
+    : httpLink
 
   const client = new ApolloClient({
     link: from([errorLink, splitLink]),
