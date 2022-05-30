@@ -220,7 +220,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           content={
             <>
               {isEditing ? (
-                <div className="flex flex-auto">
+                <div className="flex flex-auto py-1">
                   <TextArea
                     autoFocus
                     onFocus={(e) =>

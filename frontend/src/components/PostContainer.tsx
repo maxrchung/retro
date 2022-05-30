@@ -20,7 +20,7 @@ export default function PostContainer({
     >
       <div
         className={classNames(
-          'absolute right-0 flex gap-2 mr-2 -translate-y-6',
+          'absolute right-0 flex gap-2 mr-3 -translate-y-6',
           {
             invisible: !showButtons
           }

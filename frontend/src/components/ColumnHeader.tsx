@@ -14,7 +14,7 @@ export default function ColumnHeader({
 
   return (
     <div
-      className="flex flex-col gap-1 p-3 pt-1 pb-6"
+      className="flex flex-col p-3 pt-1 pb-6"
       onMouseOver={() => setShowButtons(true)}
       onMouseOut={() => setShowButtons(false)}
     >
