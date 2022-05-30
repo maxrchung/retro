@@ -5,7 +5,6 @@ import {
   BackspaceIcon,
   CheckIcon,
   PencilIcon,
-  RefreshIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import {
@@ -45,6 +44,7 @@ export default function Retro(): JSX.Element {
       className="flex items-center gap-3 w-1/2"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
+      onTouchEnd={() => console.log('touch leave')}
     >
       {isEditing ? (
         <TextArea
@@ -80,14 +80,6 @@ export default function Retro(): JSX.Element {
           invisible: !isOver
         })}
       >
-        <IconButton
-          icon={<RefreshIcon />}
-          onClick={() => {
-            router.reload()
-          }}
-          title="Refresh retro"
-        />
-
         <IconButton
           icon={isEditing ? <CheckIcon /> : <PencilIcon />}
           onClick={() => {
