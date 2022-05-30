@@ -3,6 +3,10 @@
 
 import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import {
+  ClearColumnMutation,
+  ClearColumnMutationVariables,
+  ClearRetroMutation,
+  ClearRetroMutationVariables,
   ColumnsUpdatedSubscription,
   ColumnsUpdatedSubscriptionVariables,
   CreateColumnMutation,
@@ -17,6 +21,8 @@ import {
   MoveColumnMutationVariables,
   MovePostMutation,
   MovePostMutationVariables,
+  MutationClearColumnArgs,
+  MutationClearRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationMoveColumnArgs,
@@ -226,6 +232,18 @@ const REMOVE_POST = gql`
   }
 `
 
+const CLEAR_RETRO = gql`
+  mutation ClearRetro($retroId: ID!) {
+    clearRetro(retroId: $retroId)
+  }
+`
+
+const CLEAR_COLUMN = gql`
+  mutation ClearColumn($retroId: ID!, $columnId: ID!) {
+    clearColumn(retroId: $retroId, columnId: $columnId)
+  }
+`
+
 export const useColumnsUpdated = (
   columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs,
   skip?: boolean
@@ -345,4 +363,14 @@ export const useRemoveColumn = (removeColumnArgs: MutationRemoveColumnArgs) =>
 export const useRemovePost = (removePostArgs: MutationRemovePostArgs) =>
   useMutation<RemovePostMutation, RemovePostMutationVariables>(REMOVE_POST, {
     variables: removePostArgs
+  })
+
+export const useClearRetro = (clearRetroArgs: MutationClearRetroArgs) =>
+  useMutation<ClearRetroMutation, ClearRetroMutationVariables>(CLEAR_RETRO, {
+    variables: clearRetroArgs
+  })
+
+export const useClearColumn = (clearColumnArgs: MutationClearColumnArgs) =>
+  useMutation<ClearColumnMutation, ClearColumnMutationVariables>(CLEAR_COLUMN, {
+    variables: clearColumnArgs
   })

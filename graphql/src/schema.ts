@@ -76,6 +76,8 @@ const schema = gql`
     removeRetro(retroId: ID!): Boolean!
     removeColumn(retroId: ID!, columnId: ID!): Boolean!
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
+    clearRetro(retroId: ID!): Boolean!
+    clearColumn(retroId: ID!, columnId: ID!): Boolean!
   }
 `
 
