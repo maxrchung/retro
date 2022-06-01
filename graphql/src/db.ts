@@ -125,6 +125,7 @@ export const cloneDbRetro = async (
 ): Promise<string> => {
   const newRetro = createDefaultRetro()
   newRetro.columns = oldRetro.columns
+  newRetro.name = oldRetro.name
   await client.put({
     TableName: RETRO_TABLE,
     ConditionExpression: 'attribute_not_exists(id)',
