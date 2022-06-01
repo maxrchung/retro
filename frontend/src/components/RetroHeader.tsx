@@ -4,11 +4,13 @@ import IconButton from 'components/IconButton'
 import {
   BackspaceIcon,
   CheckIcon,
+  DuplicateIcon,
   PencilIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import {
   useClearRetro,
+  useCloneRetro,
   useRemoveRetro,
   useUpdateRetroName
 } from 'graphql/client'
@@ -25,6 +27,7 @@ export default function Retro(): JSX.Element {
   const [removeRetro, { data: dataRemove }] = useRemoveRetro({ retroId })
   const [updateRetroName] = useUpdateRetroName()
   const [clearRetro] = useClearRetro({ retroId })
+  const [cloneRetro, { data: dataClone }] = useCloneRetro({ retroId })
 
   const { name } = useAppSelector((state) => state.retro)
   const [isEditing, setIsEditing] = useState(false)
@@ -38,6 +41,12 @@ export default function Retro(): JSX.Element {
       router.push('/')
     }
   }, [dataRemove])
+
+  useEffect(() => {
+    if (dataClone) {
+      router.push(`/${dataClone.cloneRetro}`)
+    }
+  }, [dataClone])
 
   return (
     <div
@@ -93,6 +102,12 @@ export default function Retro(): JSX.Element {
             setIsEditing(!isEditing)
           }}
           title={isEditing ? 'Confirm retro name' : 'Edit retro name'}
+        />
+
+        <IconButton
+          icon={<DuplicateIcon />}
+          onClick={() => cloneRetro()}
+          title="Copy retro"
         />
 
         <IconButton
