@@ -5,6 +5,7 @@ import {
   ColumnMoveDirection,
   MutationClearColumnArgs,
   MutationClearRetroArgs,
+  MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationMoveColumnArgs,
@@ -21,7 +22,13 @@ import {
   Resolvers,
   Retro
 } from './types'
-import { createDbRetro, getDbRetro, removeDbRetro, updateDbRetro } from './db'
+import {
+  cloneDbRetro,
+  createDbRetro,
+  getDbRetro,
+  removeDbRetro,
+  updateDbRetro
+} from './db'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 import {
   COLUMNS_UPDATED_SUBSCRIPTION,
@@ -361,6 +368,16 @@ const clearColumn = async (
   return publishColumns(client, retro)
 }
 
+const cloneRetro = async (
+  parent: unknown,
+  args: MutationCloneRetroArgs,
+  { client }: ServerContext
+) => {
+  const oldRetro = await getDbRetro(client, args.retroId)
+  const newRetroId = await cloneDbRetro(client, oldRetro)
+  return newRetroId
+}
+
 const resolvers: Resolvers<ServerContext> = {
   Subscription: {
     columnsUpdated: {
@@ -390,7 +407,8 @@ const resolvers: Resolvers<ServerContext> = {
     removeColumn,
     removePost,
     clearRetro,
-    clearColumn
+    clearColumn,
+    cloneRetro
   }
 }
 

@@ -7,6 +7,8 @@ import {
   ClearColumnMutationVariables,
   ClearRetroMutation,
   ClearRetroMutationVariables,
+  CloneRetroMutation,
+  CloneRetroMutationVariables,
   ColumnsUpdatedSubscription,
   ColumnsUpdatedSubscriptionVariables,
   CreateColumnMutation,
@@ -23,6 +25,7 @@ import {
   MovePostMutationVariables,
   MutationClearColumnArgs,
   MutationClearRetroArgs,
+  MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
   MutationMoveColumnArgs,
@@ -244,6 +247,12 @@ const CLEAR_COLUMN = gql`
   }
 `
 
+const CLONE_RETRO = gql`
+  mutation CloneRetro($retroId: ID!) {
+    cloneRetro(retroId: $retroId)
+  }
+`
+
 export const useColumnsUpdated = (
   columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs,
   skip?: boolean
@@ -373,4 +382,9 @@ export const useClearRetro = (clearRetroArgs: MutationClearRetroArgs) =>
 export const useClearColumn = (clearColumnArgs: MutationClearColumnArgs) =>
   useMutation<ClearColumnMutation, ClearColumnMutationVariables>(CLEAR_COLUMN, {
     variables: clearColumnArgs
+  })
+
+export const useCloneRetro = (cloneRetroArgs: MutationCloneRetroArgs) =>
+  useMutation<CloneRetroMutation, CloneRetroMutationVariables>(CLONE_RETRO, {
+    variables: cloneRetroArgs
   })

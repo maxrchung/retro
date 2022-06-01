@@ -118,3 +118,17 @@ export const removeDbRetro = async (
   })
   return true
 }
+
+export const cloneDbRetro = async (
+  client: DynamoDBDocument,
+  oldRetro: Retro
+): Promise<string> => {
+  const newRetro = createDefaultRetro()
+  newRetro.columns = oldRetro.columns
+  await client.put({
+    TableName: RETRO_TABLE,
+    ConditionExpression: 'attribute_not_exists(id)',
+    Item: newRetro
+  })
+  return newRetro.id
+}

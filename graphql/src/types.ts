@@ -33,6 +33,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   clearColumn: Scalars['Boolean'];
   clearRetro: Scalars['Boolean'];
+  cloneRetro: Scalars['ID'];
   createColumn: Scalars['Boolean'];
   createPost: Scalars['Boolean'];
   createRetro: Scalars['ID'];
@@ -55,6 +56,11 @@ export type MutationClearColumnArgs = {
 
 
 export type MutationClearRetroArgs = {
+  retroId: Scalars['ID'];
+};
+
+
+export type MutationCloneRetroArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -293,6 +299,7 @@ export type ColumnResolvers<ContextType = any, ParentType extends ResolversParen
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   clearColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationClearColumnArgs, 'columnId' | 'retroId'>>;
   clearRetro?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationClearRetroArgs, 'retroId'>>;
+  cloneRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationCloneRetroArgs, 'retroId'>>;
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
   createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -489,6 +496,13 @@ export type ClearColumnMutationVariables = Exact<{
 
 
 export type ClearColumnMutation = { __typename?: 'Mutation', clearColumn: boolean };
+
+export type CloneRetroMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type CloneRetroMutation = { __typename?: 'Mutation', cloneRetro: string };
 
 
 export const ColumnsUpdatedDocument = gql`
@@ -1115,3 +1129,34 @@ export function useClearColumnMutation(baseOptions?: Apollo.MutationHookOptions<
 export type ClearColumnMutationHookResult = ReturnType<typeof useClearColumnMutation>;
 export type ClearColumnMutationResult = Apollo.MutationResult<ClearColumnMutation>;
 export type ClearColumnMutationOptions = Apollo.BaseMutationOptions<ClearColumnMutation, ClearColumnMutationVariables>;
+export const CloneRetroDocument = gql`
+    mutation CloneRetro($retroId: ID!) {
+  cloneRetro(retroId: $retroId)
+}
+    `;
+export type CloneRetroMutationFn = Apollo.MutationFunction<CloneRetroMutation, CloneRetroMutationVariables>;
+
+/**
+ * __useCloneRetroMutation__
+ *
+ * To run a mutation, you first call `useCloneRetroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCloneRetroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cloneRetroMutation, { data, loading, error }] = useCloneRetroMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useCloneRetroMutation(baseOptions?: Apollo.MutationHookOptions<CloneRetroMutation, CloneRetroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CloneRetroMutation, CloneRetroMutationVariables>(CloneRetroDocument, options);
+      }
+export type CloneRetroMutationHookResult = ReturnType<typeof useCloneRetroMutation>;
+export type CloneRetroMutationResult = Apollo.MutationResult<CloneRetroMutation>;
+export type CloneRetroMutationOptions = Apollo.BaseMutationOptions<CloneRetroMutation, CloneRetroMutationVariables>;

@@ -78,6 +78,7 @@ const schema = gql`
     removePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
     clearRetro(retroId: ID!): Boolean!
     clearColumn(retroId: ID!, columnId: ID!): Boolean!
+    cloneRetro(retroId: ID!): ID!
   }
 `
 
