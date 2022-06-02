@@ -31,7 +31,7 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
-        console.log('Request', JSON.stringify(requestContext.request))
+        console.log('Request', JSON.stringify(requestContext.request, null, 2))
         return {
           willSendResponse(requestContext) {
             console.log(
