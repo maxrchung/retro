@@ -16,6 +16,7 @@ import React from 'react'
 import { useAppDispatch } from 'state/hooks'
 import { actions } from 'state/retroSlice'
 import ErrorBar from './ErrorBar'
+import InfoBar from './InfoBar'
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_URI
@@ -83,6 +84,7 @@ export default function ApolloWrapper({
 
   return (
     <ApolloProvider client={client}>
+      <InfoBar />
       <ErrorBar />
       <Component {...pageProps} />
     </ApolloProvider>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../state/hooks'
+import { useAppDispatch, useAppSelector } from '../state/hooks'
 import IconButton from 'components/IconButton'
 import {
   BackspaceIcon,
@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import { isKeyEnterOnly } from 'utils'
 import classNames from 'classnames'
 import TextArea from './TextArea'
+import { actions } from 'state/retroSlice'
 
 export default function Retro(): JSX.Element {
   const router = useRouter()
@@ -34,16 +35,20 @@ export default function Retro(): JSX.Element {
   const [isOver, setIsOver] = useState(false)
   const [editName, setEditName] = useState(name)
 
+  const dispatch = useAppDispatch()
+
   useEffect(() => setEditName(name), [name])
 
   useEffect(() => {
     if (dataRemove) {
+      dispatch(actions.setInfo('Retro was deleted'))
       router.push('/')
     }
   }, [dataRemove])
 
   useEffect(() => {
     if (dataClone) {
+      dispatch(actions.setInfo('Retro copied to new link'))
       router.push(`/${dataClone.cloneRetro}`)
     }
   }, [dataClone])

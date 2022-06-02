@@ -3,6 +3,7 @@ import * as Types from 'graphql/types'
 
 interface RetroState {
   retro: Types.Retro
+  info: string
   errors: string[]
 }
 
@@ -37,6 +38,7 @@ const initialState: RetroState = {
     lastViewed: '0',
     timerEnd: '0'
   },
+  info: '',
   errors: []
 }
 
@@ -56,8 +58,14 @@ export const retroSlice = createSlice({
     updateTimer: (state, action: PayloadAction<string>) => {
       state.retro.timerEnd = action.payload
     },
+    setInfo: (state, action: PayloadAction<string>) => {
+      state.info = action.payload
+    },
     setErrors: (state, action: PayloadAction<string[]>) => {
       state.errors = action.payload
+    },
+    clearInfo: (state) => {
+      state.info = ''
     },
     clearErrors: (state) => {
       state.errors = []
