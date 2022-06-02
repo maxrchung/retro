@@ -33,6 +33,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 import {
   COLUMNS_UPDATED_SUBSCRIPTION,
   NAME_UPDATED_SUBSCRIPTION,
+  RETRO_REMOVED_SUBSCRIPTION,
   TIMER_UPDATED_SUBSCRIPTION
 } from './constants'
 
@@ -77,6 +78,19 @@ const publishTimer = (client: DynamoDBDocument, retro: Retro): boolean => {
   updateDbRetro(client, retro, 'timerEnd')
   pubsub.publish(TIMER_UPDATED_SUBSCRIPTION, {
     timerUpdated: retro
+  })
+  return true
+}
+
+const subscribeRemoved = withFilter(
+  () => pubsub.asyncIterator(RETRO_REMOVED_SUBSCRIPTION),
+  (payload, variables) => payload.retroRemoved.id === variables.retroId
+) as never
+
+const publishRemoved = (client: DynamoDBDocument, retro: Retro): boolean => {
+  removeDbRetro(client, retro.id)
+  pubsub.publish(RETRO_REMOVED_SUBSCRIPTION, {
+    retroRemoved: retro
   })
   return true
 }
@@ -308,7 +322,10 @@ const removeRetro = async (
   parent: unknown,
   args: MutationRemoveRetroArgs,
   { client }: ServerContext
-) => await removeDbRetro(client, args.retroId)
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  return publishRemoved(client, retro)
+}
 
 const removeColumn = async (
   parent: unknown,
@@ -388,6 +405,9 @@ const resolvers: Resolvers<ServerContext> = {
     },
     timerUpdated: {
       subscribe: subscribeTimer
+    },
+    retroRemoved: {
+      subscribe: subscribeRemoved
     }
   },
   Query: {

@@ -36,6 +36,7 @@ const schema = gql`
     columnsUpdated(retroId: ID!): Retro!
     nameUpdated(retroId: ID!): Retro!
     timerUpdated(retroId: ID!): Retro!
+    retroRemoved(retroId: ID!): Retro!
   }
 
   type Query {

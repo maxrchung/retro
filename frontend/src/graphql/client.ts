@@ -46,8 +46,11 @@ import {
   RemovePostMutationVariables,
   RemoveRetroMutation,
   RemoveRetroMutationVariables,
+  RetroRemovedSubscription,
+  RetroRemovedSubscriptionVariables,
   SubscriptionColumnsUpdatedArgs,
   SubscriptionNameUpdatedArgs,
+  SubscriptionRetroRemovedArgs,
   SubscriptionTimerUpdatedArgs,
   TimerUpdatedSubscription,
   TimerUpdatedSubscriptionVariables,
@@ -92,6 +95,14 @@ const TIMER_UPDATED = gql`
     timerUpdated(retroId: $retroId) {
       id
       timerEnd
+    }
+  }
+`
+
+const RETRO_REMOVED = gql`
+  subscription RetroRemoved($retroId: ID!) {
+    retroRemoved(retroId: $retroId) {
+      id
     }
   }
 `
@@ -285,6 +296,18 @@ export const useTimerUpdated = (
     TIMER_UPDATED,
     {
       variables: timerUpdatedArgs,
+      skip
+    }
+  )
+
+export const useRetroRemoved = (
+  retroRemovedArgs: SubscriptionRetroRemovedArgs,
+  skip?: boolean
+) =>
+  useSubscription<RetroRemovedSubscription, RetroRemovedSubscriptionVariables>(
+    RETRO_REMOVED,
+    {
+      variables: retroRemovedArgs,
       skip
     }
   )

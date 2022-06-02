@@ -176,6 +176,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   columnsUpdated: Retro;
   nameUpdated: Retro;
+  retroRemoved: Retro;
   timerUpdated: Retro;
 };
 
@@ -186,6 +187,11 @@ export type SubscriptionColumnsUpdatedArgs = {
 
 
 export type SubscriptionNameUpdatedArgs = {
+  retroId: Scalars['ID'];
+};
+
+
+export type SubscriptionRetroRemovedArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -338,6 +344,7 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   columnsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "columnsUpdated", ParentType, ContextType, RequireFields<SubscriptionColumnsUpdatedArgs, 'retroId'>>;
   nameUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "nameUpdated", ParentType, ContextType, RequireFields<SubscriptionNameUpdatedArgs, 'retroId'>>;
+  retroRemoved?: SubscriptionResolver<ResolversTypes['Retro'], "retroRemoved", ParentType, ContextType, RequireFields<SubscriptionRetroRemovedArgs, 'retroId'>>;
   timerUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "timerUpdated", ParentType, ContextType, RequireFields<SubscriptionTimerUpdatedArgs, 'retroId'>>;
 };
 
@@ -371,6 +378,13 @@ export type TimerUpdatedSubscriptionVariables = Exact<{
 
 
 export type TimerUpdatedSubscription = { __typename?: 'Subscription', timerUpdated: { __typename?: 'Retro', id: string, timerEnd: string } };
+
+export type RetroRemovedSubscriptionVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type RetroRemovedSubscription = { __typename?: 'Subscription', retroRemoved: { __typename?: 'Retro', id: string } };
 
 export type GetRetroQueryVariables = Exact<{
   retroId: Scalars['ID'];
@@ -605,6 +619,36 @@ export function useTimerUpdatedSubscription(baseOptions: Apollo.SubscriptionHook
       }
 export type TimerUpdatedSubscriptionHookResult = ReturnType<typeof useTimerUpdatedSubscription>;
 export type TimerUpdatedSubscriptionResult = Apollo.SubscriptionResult<TimerUpdatedSubscription>;
+export const RetroRemovedDocument = gql`
+    subscription RetroRemoved($retroId: ID!) {
+  retroRemoved(retroId: $retroId) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useRetroRemovedSubscription__
+ *
+ * To run a query within a React component, call `useRetroRemovedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useRetroRemovedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRetroRemovedSubscription({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useRetroRemovedSubscription(baseOptions: Apollo.SubscriptionHookOptions<RetroRemovedSubscription, RetroRemovedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<RetroRemovedSubscription, RetroRemovedSubscriptionVariables>(RetroRemovedDocument, options);
+      }
+export type RetroRemovedSubscriptionHookResult = ReturnType<typeof useRetroRemovedSubscription>;
+export type RetroRemovedSubscriptionResult = Apollo.SubscriptionResult<RetroRemovedSubscription>;
 export const GetRetroDocument = gql`
     query GetRetro($retroId: ID!) {
   getRetro(retroId: $retroId) {

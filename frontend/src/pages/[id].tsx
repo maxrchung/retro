@@ -5,7 +5,8 @@ import {
   useGetRetro,
   useColumnsUpdated,
   useNameUpdated,
-  useTimerUpdated
+  useTimerUpdated,
+  useRetroRemoved
 } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
@@ -22,6 +23,7 @@ export default function Id(): JSX.Element {
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataName } = useNameUpdated({ retroId }, !retroId)
   const { data: dataTimer } = useTimerUpdated({ retroId }, !retroId)
+  const { data: dataRemoved } = useRetroRemoved({ retroId }, !retroId)
 
   const { name } = useAppSelector((state) => state.retro)
 
@@ -48,6 +50,13 @@ export default function Id(): JSX.Element {
       dispatch(actions.updateTimer(dataTimer.timerUpdated.timerEnd))
     }
   }, [dataTimer])
+
+  useEffect(() => {
+    if (dataRemoved) {
+      dispatch(actions.setInfo('Retro was deleted'))
+      router.push('/')
+    }
+  }, [dataRemoved])
 
   if (!dataGet) {
     return <></>
