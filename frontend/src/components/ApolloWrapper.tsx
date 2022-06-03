@@ -19,7 +19,8 @@ import ErrorBar from './ErrorBar'
 import InfoBar from './InfoBar'
 
 const httpLink = new HttpLink({
-  uri: GRAPHQL_HTTP_URI
+  uri: GRAPHQL_HTTP_URI,
+  credentials: 'include'
 })
 
 // https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024

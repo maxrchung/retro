@@ -1,5 +1,5 @@
-import { uid } from 'uid/secure'
+import { uid } from 'uid'
 
-const getUid = () => uid(7)
+const getUid = () => uid()
 
 console.log(uid())
