@@ -407,15 +407,17 @@ const likePost = async (
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    throw new UserInputError('Thumbs up post: Column not found')
+    throw new UserInputError('Like post: Column not found')
   }
   const post = column.posts.find((post) => post.id === args.postId)
   if (!post) {
-    throw new UserInputError('Thumbs up post: Post not found')
+    throw new UserInputError('Like post: Post was not found')
   }
   const like = post.likes.find((like) => like === connectionId)
   if (like) {
-    throw new UserInputError('Thumbs up post: Already thumbed up post')
+    throw new UserInputError(
+      "Like post: Can't like a post already liked by you"
+    )
   }
   post.likes.push(connectionId)
   return publishColumns(client, retro)
@@ -429,20 +431,17 @@ const unlikePost = async (
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    throw new UserInputError('Thumbs down post: Column not found')
+    throw new UserInputError('Unlike post: Column not found')
   }
   const post = column.posts.find((post) => post.id === args.postId)
   if (!post) {
-    throw new UserInputError('Thumbs down post: Post not found')
+    throw new UserInputError('Unlike post: Post not found')
   }
-  const like = post.likes.find((like) => like === connectionId)
-  if (!like) {
-    throw new UserInputError('Thumbs down post: Did not thumbs up post')
-  }
-
   const likeIndex = post.likes.findIndex((like) => like === connectionId)
   if (likeIndex < 0) {
-    throw new UserInputError('Thumbs down post: Did not thumbs up post')
+    throw new UserInputError(
+      "Unlike post: Can't unlike a post that wasn't liked by you"
+    )
   }
   post.likes.splice(likeIndex, 1)
   return publishColumns(client, retro)

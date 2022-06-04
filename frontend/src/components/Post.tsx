@@ -195,7 +195,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
               <IconButton
                 icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
                 onClick={() => (hasLiked ? unlikePost() : likePost())}
-                title={hasLiked ? 'Thumbs down' : 'Thumbs up'}
+                title={hasLiked ? 'Unlike' : 'Like'}
               />
 
               <IconButton
