@@ -103,7 +103,7 @@ export default function Retro(): JSX.Element {
         </div>
       )}
 
-      <div
+      <fieldset
         className={classNames('flex gap-2', {
           invisible: !isOver
         })}
@@ -155,7 +155,7 @@ export default function Retro(): JSX.Element {
           }
           title="Delete retro"
         />
-      </div>
+      </fieldset>
     </div>
   )
 }

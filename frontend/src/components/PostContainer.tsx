@@ -18,7 +18,7 @@ export default function PostContainer({
       onMouseOver={() => setShowButtons(true)}
       onMouseOut={() => setShowButtons(false)}
     >
-      <div
+      <fieldset
         className={classNames(
           'absolute right-0 flex gap-2 mr-3 -translate-y-6',
           {
@@ -27,7 +27,7 @@ export default function PostContainer({
         )}
       >
         {buttons}
-      </div>
+      </fieldset>
       <div className="px-3 py-4">
         {/* wat https://stackoverflow.com/a/40612184/13183186 */}
         {content}

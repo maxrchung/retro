@@ -45,6 +45,7 @@ export default function Retro(): JSX.Element {
       </header>
 
       <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3 flex-auto">
+        {/* Not exactly sure why we need this but otherwise the rightmost column is shortened */}
         <div className="flex">
           {columns.map((column, index) => (
             <Column key={column.id} column={column} index={index} />

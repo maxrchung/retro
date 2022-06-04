@@ -173,16 +173,13 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   />
                 </div>
               ) : (
-                <span
-                  className="cursor-text"
-                  onClick={() => setIsEditing(true)}
-                >
+                <p className="cursor-text" onClick={() => setIsEditing(true)}>
                   {editContent}
-                </span>
+                </p>
               )}
               {likes.length > 0 && (
                 <div className="flex items-center gap-1" title="Thumbs up">
-                  <ThumbUpIcon className="w-6" /> {likes.length}
+                  <ThumbUpIcon className="w-5" /> {likes.length}
                 </div>
               )}
             </div>
@@ -210,7 +207,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
               <IconButton
                 icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
                 onClick={() => (hasLiked ? unlikePost() : likePost())}
-                title={hasLiked ? 'Unlike' : 'Like'}
+                title={hasLiked ? 'Unlike post' : 'Like post'}
               />
 
               <IconButton

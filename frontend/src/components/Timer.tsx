@@ -131,13 +131,13 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       onMouseLeave={() => setIsOver(false)}
     >
       {orientation === TimerOrientation.LEFT && clock}
-      <div
+      <fieldset
         className={classNames('flex gap-2 items-center', {
           invisible: !isOver
         })}
       >
         {buttons}
-      </div>
+      </fieldset>
       {orientation === TimerOrientation.RIGHT && clock}
     </div>
   )

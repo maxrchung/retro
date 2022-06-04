@@ -59,13 +59,13 @@ export default function Id(): JSX.Element {
   }
 
   return (
-    <div className="flex overflow-hidden flex-auto flex-col">
+    <>
       <Head>
         <title>{name} - retro</title>
         <meta name="description" content="A simple retrospective tool." />
       </Head>
 
       <Retro />
-    </div>
+    </>
   )
 }

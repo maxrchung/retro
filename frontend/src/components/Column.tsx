@@ -252,7 +252,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 </div>
               ) : (
                 <h2
-                  className="cursor-text px-3"
+                  className="cursor-text px-3 font-bold"
                   onClick={() => setIsEditing(true)}
                 >
                   {editName}
@@ -325,7 +325,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 onClick={() => {
                   submitCreatePost()
                 }}
-                title="Create column"
+                title="Create post"
               />
             }
           />
