@@ -72,6 +72,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       icon={<PlusSmIcon />}
       label="10"
       title="Add 10 minutes"
+      key="Add 10 minutes"
     />
   )
   const add5 = (
@@ -80,6 +81,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       icon={<PlusSmIcon />}
       label="5"
       title="Add 5 minutes"
+      key="Add 5 minutes"
     />
   )
   const add1 = (
@@ -88,6 +90,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       icon={<PlusSmIcon />}
       label="1"
       title="Add 1 minute"
+      key="Add 1 minute"
     />
   )
 
@@ -103,6 +106,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       }}
       icon={<BanIcon />}
       title="Cancel timer"
+      key="Cancel timer"
     />
   )
 

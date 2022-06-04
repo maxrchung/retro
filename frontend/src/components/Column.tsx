@@ -46,7 +46,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: retroId } = useAppSelector((state) => state.retro)
 
   const columnRef = useRef<HTMLDivElement>(null)
-  const previewRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLTableColElement>(null)
   const postsRef = useRef<HTMLDivElement>(null)
   const [editName, setEditName] = useState(name)
   const [post, setPost] = useState('')
@@ -211,7 +211,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
         })}
       />
 
-      <div
+      <section
         ref={previewRef}
         className={classNames(
           'flex flex-col w-80 cursor-grab border-2 border-transparent hover:border-blue-500 bg-gray-100 rounded mx-1 h-full',
@@ -251,12 +251,12 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                   />
                 </div>
               ) : (
-                <span
+                <h2
                   className="cursor-text px-3"
                   onClick={() => setIsEditing(true)}
                 >
                   {editName}
-                </span>
+                </h2>
               )}
             </>
           }
@@ -349,7 +349,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
             })}
           />
         </div>
-      </div>
+      </section>
 
       <hr
         className={classNames('border-2 rounded translate-x-0.5 h-full', {

@@ -132,7 +132,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           'border-transparent': postHoverState !== PostHoverState.TOP
         })}
       />
-      <div
+      <article
         ref={previewRef}
         className={classNames(
           'border-2 border-transparent hover:border-blue-500 cursor-grab bg-white rounded',
@@ -221,7 +221,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
             </>
           }
         />
-      </div>
+      </article>
       <hr
         className={classNames('border-2 rounded translate-y-1.5', {
           'border-blue-500': postHoverState === PostHoverState.BOTTOM,

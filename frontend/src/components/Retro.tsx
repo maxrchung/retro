@@ -31,7 +31,7 @@ export default function Retro(): JSX.Element {
 
   return (
     <div className="flex flex-col overflow-hidden flex-auto">
-      <div className="flex flex-col gap-3 p-3">
+      <header className="flex flex-col gap-3 p-3">
         <div className="flex justify-between gap-3">
           <RetroHeader />
           <div className="hidden md:flex md:w-1/2 justify-end">
@@ -42,9 +42,8 @@ export default function Retro(): JSX.Element {
         <div className="md:hidden">
           <Timer orientation={TimerOrientation.LEFT} />
         </div>
-      </div>
+      </header>
 
-      {/* Wacky padding margin hacks to handle overflow-auto button clipping and left-most column indicator */}
       <div className="flex overflow-x-auto overflow-y-hidden px-1 pb-3 flex-auto">
         <div className="flex">
           {columns.map((column, index) => (
