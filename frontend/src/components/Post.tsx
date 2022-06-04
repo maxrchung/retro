@@ -53,9 +53,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
 
   const hasLiked = likes.find((like) => like === connectionId)
 
-  console.log('connectionId', connectionId)
-  console.log('likes', likes)
-
   const [removePost] = useRemovePost({
     retroId,
     columnId,
