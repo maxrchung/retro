@@ -8,11 +8,13 @@ import {
   MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationLikePostArgs,
   MutationMoveColumnArgs,
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
   MutationRemoveRetroArgs,
+  MutationUnlikePostArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
   MutationUpdateRetroNameArgs,
@@ -161,7 +163,7 @@ const createPost = async (
     id: uid(),
     content: args.postContent,
     author: connectionId,
-    likes: 0
+    likes: []
   }
   column.posts.unshift(post)
   return publishColumns(client, retro)
@@ -397,6 +399,55 @@ const cloneRetro = async (
   return newRetroId
 }
 
+const likePost = async (
+  parent: unknown,
+  args: MutationLikePostArgs,
+  { client, connectionId }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  const column = retro.columns.find((column) => column.id === args.columnId)
+  if (!column) {
+    throw new UserInputError('Thumbs up post: Column not found')
+  }
+  const post = column.posts.find((post) => post.id === args.postId)
+  if (!post) {
+    throw new UserInputError('Thumbs up post: Post not found')
+  }
+  const like = post.likes.find((like) => like === connectionId)
+  if (like) {
+    throw new UserInputError('Thumbs up post: Already thumbed up post')
+  }
+  post.likes.push(connectionId)
+  return publishColumns(client, retro)
+}
+
+const unlikePost = async (
+  parent: unknown,
+  args: MutationUnlikePostArgs,
+  { client, connectionId }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  const column = retro.columns.find((column) => column.id === args.columnId)
+  if (!column) {
+    throw new UserInputError('Thumbs down post: Column not found')
+  }
+  const post = column.posts.find((post) => post.id === args.postId)
+  if (!post) {
+    throw new UserInputError('Thumbs down post: Post not found')
+  }
+  const like = post.likes.find((like) => like === connectionId)
+  if (!like) {
+    throw new UserInputError('Thumbs down post: Did not thumbs up post')
+  }
+
+  const likeIndex = post.likes.findIndex((like) => like === connectionId)
+  if (likeIndex < 0) {
+    throw new UserInputError('Thumbs down post: Did not thumbs up post')
+  }
+  post.likes.splice(likeIndex, 1)
+  return publishColumns(client, retro)
+}
+
 const resolvers: Resolvers<ServerContext> = {
   Subscription: {
     columnsUpdated: {
@@ -430,7 +481,9 @@ const resolvers: Resolvers<ServerContext> = {
     removePost,
     clearRetro,
     clearColumn,
-    cloneRetro
+    cloneRetro,
+    likePost,
+    unlikePost
   }
 }
 

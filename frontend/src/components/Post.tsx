@@ -3,14 +3,17 @@ import * as Types from 'graphql/types'
 import {
   CheckIcon,
   PencilIcon,
+  ThumbDownIcon,
   ThumbUpIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import PostContainer from 'components/PostContainer'
 import {
+  useLikePost,
   useMovePost,
   useRemovePost,
+  useUnlikePost,
   useUpdatePostContent
 } from 'graphql/client'
 import { useAppSelector } from 'state/hooks'
@@ -34,7 +37,7 @@ export interface PostDragItem {
 export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: columnId } = column
   const { id: postId, content, likes } = post
-  const { retro } = useAppSelector((state) => state)
+  const { retro, connectionId } = useAppSelector((state) => state)
   const { id: retroId } = retro
 
   const ref = useRef<HTMLDivElement>(null)
@@ -42,9 +45,16 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const [postHoverState, setPostHoverState] = useState(PostHoverState.NONE)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(content)
+  const [likePost] = useLikePost({ retroId, columnId, postId })
+  const [unlikePost] = useUnlikePost({ retroId, columnId, postId })
 
   // Pick up changes
   useEffect(() => setEditContent(content), [content])
+
+  const hasLiked = likes.find((like) => like === connectionId)
+
+  console.log('connectionId', connectionId)
+  console.log('likes', likes)
 
   const [removePost] = useRemovePost({
     retroId,
@@ -136,7 +146,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       >
         <PostContainer
           content={
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               {isEditing ? (
                 <div className="flex">
                   <TextArea
@@ -173,15 +183,21 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   {editContent}
                 </span>
               )}
-              {likes > 0 && (
-                <div className="flex items-center gap-2" title="Thumbs up">
-                  <ThumbUpIcon width={24} /> {likes.toString()}
+              {likes.length > 0 && (
+                <div className="flex items-center gap-1" title="Thumbs up">
+                  <ThumbUpIcon className="w-6" /> {likes.length}
                 </div>
               )}
             </div>
           }
           buttons={
             <>
+              <IconButton
+                icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
+                onClick={() => (hasLiked ? unlikePost() : likePost())}
+                title={hasLiked ? 'Thumbs down' : 'Thumbs up'}
+              />
+
               <IconButton
                 icon={isEditing ? <CheckIcon /> : <PencilIcon />}
                 onClick={() => {

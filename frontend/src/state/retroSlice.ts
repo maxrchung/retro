@@ -31,7 +31,7 @@ const initialState: RetroState = {
             id: 'e',
             content: 'Update the retro :)',
             author: 'retro',
-            likes: 0
+            likes: []
           }
         ]
       }

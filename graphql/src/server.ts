@@ -33,7 +33,7 @@ const server = new ApolloServer({
       // https://stackoverflow.com/a/53546237
       if (!connectionId) {
         connectionId = uid()
-        res.cookie(RETRO_CONNECTION_ID, connectionId, { httpOnly: true })
+        res.cookie(RETRO_CONNECTION_ID, connectionId)
       }
     }
 

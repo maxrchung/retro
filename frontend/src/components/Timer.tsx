@@ -108,8 +108,8 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
           title="Cancel timer"
         />
       </div>
-      <div className="flex items-center gap-2" title="Clock">
-        <ClockIcon width={24} /> {getTimer(timer, curr)}
+      <div className="flex items-center gap-1" title="Clock">
+        <ClockIcon className="w-6" /> {getTimer(timer, curr)}
       </div>
     </div>
   ) : (
@@ -118,8 +118,8 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
-      <div className="flex items-center gap-2" title="Clock">
-        <ClockIcon width={24} /> {getTimer(timer, curr)}
+      <div className="flex items-center gap-1" title="Clock">
+        <ClockIcon className="w-6" /> {getTimer(timer, curr)}
       </div>
       <div
         className={classNames('flex gap-2 items-center', {

@@ -58,7 +58,7 @@ const createDefaultRetro = (): Retro => {
             id: 'd',
             content: 'Update the retro :)',
             author: 'retro',
-            likes: 0
+            likes: []
           }
         ]
       }

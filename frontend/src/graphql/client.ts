@@ -19,6 +19,8 @@ import {
   CreateRetroMutationVariables,
   GetRetroQuery,
   GetRetroQueryVariables,
+  LikePostMutation,
+  LikePostMutationVariables,
   MoveColumnMutation,
   MoveColumnMutationVariables,
   MovePostMutation,
@@ -28,6 +30,7 @@ import {
   MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationLikePostArgs,
   MutationMoveColumnArgs,
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
@@ -54,6 +57,8 @@ import {
   SubscriptionTimerUpdatedArgs,
   TimerUpdatedSubscription,
   TimerUpdatedSubscriptionVariables,
+  UnlikePostMutation,
+  UnlikePostMutationVariables,
   UpdateColumnNameMutation,
   UpdateColumnNameMutationVariables,
   UpdatePostContentMutation,
@@ -268,6 +273,18 @@ const CLONE_RETRO = gql`
   }
 `
 
+const LIKE_POST = gql`
+  mutation LikePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
+    likePost(retroId: $retroId, columnId: $columnId, postId: $postId)
+  }
+`
+
+const UNLIKE_POST = gql`
+  mutation UnlikePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
+    unlikePost(retroId: $retroId, columnId: $columnId, postId: $postId)
+  }
+`
+
 export const useColumnsUpdated = (
   columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs,
   skip?: boolean
@@ -414,4 +431,14 @@ export const useClearColumn = (clearColumnArgs: MutationClearColumnArgs) =>
 export const useCloneRetro = (cloneRetroArgs: MutationCloneRetroArgs) =>
   useMutation<CloneRetroMutation, CloneRetroMutationVariables>(CLONE_RETRO, {
     variables: cloneRetroArgs
+  })
+
+export const useLikePost = (likePostArgs: MutationLikePostArgs) =>
+  useMutation<LikePostMutation, LikePostMutationVariables>(LIKE_POST, {
+    variables: likePostArgs
+  })
+
+export const useUnlikePost = (unlikePostArgs: MutationLikePostArgs) =>
+  useMutation<UnlikePostMutation, UnlikePostMutationVariables>(UNLIKE_POST, {
+    variables: unlikePostArgs
   })

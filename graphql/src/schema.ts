@@ -31,7 +31,7 @@ const schema = gql`
     id: ID!
     content: String!
     author: String!
-    likes: Int!
+    likes: [String!]!
   }
 
   type Subscription {
@@ -82,6 +82,8 @@ const schema = gql`
     clearRetro(retroId: ID!): Boolean!
     clearColumn(retroId: ID!, columnId: ID!): Boolean!
     cloneRetro(retroId: ID!): ID!
+    likePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
+    unlikePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
   }
 `
 

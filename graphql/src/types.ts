@@ -37,11 +37,13 @@ export type Mutation = {
   createColumn: Scalars['Boolean'];
   createPost: Scalars['Boolean'];
   createRetro: Scalars['ID'];
+  likePost: Scalars['Boolean'];
   moveColumn: Scalars['Boolean'];
   movePost: Scalars['Boolean'];
   removeColumn: Scalars['Boolean'];
   removePost: Scalars['Boolean'];
   removeRetro: Scalars['Boolean'];
+  unlikePost: Scalars['Boolean'];
   updateColumnName: Scalars['Boolean'];
   updatePostContent: Scalars['Boolean'];
   updateRetroName: Scalars['Boolean'];
@@ -74,6 +76,13 @@ export type MutationCreateColumnArgs = {
 export type MutationCreatePostArgs = {
   columnId: Scalars['ID'];
   postContent: Scalars['String'];
+  retroId: Scalars['ID'];
+};
+
+
+export type MutationLikePostArgs = {
+  columnId: Scalars['ID'];
+  postId: Scalars['ID'];
   retroId: Scalars['ID'];
 };
 
@@ -114,6 +123,13 @@ export type MutationRemoveRetroArgs = {
 };
 
 
+export type MutationUnlikePostArgs = {
+  columnId: Scalars['ID'];
+  postId: Scalars['ID'];
+  retroId: Scalars['ID'];
+};
+
+
 export type MutationUpdateColumnNameArgs = {
   columnId: Scalars['ID'];
   columnName: Scalars['String'];
@@ -145,7 +161,7 @@ export type Post = {
   author: Scalars['String'];
   content: Scalars['String'];
   id: Scalars['ID'];
-  likes: Scalars['Int'];
+  likes: Array<Scalars['String']>;
 };
 
 export enum PostMoveDirection {
@@ -275,7 +291,6 @@ export type ResolversTypes = {
   Column: ResolverTypeWrapper<Column>;
   ColumnMoveDirection: ColumnMoveDirection;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   PostMoveDirection: PostMoveDirection;
@@ -290,7 +305,6 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Column: Column;
   ID: Scalars['ID'];
-  Int: Scalars['Int'];
   Mutation: {};
   Post: Post;
   Query: {};
@@ -313,11 +327,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
   createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  likePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   moveColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveColumnArgs, 'columnMoveDirection' | 'oldColumnId' | 'retroId' | 'targetColumnId'>>;
   movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId'>>;
   removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
   removePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   removeRetro?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveRetroArgs, 'retroId'>>;
+  unlikePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   updateColumnName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnNameArgs, 'columnId' | 'columnName' | 'retroId'>>;
   updatePostContent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePostContentArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
   updateRetroName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateRetroNameArgs, 'retroId' | 'retroName'>>;
@@ -328,7 +344,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
   author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  likes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -369,7 +385,7 @@ export type ColumnsUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: number }> }> } };
+export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
 
 export type NameUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
@@ -397,7 +413,7 @@ export type GetRetroQueryVariables = Exact<{
 }>;
 
 
-export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: number }> }> } };
+export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
 
 export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -523,6 +539,24 @@ export type CloneRetroMutationVariables = Exact<{
 
 
 export type CloneRetroMutation = { __typename?: 'Mutation', cloneRetro: string };
+
+export type LikePostMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  columnId: Scalars['ID'];
+  postId: Scalars['ID'];
+}>;
+
+
+export type LikePostMutation = { __typename?: 'Mutation', likePost: boolean };
+
+export type UnlikePostMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+  columnId: Scalars['ID'];
+  postId: Scalars['ID'];
+}>;
+
+
+export type UnlikePostMutation = { __typename?: 'Mutation', unlikePost: boolean };
 
 
 export const ColumnsUpdatedDocument = gql`
@@ -1214,3 +1248,69 @@ export function useCloneRetroMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CloneRetroMutationHookResult = ReturnType<typeof useCloneRetroMutation>;
 export type CloneRetroMutationResult = Apollo.MutationResult<CloneRetroMutation>;
 export type CloneRetroMutationOptions = Apollo.BaseMutationOptions<CloneRetroMutation, CloneRetroMutationVariables>;
+export const LikePostDocument = gql`
+    mutation LikePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
+  likePost(retroId: $retroId, columnId: $columnId, postId: $postId)
+}
+    `;
+export type LikePostMutationFn = Apollo.MutationFunction<LikePostMutation, LikePostMutationVariables>;
+
+/**
+ * __useLikePostMutation__
+ *
+ * To run a mutation, you first call `useLikePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likePostMutation, { data, loading, error }] = useLikePostMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      columnId: // value for 'columnId'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useLikePostMutation(baseOptions?: Apollo.MutationHookOptions<LikePostMutation, LikePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikePostMutation, LikePostMutationVariables>(LikePostDocument, options);
+      }
+export type LikePostMutationHookResult = ReturnType<typeof useLikePostMutation>;
+export type LikePostMutationResult = Apollo.MutationResult<LikePostMutation>;
+export type LikePostMutationOptions = Apollo.BaseMutationOptions<LikePostMutation, LikePostMutationVariables>;
+export const UnlikePostDocument = gql`
+    mutation UnlikePost($retroId: ID!, $columnId: ID!, $postId: ID!) {
+  unlikePost(retroId: $retroId, columnId: $columnId, postId: $postId)
+}
+    `;
+export type UnlikePostMutationFn = Apollo.MutationFunction<UnlikePostMutation, UnlikePostMutationVariables>;
+
+/**
+ * __useUnlikePostMutation__
+ *
+ * To run a mutation, you first call `useUnlikePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlikePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlikePostMutation, { data, loading, error }] = useUnlikePostMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *      columnId: // value for 'columnId'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useUnlikePostMutation(baseOptions?: Apollo.MutationHookOptions<UnlikePostMutation, UnlikePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlikePostMutation, UnlikePostMutationVariables>(UnlikePostDocument, options);
+      }
+export type UnlikePostMutationHookResult = ReturnType<typeof useUnlikePostMutation>;
+export type UnlikePostMutationResult = Apollo.MutationResult<UnlikePostMutation>;
+export type UnlikePostMutationOptions = Apollo.BaseMutationOptions<UnlikePostMutation, UnlikePostMutationVariables>;
