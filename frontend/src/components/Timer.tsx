@@ -66,97 +66,75 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
     })
   }
 
-  return orientation === TimerOrientation.RIGHT ? (
-    <div
-      className="flex gap-3 flex-auto justify-end"
-      onMouseOver={() => setIsOver(true)}
-      onMouseLeave={() => setIsOver(false)}
-    >
-      <div
-        className={classNames('flex gap-2 items-center', {
-          invisible: !isOver
-        })}
-      >
-        <IconButton
-          onClick={addSeconds(600)}
-          icon={<PlusSmIcon />}
-          label="10"
-          title="Add 10 minutes"
-        />
-        <IconButton
-          onClick={addSeconds(300)}
-          icon={<PlusSmIcon />}
-          label="5"
-          title="Add 5 minutes"
-        />
-        <IconButton
-          onClick={addSeconds(60)}
-          icon={<PlusSmIcon />}
-          label="1"
-          title="Add 1 minute"
-        />
-        <IconButton
-          onClick={() => {
-            updateTimer({
-              variables: {
-                retroId: id,
-                timerEnd: new Date(0).toISOString()
-              }
-            })
-          }}
-          icon={<BanIcon />}
-          title="Cancel timer"
-        />
-      </div>
-      <div className="flex items-center gap-1" title="Clock">
-        <ClockIcon className="w-6" /> {getTimer(timer, curr)}
-      </div>
+  const add10 = (
+    <IconButton
+      onClick={addSeconds(600)}
+      icon={<PlusSmIcon />}
+      label="10"
+      title="Add 10 minutes"
+    />
+  )
+  const add5 = (
+    <IconButton
+      onClick={addSeconds(300)}
+      icon={<PlusSmIcon />}
+      label="5"
+      title="Add 5 minutes"
+    />
+  )
+  const add1 = (
+    <IconButton
+      onClick={addSeconds(60)}
+      icon={<PlusSmIcon />}
+      label="1"
+      title="Add 1 minute"
+    />
+  )
+
+  const cancel = (
+    <IconButton
+      onClick={() => {
+        updateTimer({
+          variables: {
+            retroId: id,
+            timerEnd: new Date(0).toISOString()
+          }
+        })
+      }}
+      icon={<BanIcon />}
+      title="Cancel timer"
+    />
+  )
+
+  const buttons =
+    orientation === TimerOrientation.RIGHT
+      ? [add10, add5, add1, cancel]
+      : [cancel, add1, add5, add10]
+
+  const clock = (
+    <div className="flex items-center gap-1" title="Clock">
+      <ClockIcon className="w-6" /> <time>{getTimer(timer, curr)}</time>
     </div>
-  ) : (
+  )
+
+  return (
     <div
-      className="flex gap-3 w-full"
+      className={classNames('flex gap-3', {
+        'flex-auto justify-end': orientation === TimerOrientation.RIGHT,
+        'w-full': orientation === TimerOrientation.LEFT
+      })}
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
-      <div className="flex items-center gap-2" title="Clock">
-        <ClockIcon className="w-6" /> {getTimer(timer, curr)}
-      </div>
+      {orientation === TimerOrientation.LEFT && clock}
       <div
         className={classNames('flex gap-2 items-center', {
           invisible: !isOver
         })}
       >
-        <IconButton
-          onClick={() => {
-            updateTimer({
-              variables: {
-                retroId: id,
-                timerEnd: new Date(0).toISOString()
-              }
-            })
-          }}
-          icon={<BanIcon />}
-          title="Cancel timer"
-        />
-        <IconButton
-          onClick={addSeconds(60)}
-          icon={<PlusSmIcon />}
-          label="1"
-          title="Add 1 minute"
-        />
-        <IconButton
-          onClick={addSeconds(300)}
-          icon={<PlusSmIcon />}
-          label="5"
-          title="Add 5 minutes"
-        />
-        <IconButton
-          onClick={addSeconds(600)}
-          icon={<PlusSmIcon />}
-          label="10"
-          title="Add 10 minutes"
-        />
+        {buttons}
       </div>
+      {orientation === TimerOrientation.RIGHT && clock}
     </div>
   )
 }
