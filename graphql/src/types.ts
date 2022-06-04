@@ -415,7 +415,7 @@ export type GetRetroQueryVariables = Exact<{
 }>;
 
 
-export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
+export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, showPosts: boolean, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
 
 export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -679,6 +679,7 @@ export const GetRetroDocument = gql`
         likes
       }
     }
+    showPosts
     createdAt
     lastUpdated
     lastViewed

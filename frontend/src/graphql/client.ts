@@ -40,8 +40,6 @@ import {
   MutationUpdatePostContentArgs,
   MutationUpdateRetroNameArgs,
   MutationUpdateTimerArgs,
-  NameUpdatedSubscription,
-  NameUpdatedSubscriptionVariables,
   OptionsUpdatedSubscription,
   OptionsUpdatedSubscriptionVariables,
   QueryGetRetroArgs,
@@ -121,6 +119,7 @@ const GET_RETRO = gql`
           likes
         }
       }
+      showPosts
       createdAt
       lastUpdated
       lastViewed
