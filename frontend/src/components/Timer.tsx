@@ -116,7 +116,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       : [cancel, add1, add5, add10]
 
   const clock = (
-    <div className="flex items-center gap-1" title="Clock">
+    <div className="flex items-center gap-1" title="Timer">
       <ClockIcon className="w-6" /> <time>{getTimer(timer, curr)}</time>
     </div>
   )
