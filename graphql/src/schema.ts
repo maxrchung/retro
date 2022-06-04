@@ -30,6 +30,8 @@ const schema = gql`
   type Post {
     id: ID!
     content: String!
+    author: String!
+    likes: Int!
   }
 
   type Subscription {

@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
-import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline'
+import {
+  CheckIcon,
+  PencilIcon,
+  ThumbUpIcon,
+  TrashIcon
+} from '@heroicons/react/outline'
 import IconButton from 'components/IconButton'
 import PostContainer from 'components/PostContainer'
 import {
@@ -28,8 +33,9 @@ export interface PostDragItem {
 
 export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: columnId } = column
-  const { id: postId, content } = post
-  const { id: retroId } = useAppSelector((state) => state.retro)
+  const { id: postId, content, likes } = post
+  const { retro } = useAppSelector((state) => state)
+  const { id: retroId } = retro
 
   const ref = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -130,7 +136,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       >
         <PostContainer
           content={
-            <>
+            <div className="flex flex-col">
               {isEditing ? (
                 <div className="flex">
                   <TextArea
@@ -167,7 +173,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   {editContent}
                 </span>
               )}
-            </>
+              {likes > 0 && (
+                <div className="flex items-center gap-2" title="Thumbs up">
+                  <ThumbUpIcon width={24} /> {likes.toString()}
+                </div>
+              )}
+            </div>
           }
           buttons={
             <>

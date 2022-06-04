@@ -138,7 +138,7 @@ const createColumn = async (
 const createPost = async (
   parent: unknown,
   args: MutationCreatePostArgs,
-  { client }: ServerContext
+  { client, connectionId }: ServerContext
 ) => {
   if (args.postContent.length === 0) {
     throw new UserInputError('Create post: Post cannot be empty')
@@ -159,7 +159,9 @@ const createPost = async (
   }
   const post = {
     id: uid(),
-    content: args.postContent
+    content: args.postContent,
+    author: connectionId,
+    likes: 0
   }
   column.posts.unshift(post)
   return publishColumns(client, retro)

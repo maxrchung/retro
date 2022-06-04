@@ -75,6 +75,8 @@ const COLUMNS_UPDATED = gql`
         posts {
           id
           content
+          author
+          likes
         }
       }
     }
@@ -118,6 +120,8 @@ const GET_RETRO = gql`
         posts {
           id
           content
+          author
+          likes
         }
       }
       createdAt

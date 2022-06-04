@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
 import Retro from 'components/Retro'
+import { getCookie } from 'cookies-next'
 
 export default function Id(): JSX.Element {
   const router = useRouter()
@@ -26,6 +27,9 @@ export default function Id(): JSX.Element {
   const { data: dataRemoved } = useRetroRemoved({ retroId }, !retroId)
 
   const { name } = useAppSelector((state) => state.retro)
+
+  const connectionId = getCookie('retro-connection-id') ?? ''
+  dispatch(actions.setConnectionId(connectionId.toString()))
 
   useEffect(() => {
     if (dataGet) {

@@ -142,8 +142,10 @@ export type MutationUpdateTimerArgs = {
 
 export type Post = {
   __typename?: 'Post';
+  author: Scalars['String'];
   content: Scalars['String'];
   id: Scalars['ID'];
+  likes: Scalars['Int'];
 };
 
 export enum PostMoveDirection {
@@ -273,6 +275,7 @@ export type ResolversTypes = {
   Column: ResolverTypeWrapper<Column>;
   ColumnMoveDirection: ColumnMoveDirection;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   PostMoveDirection: PostMoveDirection;
@@ -287,6 +290,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Column: Column;
   ID: Scalars['ID'];
+  Int: Scalars['Int'];
   Mutation: {};
   Post: Post;
   Query: {};
@@ -321,8 +325,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
+  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -363,7 +369,7 @@ export type ColumnsUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: number }> }> } };
 
 export type NameUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
@@ -391,7 +397,7 @@ export type GetRetroQueryVariables = Exact<{
 }>;
 
 
-export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string }> }> } };
+export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: number }> }> } };
 
 export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -529,6 +535,8 @@ export const ColumnsUpdatedDocument = gql`
       posts {
         id
         content
+        author
+        likes
       }
     }
   }
@@ -660,6 +668,8 @@ export const GetRetroDocument = gql`
       posts {
         id
         content
+        author
+        likes
       }
     }
     createdAt

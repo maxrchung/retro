@@ -5,6 +5,7 @@ interface RetroState {
   retro: Types.Retro
   info: string
   errors: string[]
+  connectionId: string
 }
 
 const initialState: RetroState = {
@@ -27,8 +28,10 @@ const initialState: RetroState = {
         name: 'Action items',
         posts: [
           {
-            id: '',
-            content: 'Update the retro :)'
+            id: 'e',
+            content: 'Update the retro :)',
+            author: 'retro',
+            likes: 0
           }
         ]
       }
@@ -39,7 +42,8 @@ const initialState: RetroState = {
     timerEnd: '0'
   },
   info: '',
-  errors: []
+  errors: [],
+  connectionId: ''
 }
 
 export const retroSlice = createSlice({
@@ -73,6 +77,9 @@ export const retroSlice = createSlice({
     resetState: (state) => {
       state.retro = initialState.retro
       state.errors = initialState.errors
+    },
+    setConnectionId: (state, action: PayloadAction<string>) => {
+      state.connectionId = action.payload
     }
   }
 })

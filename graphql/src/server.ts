@@ -8,6 +8,7 @@ import { uid } from 'uid'
 
 export interface ServerContext {
   client: DynamoDBDocument
+  connectionId: string
 }
 
 const server = new ApolloServer({
@@ -70,13 +71,13 @@ const getConnectionId = (cookieString: string | undefined) => {
 
   const cookies = cookieString.split(';')
   for (const cookie of cookies) {
-    const keyValue = cookie.trim().split('=')
+    const keyValue = cookie.split('=')
     if (keyValue.length !== 2) {
       continue
     }
 
-    const key = keyValue[0]
-    const value = keyValue[1]
+    const key = keyValue[0].trim()
+    const value = keyValue[1].trim()
 
     if (key === RETRO_CONNECTION_ID) {
       return value
