@@ -19,6 +19,8 @@ import {
   CreateRetroMutationVariables,
   GetRetroQuery,
   GetRetroQueryVariables,
+  HidePostsMutation,
+  HidePostsMutationVariables,
   LikePostMutation,
   LikePostMutationVariables,
   MoveColumnMutation,
@@ -30,12 +32,14 @@ import {
   MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationHidePostsArgs,
   MutationLikePostArgs,
   MutationMoveColumnArgs,
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
   MutationRemoveRetroArgs,
+  MutationShowPostsArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
   MutationUpdateRetroNameArgs,
@@ -51,6 +55,8 @@ import {
   RemoveRetroMutationVariables,
   RetroRemovedSubscription,
   RetroRemovedSubscriptionVariables,
+  ShowPostsMutation,
+  ShowPostsMutationVariables,
   SubscriptionColumnsUpdatedArgs,
   SubscriptionOptionsUpdatedArgs,
   SubscriptionRetroRemovedArgs,
@@ -276,6 +282,18 @@ const UNLIKE_POST = gql`
   }
 `
 
+const SHOW_POSTS = gql`
+  mutation ShowPosts($retroId: ID!) {
+    showPosts(retroId: $retroId)
+  }
+`
+
+const HIDE_POSTS = gql`
+  mutation HidePosts($retroId: ID!) {
+    hidePosts(retroId: $retroId)
+  }
+`
+
 export const useColumnsUpdated = (
   columnsUpdatedArgs: SubscriptionColumnsUpdatedArgs,
   skip?: boolean
@@ -420,4 +438,14 @@ export const useLikePost = (likePostArgs: MutationLikePostArgs) =>
 export const useUnlikePost = (unlikePostArgs: MutationLikePostArgs) =>
   useMutation<UnlikePostMutation, UnlikePostMutationVariables>(UNLIKE_POST, {
     variables: unlikePostArgs
+  })
+
+export const useShowPosts = (showPostsArgs: MutationShowPostsArgs) =>
+  useMutation<ShowPostsMutation, ShowPostsMutationVariables>(SHOW_POSTS, {
+    variables: showPostsArgs
+  })
+
+export const useHidePosts = (hidePostsArgs: MutationHidePostsArgs) =>
+  useMutation<HidePostsMutation, HidePostsMutationVariables>(HIDE_POSTS, {
+    variables: hidePostsArgs
   })

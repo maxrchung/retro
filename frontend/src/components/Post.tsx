@@ -190,12 +190,6 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           buttons={
             <>
               <IconButton
-                icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
-                onClick={() => (hasLiked ? unlikePost() : likePost())}
-                title={hasLiked ? 'Unlike' : 'Like'}
-              />
-
-              <IconButton
                 icon={isEditing ? <CheckIcon /> : <PencilIcon />}
                 onClick={() => {
                   isEditing
@@ -211,6 +205,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   setIsEditing(!isEditing)
                 }}
                 title={isEditing ? 'Confirm post' : 'Edit post'}
+              />
+
+              <IconButton
+                icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
+                onClick={() => (hasLiked ? unlikePost() : likePost())}
+                title={hasLiked ? 'Unlike' : 'Like'}
               />
 
               <IconButton

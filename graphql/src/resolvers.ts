@@ -67,7 +67,7 @@ const subscribeOptions = withFilter(
 const publishOptions = (client: DynamoDBDocument, retro: Retro): boolean => {
   updateDbRetro(client, retro, ['name', 'timerEnd', 'showPosts'])
   pubsub.publish(OPTIONS_UPDATED_SUBSCRIPTION, {
-    nameUpdated: retro
+    optionsUpdated: retro
   })
   return true
 }

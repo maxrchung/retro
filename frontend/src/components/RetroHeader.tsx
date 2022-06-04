@@ -5,13 +5,17 @@ import {
   BackspaceIcon,
   CheckIcon,
   DuplicateIcon,
+  EyeIcon,
+  EyeOffIcon,
   PencilIcon,
   TrashIcon
 } from '@heroicons/react/outline'
 import {
   useClearRetro,
   useCloneRetro,
+  useHidePosts,
   useRemoveRetro,
+  useShowPosts,
   useUpdateRetroName
 } from 'graphql/client'
 import { useRouter } from 'next/router'
@@ -29,8 +33,12 @@ export default function Retro(): JSX.Element {
   const [updateRetroName] = useUpdateRetroName()
   const [clearRetro] = useClearRetro({ retroId })
   const [cloneRetro, { data: dataClone }] = useCloneRetro({ retroId })
+  const [showPosts] = useShowPosts({ retroId })
+  const [hidePosts] = useHidePosts({ retroId })
 
-  const { name } = useAppSelector((state) => state.retro)
+  const { name, showPosts: canShowPosts } = useAppSelector(
+    (state) => state.retro
+  )
   const [isEditing, setIsEditing] = useState(false)
   const [isOver, setIsOver] = useState(false)
   const [editName, setEditName] = useState(name)
@@ -55,7 +63,7 @@ export default function Retro(): JSX.Element {
 
   return (
     <div
-      className="flex items-center gap-3 w-full md:w-1/2 "
+      className="flex items-center gap-2 w-full md:w-1/2 "
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
@@ -80,12 +88,19 @@ export default function Retro(): JSX.Element {
           value={editName}
         />
       ) : (
-        <h1
-          className="font-bold text-xl cursor-text"
-          onClick={() => setIsEditing(true)}
-        >
-          {editName}
-        </h1>
+        <div className="flex gap-3">
+          <h1
+            className="font-bold text-xl cursor-text"
+            onClick={() => setIsEditing(true)}
+          >
+            {editName}
+          </h1>
+          {canShowPosts ? (
+            <EyeIcon className="w-6" />
+          ) : (
+            <EyeOffIcon className="w-6" />
+          )}
+        </div>
       )}
 
       <div
@@ -107,6 +122,12 @@ export default function Retro(): JSX.Element {
             setIsEditing(!isEditing)
           }}
           title={isEditing ? 'Confirm retro name' : 'Edit retro name'}
+        />
+
+        <IconButton
+          icon={canShowPosts ? <EyeOffIcon /> : <EyeIcon />}
+          onClick={() => (canShowPosts ? hidePosts() : showPosts())}
+          title={canShowPosts ? 'Hide posts' : 'Show posts'}
         />
 
         <IconButton

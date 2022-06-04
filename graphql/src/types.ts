@@ -560,6 +560,20 @@ export type UnlikePostMutationVariables = Exact<{
 
 export type UnlikePostMutation = { __typename?: 'Mutation', unlikePost: boolean };
 
+export type ShowPostsMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type ShowPostsMutation = { __typename?: 'Mutation', showPosts: boolean };
+
+export type HidePostsMutationVariables = Exact<{
+  retroId: Scalars['ID'];
+}>;
+
+
+export type HidePostsMutation = { __typename?: 'Mutation', hidePosts: boolean };
+
 
 export const ColumnsUpdatedDocument = gql`
     subscription ColumnsUpdated($retroId: ID!) {
@@ -1288,3 +1302,65 @@ export function useUnlikePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UnlikePostMutationHookResult = ReturnType<typeof useUnlikePostMutation>;
 export type UnlikePostMutationResult = Apollo.MutationResult<UnlikePostMutation>;
 export type UnlikePostMutationOptions = Apollo.BaseMutationOptions<UnlikePostMutation, UnlikePostMutationVariables>;
+export const ShowPostsDocument = gql`
+    mutation ShowPosts($retroId: ID!) {
+  showPosts(retroId: $retroId)
+}
+    `;
+export type ShowPostsMutationFn = Apollo.MutationFunction<ShowPostsMutation, ShowPostsMutationVariables>;
+
+/**
+ * __useShowPostsMutation__
+ *
+ * To run a mutation, you first call `useShowPostsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShowPostsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [showPostsMutation, { data, loading, error }] = useShowPostsMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useShowPostsMutation(baseOptions?: Apollo.MutationHookOptions<ShowPostsMutation, ShowPostsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ShowPostsMutation, ShowPostsMutationVariables>(ShowPostsDocument, options);
+      }
+export type ShowPostsMutationHookResult = ReturnType<typeof useShowPostsMutation>;
+export type ShowPostsMutationResult = Apollo.MutationResult<ShowPostsMutation>;
+export type ShowPostsMutationOptions = Apollo.BaseMutationOptions<ShowPostsMutation, ShowPostsMutationVariables>;
+export const HidePostsDocument = gql`
+    mutation HidePosts($retroId: ID!) {
+  hidePosts(retroId: $retroId)
+}
+    `;
+export type HidePostsMutationFn = Apollo.MutationFunction<HidePostsMutation, HidePostsMutationVariables>;
+
+/**
+ * __useHidePostsMutation__
+ *
+ * To run a mutation, you first call `useHidePostsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHidePostsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [hidePostsMutation, { data, loading, error }] = useHidePostsMutation({
+ *   variables: {
+ *      retroId: // value for 'retroId'
+ *   },
+ * });
+ */
+export function useHidePostsMutation(baseOptions?: Apollo.MutationHookOptions<HidePostsMutation, HidePostsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<HidePostsMutation, HidePostsMutationVariables>(HidePostsDocument, options);
+      }
+export type HidePostsMutationHookResult = ReturnType<typeof useHidePostsMutation>;
+export type HidePostsMutationResult = Apollo.MutationResult<HidePostsMutation>;
+export type HidePostsMutationOptions = Apollo.BaseMutationOptions<HidePostsMutation, HidePostsMutationVariables>;
