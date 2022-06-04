@@ -8,12 +8,14 @@ import {
   MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationHidePostsArgs,
   MutationLikePostArgs,
   MutationMoveColumnArgs,
   MutationMovePostArgs,
   MutationRemoveColumnArgs,
   MutationRemovePostArgs,
   MutationRemoveRetroArgs,
+  MutationShowPostsArgs,
   MutationUnlikePostArgs,
   MutationUpdateColumnNameArgs,
   MutationUpdatePostContentArgs,
@@ -34,9 +36,8 @@ import {
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 import {
   COLUMNS_UPDATED_SUBSCRIPTION,
-  NAME_UPDATED_SUBSCRIPTION,
-  RETRO_REMOVED_SUBSCRIPTION,
-  TIMER_UPDATED_SUBSCRIPTION
+  OPTIONS_UPDATED_SUBSCRIPTION,
+  RETRO_REMOVED_SUBSCRIPTION
 } from './constants'
 
 // Note, this can't scale with multiple contains, we should eventually move pubsub into something like DDB
@@ -50,7 +51,7 @@ const subscribeColumns = withFilter(
 ) as never
 
 const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbRetro(client, retro, 'columns')
+  updateDbRetro(client, retro, ['columns'])
   pubsub.publish(COLUMNS_UPDATED_SUBSCRIPTION, {
     // We have to include retro id so that filtering can send to the correct clients
     columnsUpdated: retro
@@ -58,28 +59,15 @@ const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
   return true
 }
 
-const subscribeName = withFilter(
-  () => pubsub.asyncIterator(NAME_UPDATED_SUBSCRIPTION),
-  (payload, variables) => payload.nameUpdated.id === variables.retroId
+const subscribeOptions = withFilter(
+  () => pubsub.asyncIterator(OPTIONS_UPDATED_SUBSCRIPTION),
+  (payload, variables) => payload.optionsUpdated.id === variables.retroId
 ) as never
 
-const publishName = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbRetro(client, retro, 'name')
-  pubsub.publish(NAME_UPDATED_SUBSCRIPTION, {
+const publishOptions = (client: DynamoDBDocument, retro: Retro): boolean => {
+  updateDbRetro(client, retro, ['name', 'timerEnd', 'showPosts'])
+  pubsub.publish(OPTIONS_UPDATED_SUBSCRIPTION, {
     nameUpdated: retro
-  })
-  return true
-}
-
-const subscribeTimer = withFilter(
-  () => pubsub.asyncIterator(TIMER_UPDATED_SUBSCRIPTION),
-  (payload, variables) => payload.timerUpdated.id === variables.retroId
-) as never
-
-const publishTimer = (client: DynamoDBDocument, retro: Retro): boolean => {
-  updateDbRetro(client, retro, 'timerEnd')
-  pubsub.publish(TIMER_UPDATED_SUBSCRIPTION, {
-    timerUpdated: retro
   })
   return true
 }
@@ -181,7 +169,7 @@ const updateRetroName = async (
   }
   const retro = await getDbRetro(client, args.retroId)
   retro.name = args.retroName
-  return publishName(client, retro)
+  return publishOptions(client, retro)
 }
 
 const updateTimer = async (
@@ -191,7 +179,27 @@ const updateTimer = async (
 ) => {
   const retro = await getDbRetro(client, args.retroId)
   retro.timerEnd = args.timerEnd
-  return publishTimer(client, retro)
+  return publishOptions(client, retro)
+}
+
+const showPosts = async (
+  parent: unknown,
+  args: MutationShowPostsArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  retro.showPosts = true
+  return publishOptions(client, retro)
+}
+
+const hidePosts = async (
+  parent: unknown,
+  args: MutationHidePostsArgs,
+  { client }: ServerContext
+) => {
+  const retro = await getDbRetro(client, args.retroId)
+  retro.showPosts = false
+  return publishOptions(client, retro)
 }
 
 const updateColumnName = async (
@@ -452,11 +460,8 @@ const resolvers: Resolvers<ServerContext> = {
     columnsUpdated: {
       subscribe: subscribeColumns
     },
-    nameUpdated: {
-      subscribe: subscribeName
-    },
-    timerUpdated: {
-      subscribe: subscribeTimer
+    optionsUpdated: {
+      subscribe: subscribeOptions
     },
     retroRemoved: {
       subscribe: subscribeRemoved
@@ -482,7 +487,9 @@ const resolvers: Resolvers<ServerContext> = {
     clearColumn,
     cloneRetro,
     likePost,
-    unlikePost
+    unlikePost,
+    showPosts,
+    hidePosts
   }
 }
 

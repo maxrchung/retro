@@ -16,6 +16,7 @@ const schema = gql`
     name: String!
     columns: [Column!]!
     timerEnd: String!
+    showPosts: Boolean!
     createdAt: String!
     lastViewed: String!
     lastUpdated: String!
@@ -36,8 +37,7 @@ const schema = gql`
 
   type Subscription {
     columnsUpdated(retroId: ID!): Retro!
-    nameUpdated(retroId: ID!): Retro!
-    timerUpdated(retroId: ID!): Retro!
+    optionsUpdated(retroId: ID!): Retro!
     retroRemoved(retroId: ID!): Retro!
   }
 
@@ -84,6 +84,8 @@ const schema = gql`
     cloneRetro(retroId: ID!): ID!
     likePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
     unlikePost(retroId: ID!, columnId: ID!, postId: ID!): Boolean!
+    showPosts(retroId: ID!): Boolean!
+    hidePosts(retroId: ID!): Boolean!
   }
 `
 

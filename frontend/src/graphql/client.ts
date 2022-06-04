@@ -42,6 +42,8 @@ import {
   MutationUpdateTimerArgs,
   NameUpdatedSubscription,
   NameUpdatedSubscriptionVariables,
+  OptionsUpdatedSubscription,
+  OptionsUpdatedSubscriptionVariables,
   QueryGetRetroArgs,
   RemoveColumnMutation,
   RemoveColumnMutationVariables,
@@ -52,11 +54,8 @@ import {
   RetroRemovedSubscription,
   RetroRemovedSubscriptionVariables,
   SubscriptionColumnsUpdatedArgs,
-  SubscriptionNameUpdatedArgs,
+  SubscriptionOptionsUpdatedArgs,
   SubscriptionRetroRemovedArgs,
-  SubscriptionTimerUpdatedArgs,
-  TimerUpdatedSubscription,
-  TimerUpdatedSubscriptionVariables,
   UnlikePostMutation,
   UnlikePostMutationVariables,
   UpdateColumnNameMutation,
@@ -88,20 +87,13 @@ const COLUMNS_UPDATED = gql`
   }
 `
 
-const NAME_UPDATED = gql`
-  subscription NameUpdated($retroId: ID!) {
-    nameUpdated(retroId: $retroId) {
+const OPTIONS_UPDATED = gql`
+  subscription OptionsUpdated($retroId: ID!) {
+    optionsUpdated(retroId: $retroId) {
       id
       name
-    }
-  }
-`
-
-const TIMER_UPDATED = gql`
-  subscription TimerUpdated($retroId: ID!) {
-    timerUpdated(retroId: $retroId) {
-      id
       timerEnd
+      showPosts
     }
   }
 `
@@ -297,29 +289,17 @@ export const useColumnsUpdated = (
     skip
   })
 
-export const useNameUpdated = (
-  nameUpdatedArgs: SubscriptionNameUpdatedArgs,
+export const useOptionsUpdated = (
+  optionsUpdatedArgs: SubscriptionOptionsUpdatedArgs,
   skip?: boolean
 ) =>
-  useSubscription<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>(
-    NAME_UPDATED,
-    {
-      variables: nameUpdatedArgs,
-      skip
-    }
-  )
-
-export const useTimerUpdated = (
-  timerUpdatedArgs: SubscriptionTimerUpdatedArgs,
-  skip?: boolean
-) =>
-  useSubscription<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>(
-    TIMER_UPDATED,
-    {
-      variables: timerUpdatedArgs,
-      skip
-    }
-  )
+  useSubscription<
+    OptionsUpdatedSubscription,
+    OptionsUpdatedSubscriptionVariables
+  >(OPTIONS_UPDATED, {
+    variables: optionsUpdatedArgs,
+    skip
+  })
 
 export const useRetroRemoved = (
   retroRemovedArgs: SubscriptionRetroRemovedArgs,

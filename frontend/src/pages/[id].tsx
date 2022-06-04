@@ -4,9 +4,8 @@ import { useAppDispatch, useAppSelector } from '../state/hooks'
 import {
   useGetRetro,
   useColumnsUpdated,
-  useNameUpdated,
-  useTimerUpdated,
-  useRetroRemoved
+  useRetroRemoved,
+  useOptionsUpdated
 } from 'graphql/client'
 import { useRouter } from 'next/router'
 import { actions } from 'state/retroSlice'
@@ -22,8 +21,7 @@ export default function Id(): JSX.Element {
   // No point to fetch if retroId is not set
   const { data: dataGet } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
-  const { data: dataName } = useNameUpdated({ retroId }, !retroId)
-  const { data: dataTimer } = useTimerUpdated({ retroId }, !retroId)
+  const { data: dataOptions } = useOptionsUpdated({ retroId }, !retroId)
   const { data: dataRemoved } = useRetroRemoved({ retroId }, !retroId)
 
   const { name } = useAppSelector((state) => state.retro)
@@ -44,16 +42,10 @@ export default function Id(): JSX.Element {
   }, [dataColumns])
 
   useEffect(() => {
-    if (dataName) {
-      dispatch(actions.updateName(dataName.nameUpdated.name))
+    if (dataOptions) {
+      dispatch(actions.updateOptions(dataOptions.optionsUpdated))
     }
-  }, [dataName])
-
-  useEffect(() => {
-    if (dataTimer) {
-      dispatch(actions.updateTimer(dataTimer.timerUpdated.timerEnd))
-    }
-  }, [dataTimer])
+  }, [dataOptions])
 
   useEffect(() => {
     if (dataRemoved) {

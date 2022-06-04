@@ -37,12 +37,14 @@ export type Mutation = {
   createColumn: Scalars['Boolean'];
   createPost: Scalars['Boolean'];
   createRetro: Scalars['ID'];
+  hidePosts: Scalars['Boolean'];
   likePost: Scalars['Boolean'];
   moveColumn: Scalars['Boolean'];
   movePost: Scalars['Boolean'];
   removeColumn: Scalars['Boolean'];
   removePost: Scalars['Boolean'];
   removeRetro: Scalars['Boolean'];
+  showPosts: Scalars['Boolean'];
   unlikePost: Scalars['Boolean'];
   updateColumnName: Scalars['Boolean'];
   updatePostContent: Scalars['Boolean'];
@@ -76,6 +78,11 @@ export type MutationCreateColumnArgs = {
 export type MutationCreatePostArgs = {
   columnId: Scalars['ID'];
   postContent: Scalars['String'];
+  retroId: Scalars['ID'];
+};
+
+
+export type MutationHidePostsArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -119,6 +126,11 @@ export type MutationRemovePostArgs = {
 
 
 export type MutationRemoveRetroArgs = {
+  retroId: Scalars['ID'];
+};
+
+
+export type MutationShowPostsArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -187,15 +199,15 @@ export type Retro = {
   lastUpdated: Scalars['String'];
   lastViewed: Scalars['String'];
   name: Scalars['String'];
+  showPosts: Scalars['Boolean'];
   timerEnd: Scalars['String'];
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
   columnsUpdated: Retro;
-  nameUpdated: Retro;
+  optionsUpdated: Retro;
   retroRemoved: Retro;
-  timerUpdated: Retro;
 };
 
 
@@ -204,17 +216,12 @@ export type SubscriptionColumnsUpdatedArgs = {
 };
 
 
-export type SubscriptionNameUpdatedArgs = {
+export type SubscriptionOptionsUpdatedArgs = {
   retroId: Scalars['ID'];
 };
 
 
 export type SubscriptionRetroRemovedArgs = {
-  retroId: Scalars['ID'];
-};
-
-
-export type SubscriptionTimerUpdatedArgs = {
   retroId: Scalars['ID'];
 };
 
@@ -327,12 +334,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
   createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  hidePosts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationHidePostsArgs, 'retroId'>>;
   likePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   moveColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveColumnArgs, 'columnMoveDirection' | 'oldColumnId' | 'retroId' | 'targetColumnId'>>;
   movePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMovePostArgs, 'oldColumnId' | 'oldPostId' | 'postMoveDirection' | 'retroId' | 'targetColumnId'>>;
   removeColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveColumnArgs, 'columnId' | 'retroId'>>;
   removePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   removeRetro?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveRetroArgs, 'retroId'>>;
+  showPosts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationShowPostsArgs, 'retroId'>>;
   unlikePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   updateColumnName?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateColumnNameArgs, 'columnId' | 'columnName' | 'retroId'>>;
   updatePostContent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdatePostContentArgs, 'columnId' | 'postContent' | 'postId' | 'retroId'>>;
@@ -359,15 +368,15 @@ export type RetroResolvers<ContextType = any, ParentType extends ResolversParent
   lastUpdated?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastViewed?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  showPosts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   timerEnd?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   columnsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "columnsUpdated", ParentType, ContextType, RequireFields<SubscriptionColumnsUpdatedArgs, 'retroId'>>;
-  nameUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "nameUpdated", ParentType, ContextType, RequireFields<SubscriptionNameUpdatedArgs, 'retroId'>>;
+  optionsUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "optionsUpdated", ParentType, ContextType, RequireFields<SubscriptionOptionsUpdatedArgs, 'retroId'>>;
   retroRemoved?: SubscriptionResolver<ResolversTypes['Retro'], "retroRemoved", ParentType, ContextType, RequireFields<SubscriptionRetroRemovedArgs, 'retroId'>>;
-  timerUpdated?: SubscriptionResolver<ResolversTypes['Retro'], "timerUpdated", ParentType, ContextType, RequireFields<SubscriptionTimerUpdatedArgs, 'retroId'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -387,19 +396,12 @@ export type ColumnsUpdatedSubscriptionVariables = Exact<{
 
 export type ColumnsUpdatedSubscription = { __typename?: 'Subscription', columnsUpdated: { __typename?: 'Retro', id: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
 
-export type NameUpdatedSubscriptionVariables = Exact<{
+export type OptionsUpdatedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
 }>;
 
 
-export type NameUpdatedSubscription = { __typename?: 'Subscription', nameUpdated: { __typename?: 'Retro', id: string, name: string } };
-
-export type TimerUpdatedSubscriptionVariables = Exact<{
-  retroId: Scalars['ID'];
-}>;
-
-
-export type TimerUpdatedSubscription = { __typename?: 'Subscription', timerUpdated: { __typename?: 'Retro', id: string, timerEnd: string } };
+export type OptionsUpdatedSubscription = { __typename?: 'Subscription', optionsUpdated: { __typename?: 'Retro', id: string, name: string, timerEnd: string, showPosts: boolean } };
 
 export type RetroRemovedSubscriptionVariables = Exact<{
   retroId: Scalars['ID'];
@@ -599,68 +601,39 @@ export function useColumnsUpdatedSubscription(baseOptions: Apollo.SubscriptionHo
       }
 export type ColumnsUpdatedSubscriptionHookResult = ReturnType<typeof useColumnsUpdatedSubscription>;
 export type ColumnsUpdatedSubscriptionResult = Apollo.SubscriptionResult<ColumnsUpdatedSubscription>;
-export const NameUpdatedDocument = gql`
-    subscription NameUpdated($retroId: ID!) {
-  nameUpdated(retroId: $retroId) {
+export const OptionsUpdatedDocument = gql`
+    subscription OptionsUpdated($retroId: ID!) {
+  optionsUpdated(retroId: $retroId) {
     id
     name
-  }
-}
-    `;
-
-/**
- * __useNameUpdatedSubscription__
- *
- * To run a query within a React component, call `useNameUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNameUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNameUpdatedSubscription({
- *   variables: {
- *      retroId: // value for 'retroId'
- *   },
- * });
- */
-export function useNameUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<NameUpdatedSubscription, NameUpdatedSubscriptionVariables>(NameUpdatedDocument, options);
-      }
-export type NameUpdatedSubscriptionHookResult = ReturnType<typeof useNameUpdatedSubscription>;
-export type NameUpdatedSubscriptionResult = Apollo.SubscriptionResult<NameUpdatedSubscription>;
-export const TimerUpdatedDocument = gql`
-    subscription TimerUpdated($retroId: ID!) {
-  timerUpdated(retroId: $retroId) {
-    id
     timerEnd
+    showPosts
   }
 }
     `;
 
 /**
- * __useTimerUpdatedSubscription__
+ * __useOptionsUpdatedSubscription__
  *
- * To run a query within a React component, call `useTimerUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useTimerUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOptionsUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOptionsUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTimerUpdatedSubscription({
+ * const { data, loading, error } = useOptionsUpdatedSubscription({
  *   variables: {
  *      retroId: // value for 'retroId'
  *   },
  * });
  */
-export function useTimerUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>) {
+export function useOptionsUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OptionsUpdatedSubscription, OptionsUpdatedSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<TimerUpdatedSubscription, TimerUpdatedSubscriptionVariables>(TimerUpdatedDocument, options);
+        return Apollo.useSubscription<OptionsUpdatedSubscription, OptionsUpdatedSubscriptionVariables>(OptionsUpdatedDocument, options);
       }
-export type TimerUpdatedSubscriptionHookResult = ReturnType<typeof useTimerUpdatedSubscription>;
-export type TimerUpdatedSubscriptionResult = Apollo.SubscriptionResult<TimerUpdatedSubscription>;
+export type OptionsUpdatedSubscriptionHookResult = ReturnType<typeof useOptionsUpdatedSubscription>;
+export type OptionsUpdatedSubscriptionResult = Apollo.SubscriptionResult<OptionsUpdatedSubscription>;
 export const RetroRemovedDocument = gql`
     subscription RetroRemoved($retroId: ID!) {
   retroRemoved(retroId: $retroId) {

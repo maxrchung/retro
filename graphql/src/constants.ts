@@ -1,7 +1,6 @@
 export const DYNAMODB_ENDPOINT = 'http://localhost:8000'
 export const RETRO_TABLE = 'retro-table'
 export const COLUMNS_UPDATED_SUBSCRIPTION = 'columns-updated'
-export const NAME_UPDATED_SUBSCRIPTION = 'name-updated'
-export const TIMER_UPDATED_SUBSCRIPTION = 'timer-updated'
+export const OPTIONS_UPDATED_SUBSCRIPTION = 'options-updated'
 export const RETRO_REMOVED_SUBSCRIPTION = 'retro-removed'
 export const RETRO_CONNECTION_ID = 'retro-connection-id'

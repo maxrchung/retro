@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import * as Types from 'graphql/types'
+import { OptionsUpdatedSubscription } from 'graphql/types'
 
 interface RetroState {
   retro: Types.Retro
@@ -36,6 +37,7 @@ const initialState: RetroState = {
         ]
       }
     ],
+    showPosts: true,
     createdAt: '0',
     lastUpdated: '0',
     lastViewed: '0',
@@ -55,6 +57,14 @@ export const retroSlice = createSlice({
     },
     updateName: (state, action: PayloadAction<string>) => {
       state.retro.name = action.payload
+    },
+    updateOptions: (
+      state,
+      action: PayloadAction<OptionsUpdatedSubscription['optionsUpdated']>
+    ) => {
+      state.retro.name = action.payload.name
+      state.retro.timerEnd = action.payload.timerEnd
+      state.retro.showPosts = action.payload.showPosts
     },
     updateColumns: (state, action: PayloadAction<Array<Types.Column>>) => {
       state.retro.columns = action.payload

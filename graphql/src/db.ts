@@ -63,6 +63,7 @@ const createDefaultRetro = (): Retro => {
         ]
       }
     ],
+    showPosts: true,
     createdAt: isoDate,
     lastUpdated: isoDate,
     lastViewed: isoDate,
@@ -85,7 +86,7 @@ export const createDbRetro = async (
 export const updateDbRetro = (
   client: DynamoDBDocument,
   retro: Retro,
-  attribute: keyof Retro
+  attributes: (keyof Retro)[]
 ): Promise<UpdateCommandOutput> => {
   const isoDate = new Date().toISOString()
   return client.update({
@@ -94,14 +95,25 @@ export const updateDbRetro = (
       id: retro.id
     },
     ConditionExpression: 'attribute_exists(id)',
-    UpdateExpression: `SET #${attribute} = :${attribute}, #lastUpdated = :lastUpdated, #lastViewed = :lastViewed`,
+    UpdateExpression: `SET ${attributes
+      .map((attribute) => `#${attribute} = :${attribute}`)
+      .join(', ')}, #lastUpdated = :lastUpdated, #lastViewed = :lastViewed`,
     ExpressionAttributeNames: {
-      [`#${attribute}`]: attribute,
+      ...attributes.reduce<Record<string, string>>((accumulator, attribute) => {
+        accumulator[`#${attribute}`] = attribute
+        return accumulator
+      }, {}),
       '#lastUpdated': 'lastUpdated',
       '#lastViewed': 'lastViewed'
     },
     ExpressionAttributeValues: {
-      [`:${attribute}`]: retro[attribute],
+      ...attributes.reduce<Record<string, Retro[keyof Retro]>>(
+        (accumulator, attribute) => {
+          accumulator[`:${attribute}`] = retro[attribute]
+          return accumulator
+        },
+        {}
+      ),
       ':lastUpdated': isoDate,
       ':lastViewed': isoDate
     }
