@@ -42,8 +42,13 @@ export default function ApolloWrapper({
   const errorLink = onError(({ response, graphQLErrors, networkError }) => {
     const errors = []
     if (graphQLErrors) {
-      graphQLErrors.forEach(({ message }) =>
-        errors.push(message.length > 0 ? message : 'Internal server error')
+      console.dir(graphQLErrors)
+      graphQLErrors.forEach(({ message, extensions }) =>
+        errors.push(
+          extensions?.code === 'INTERNAL_SERVER_ERROR'
+            ? 'Internal server error'
+            : message
+        )
       )
     }
     if (networkError) {
