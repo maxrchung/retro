@@ -12,12 +12,6 @@
   src: local('Amazon Ember'), url('/AmazonEmber_W_Bd.woff2');
 }
 
-@font-face {
-  font-family: 'Amazon Ember';
-  font-weight: 800;
-  src: local('Amazon Ember'), url('/AmazonEmber_W_He.woff2');
-}
-
 html {
   height: 100%;
 }
