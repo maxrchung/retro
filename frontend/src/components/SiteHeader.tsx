@@ -8,9 +8,9 @@ import RetroIcon from 'icons/RetroIcon'
 export default function SiteHeader(): JSX.Element {
   return (
     <nav className="flex justify-between items-center p-3 bg-gray-100">
-      <Link href="/">
+      <a href="/">
         <IconButton icon={<RetroIcon />} label="retro" title="Home" />
-      </Link>
+      </a>
       <div className="flex justify-between gap-2 align-items-center">
         <a href="https://github.com/maxrchung/retro">
           <IconButton icon={<GitHubIcon />} title="GitHub" />

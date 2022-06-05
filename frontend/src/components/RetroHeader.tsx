@@ -4,7 +4,7 @@ import IconButton from 'components/IconButton'
 import {
   BackspaceIcon,
   CheckIcon,
-  DuplicateIcon,
+  DocumentDuplicateIcon,
   EyeIcon,
   EyeOffIcon,
   PencilIcon,
@@ -88,18 +88,18 @@ export default function Retro(): JSX.Element {
           value={editName}
         />
       ) : (
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <h1
             className="font-bold text-xl cursor-text"
             onClick={() => setIsEditing(true)}
           >
             {editName}
           </h1>
-          {canShowPosts ? (
-            <EyeIcon className="w-6" />
-          ) : (
-            <EyeOffIcon className="w-6" />
-          )}
+          <IconButton
+            icon={canShowPosts ? <EyeIcon /> : <EyeOffIcon />}
+            onClick={() => (canShowPosts ? hidePosts() : showPosts())}
+            title={canShowPosts ? 'Hide posts' : 'Show posts'}
+          />
         </div>
       )}
 
@@ -124,37 +124,35 @@ export default function Retro(): JSX.Element {
           title={isEditing ? 'Confirm retro name' : 'Edit retro name'}
         />
 
-        <IconButton
-          icon={canShowPosts ? <EyeOffIcon /> : <EyeIcon />}
-          onClick={() => (canShowPosts ? hidePosts() : showPosts())}
-          title={canShowPosts ? 'Hide posts' : 'Show posts'}
-        />
+        {!isEditing && (
+          <>
+            <IconButton
+              icon={<DocumentDuplicateIcon />}
+              onClick={() => cloneRetro()}
+              title="Clone retro"
+            />
 
-        <IconButton
-          icon={<DuplicateIcon />}
-          onClick={() => cloneRetro()}
-          title="Copy retro"
-        />
+            <IconButton
+              icon={<BackspaceIcon />}
+              onClick={() =>
+                confirm(
+                  'Are you sure you want to clear this retro? All posts in the retro will be deleted.'
+                ) && clearRetro()
+              }
+              title="Clear retro"
+            />
 
-        <IconButton
-          icon={<BackspaceIcon />}
-          onClick={() =>
-            confirm(
-              'Are you sure you want to clear this retro? All posts in the retro will be deleted.'
-            ) && clearRetro()
-          }
-          title="Clear retro"
-        />
-
-        <IconButton
-          icon={<TrashIcon />}
-          onClick={() =>
-            confirm(
-              'Are you sure you want to delete this retro? All columns and posts in the retro will be deleted.'
-            ) && removeRetro()
-          }
-          title="Delete retro"
-        />
+            <IconButton
+              icon={<TrashIcon />}
+              onClick={() =>
+                confirm(
+                  'Are you sure you want to delete this retro? All columns and posts in the retro will be deleted.'
+                ) && removeRetro()
+              }
+              title="Delete retro"
+            />
+          </>
+        )}
       </fieldset>
     </div>
   )

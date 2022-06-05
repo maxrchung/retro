@@ -278,24 +278,29 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                 }}
                 title={isEditing ? 'Confirm column name' : 'Edit column name'}
               />
-              <IconButton
-                icon={<BackspaceIcon />}
-                onClick={() =>
-                  confirm(
-                    'Are you sure you want to clear this column? All posts in the column will be deleted.'
-                  ) && clearColumn()
-                }
-                title="Clear column"
-              />
-              <IconButton
-                icon={<TrashIcon />}
-                onClick={() =>
-                  confirm(
-                    'Are you sure you want to delete this column? All posts in the column will be deleted.'
-                  ) && removeColumn()
-                }
-                title="Delete column"
-              />
+
+              {!isEditing && (
+                <>
+                  <IconButton
+                    icon={<BackspaceIcon />}
+                    onClick={() =>
+                      confirm(
+                        'Are you sure you want to clear this column? All posts in the column will be deleted.'
+                      ) && clearColumn()
+                    }
+                    title="Clear column"
+                  />
+                  <IconButton
+                    icon={<TrashIcon />}
+                    onClick={() =>
+                      confirm(
+                        'Are you sure you want to delete this column? All posts in the column will be deleted.'
+                      ) && removeColumn()
+                    }
+                    title="Delete column"
+                  />
+                </>
+              )}
             </>
           }
         />

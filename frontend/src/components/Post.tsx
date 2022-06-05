@@ -212,17 +212,21 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                 />
               )}
 
-              <IconButton
-                icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
-                onClick={() => (hasLiked ? unlikePost() : likePost())}
-                title={hasLiked ? 'Unlike post' : 'Like post'}
-              />
+              {!isEditing && (
+                <>
+                  <IconButton
+                    icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
+                    onClick={() => (hasLiked ? unlikePost() : likePost())}
+                    title={hasLiked ? 'Unlike post' : 'Like post'}
+                  />
 
-              <IconButton
-                icon={<TrashIcon />}
-                onClick={() => confirmRemovePost()}
-                title="Delete post"
-              />
+                  <IconButton
+                    icon={<TrashIcon />}
+                    onClick={() => confirmRemovePost()}
+                    title="Delete post"
+                  />
+                </>
+              )}
             </>
           }
         />
