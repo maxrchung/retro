@@ -5,8 +5,6 @@ interface InputContentProps {
   button: JSX.Element
 }
 
-// It seems I needed this at some point, but I removed it without problem? https://stackoverflow.com/a/40612184/13183186
-
 export default function InputContainer({
   content,
   button

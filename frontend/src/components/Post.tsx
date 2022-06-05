@@ -36,9 +36,9 @@ export interface PostDragItem {
 
 export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: columnId } = column
-  const { id: postId, content, likes } = post
+  const { id: postId, content, likes, author } = post
   const { retro, connectionId } = useAppSelector((state) => state)
-  const { id: retroId } = retro
+  const { id: retroId, showPosts } = retro
 
   const ref = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -52,6 +52,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   useEffect(() => setEditContent(content), [content])
 
   const hasLiked = likes.find((like) => like === connectionId)
+  const isAuthor = author === connectionId
 
   const [removePost] = useRemovePost({
     retroId,
@@ -173,7 +174,12 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   />
                 </div>
               ) : (
-                <p className="cursor-text" onClick={() => setIsEditing(true)}>
+                <p
+                  className={classNames('cursor-text', {
+                    blur: !showPosts && !isAuthor
+                  })}
+                  onClick={() => (showPosts || isAuthor) && setIsEditing(true)}
+                >
                   {editContent}
                 </p>
               )}
@@ -186,23 +192,25 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
           }
           buttons={
             <>
-              <IconButton
-                icon={isEditing ? <CheckIcon /> : <PencilIcon />}
-                onClick={() => {
-                  isEditing
-                    ? updatePostContent({
-                        variables: {
-                          retroId,
-                          columnId,
-                          postId,
-                          postContent: editContent
-                        }
-                      })
-                    : setEditContent(content)
-                  setIsEditing(!isEditing)
-                }}
-                title={isEditing ? 'Confirm post' : 'Edit post'}
-              />
+              {(showPosts || isAuthor) && (
+                <IconButton
+                  icon={isEditing ? <CheckIcon /> : <PencilIcon />}
+                  onClick={() => {
+                    isEditing
+                      ? updatePostContent({
+                          variables: {
+                            retroId,
+                            columnId,
+                            postId,
+                            postContent: editContent
+                          }
+                        })
+                      : setEditContent(content)
+                    setIsEditing(!isEditing)
+                  }}
+                  title={isEditing ? 'Confirm post' : 'Edit post'}
+                />
+              )}
 
               <IconButton
                 icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
