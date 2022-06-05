@@ -56,7 +56,7 @@ export default function Retro(): JSX.Element {
 
   useEffect(() => {
     if (dataClone) {
-      dispatch(actions.setInfo('Retro copied to new link'))
+      dispatch(actions.setInfo('Retro cloned to new link'))
       router.push(`/${dataClone.cloneRetro}`)
     }
   }, [dataClone])

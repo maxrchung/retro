@@ -228,7 +228,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     onClick={async () => {
                       dispatch(actions.clearInfo())
                       await navigator.clipboard.writeText(editContent)
-                      dispatch(actions.setInfo('Copied post to clipboard'))
+                      dispatch(actions.setInfo('Post copied to clipboard'))
                     }}
                     title="Copy post"
                   />
