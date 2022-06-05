@@ -34,7 +34,7 @@ export default function Home(): JSX.Element {
             <div className="h-12 w-12">
               <RetroIcon />
             </div>
-            <h1 className="font-bold text-4xl">retro</h1>
+            <h1 className="font-bold text-4xl text-blue-500">retro</h1>
           </div>
 
           <p className="mb-3">A simple retrospective tool.</p>

@@ -3,6 +3,7 @@
 @font-face {
   font-family: 'Amazon Ember';
   font-weight: 400;
+  /* Need to use static route so it doesn't conflict with [id] page */
   src: local('Amazon Ember'), url('/AmazonEmber_W_Rg.woff2');
 }
 
