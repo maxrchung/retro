@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import {
   CheckIcon,
+  ClipboardCopyIcon,
   PencilIcon,
   ThumbDownIcon,
   ThumbUpIcon,
@@ -16,12 +17,13 @@ import {
   useUnlikePost,
   useUpdatePostContent
 } from 'graphql/client'
-import { useAppSelector } from 'state/hooks'
+import { useAppDispatch, useAppSelector } from 'state/hooks'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
 import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
 import TextArea from './TextArea'
+import { actions } from 'state/retroSlice'
 
 interface PostProps {
   column: Types.Column
@@ -68,6 +70,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
 
   const [movePost] = useMovePost()
   const [updatePostContent] = useUpdatePostContent()
+  const dispatch = useAppDispatch()
 
   const [{ isDragging }, dragRef, dragPreview] = useDrag<
     PostDragItem,
@@ -218,6 +221,16 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                     icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
                     onClick={() => (hasLiked ? unlikePost() : likePost())}
                     title={hasLiked ? 'Unlike post' : 'Like post'}
+                  />
+
+                  <IconButton
+                    icon={<ClipboardCopyIcon />}
+                    onClick={async () => {
+                      dispatch(actions.clearInfo())
+                      await navigator.clipboard.writeText(editContent)
+                      dispatch(actions.setInfo('Copied post to clipboard'))
+                    }}
+                    title="Copy post"
                   />
 
                   <IconButton
