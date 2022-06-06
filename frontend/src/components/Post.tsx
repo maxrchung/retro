@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as Types from 'graphql/types'
 import {
   CheckIcon,
-  ClipboardCopyIcon,
+  DuplicateIcon,
   PencilIcon,
   ThumbDownIcon,
   ThumbUpIcon,
@@ -224,13 +224,13 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
                   />
 
                   <IconButton
-                    icon={<ClipboardCopyIcon />}
+                    icon={<DuplicateIcon />}
                     onClick={async () => {
                       dispatch(actions.clearInfo())
                       await navigator.clipboard.writeText(editContent)
                       dispatch(actions.setInfo('Post copied to clipboard'))
                     }}
-                    title="Copy post"
+                    title="Copy post to clipboard"
                   />
 
                   <IconButton

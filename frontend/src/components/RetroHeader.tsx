@@ -98,7 +98,7 @@ export default function Retro(): JSX.Element {
           <IconButton
             icon={canShowPosts ? <EyeIcon /> : <EyeOffIcon />}
             onClick={() => (canShowPosts ? hidePosts() : showPosts())}
-            title={canShowPosts ? 'Hide posts' : 'Show posts'}
+            title={canShowPosts ? 'Blur other posts' : 'Show other posts'}
           />
         </div>
       )}
@@ -129,7 +129,7 @@ export default function Retro(): JSX.Element {
             <IconButton
               icon={<DocumentDuplicateIcon />}
               onClick={() => cloneRetro()}
-              title="Clone retro"
+              title="Clone retro to new link"
             />
 
             <IconButton
@@ -139,7 +139,7 @@ export default function Retro(): JSX.Element {
                   'Are you sure you want to clear this retro? All posts in the retro will be deleted.'
                 ) && clearRetro()
               }
-              title="Clear retro"
+              title="Clear all posts in retro"
             />
 
             <IconButton

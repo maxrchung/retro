@@ -391,7 +391,7 @@ const clearColumn = async (
   const retro = await getDbRetro(client, args.retroId)
   const column = retro.columns.find((column) => column.id === args.columnId)
   if (!column) {
-    throw new UserInputError('Clear column: Column not found')
+    throw new UserInputError('Clear posts in column: Column not found')
   }
   column.posts = []
   return publishColumns(client, retro)

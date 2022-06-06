@@ -288,7 +288,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
                         'Are you sure you want to clear this column? All posts in the column will be deleted.'
                       ) && clearColumn()
                     }
-                    title="Clear column"
+                    title="Clear all posts in column"
                   />
                   <IconButton
                     icon={<TrashIcon />}
