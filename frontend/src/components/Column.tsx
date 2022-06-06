@@ -24,7 +24,12 @@ import * as Types from 'graphql/types'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
-import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
+import {
+  getPostHoverState,
+  isKeyEnterOnly,
+  PostHoverState,
+  useIsMountedRef
+} from '../utils'
 import { ColumnHoverState, getColumnHoverState } from '../utils'
 import InputContainer from './InputContainer'
 import TextArea from './TextArea'
@@ -44,6 +49,9 @@ const selectionBuffer = 10
 export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column
   const { id: retroId } = useAppSelector((state) => state.retro)
+
+  // https://www.debuggr.io/react-update-unmounted-component/
+  const isMountedRef = useIsMountedRef()
 
   const columnRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLTableColElement>(null)
@@ -133,7 +141,7 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       collect: (monitor) => {
         if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setColumnHoverState(ColumnHoverState.NONE))
+          setColumnHoverState(ColumnHoverState.NONE)
         }
       }
     }),
@@ -192,7 +200,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
       collect: (monitor) => {
         if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setPostHoverState(PostHoverState.NONE))
+          setTimeout(
+            // Ensure we are mounted otherwise we will raise console error for updating on unmounted component
+            () => isMountedRef.current && setPostHoverState(PostHoverState.NONE)
+          )
         }
       }
     }),

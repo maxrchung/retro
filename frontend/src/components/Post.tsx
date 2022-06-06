@@ -21,7 +21,12 @@ import { useAppDispatch, useAppSelector } from 'state/hooks'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'
-import { getPostHoverState, isKeyEnterOnly, PostHoverState } from '../utils'
+import {
+  getPostHoverState,
+  isKeyEnterOnly,
+  PostHoverState,
+  useIsMountedRef
+} from '../utils'
 import TextArea from './TextArea'
 import { actions } from 'state/retroSlice'
 
@@ -41,6 +46,7 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
   const { id: postId, content, likes, author } = post
   const { retro, connectionId } = useAppSelector((state) => state)
   const { id: retroId, showPosts } = retro
+  const isMountedRef = useIsMountedRef()
 
   const ref = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -118,7 +124,9 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
       collect: (monitor) => {
         if (!monitor.isOver()) {
           // Hack to reduce flickering as border changes from one post to the next
-          setTimeout(() => setPostHoverState(PostHoverState.NONE))
+          setTimeout(
+            () => isMountedRef.current && setPostHoverState(PostHoverState.NONE)
+          )
         }
       }
     }),

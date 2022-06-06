@@ -1,3 +1,4 @@
+import { MutableRefObject, useEffect, useRef } from 'react'
 import { DropTargetMonitor } from 'react-dnd'
 
 export enum ColumnHoverState {
@@ -68,3 +69,14 @@ export const getPostHoverState = (
 
 export const isKeyEnterOnly = (e: React.KeyboardEvent): boolean =>
   e.key === 'Enter' && !e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey
+
+export const useIsMountedRef = (): MutableRefObject<boolean> => {
+  const isMountedRef = useRef(true)
+  useEffect(() => {
+    isMountedRef.current = true
+    return () => {
+      isMountedRef.current = false
+    }
+  })
+  return isMountedRef
+}
