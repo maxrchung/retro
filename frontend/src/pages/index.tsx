@@ -30,11 +30,11 @@ export default function Home(): JSX.Element {
 
       <div className="absolute flex flex-col justify-center h-full w-full">
         <div className="flex flex-col items-center -translate-y-16">
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center text-blue-500">
             <div className="h-12 w-12">
               <RetroIcon />
             </div>
-            <h1 className="text-4xl text-blue-500">retro</h1>
+            <h1 className="text-4xl">retro</h1>
           </div>
 
           <p className="mb-4">A simple retrospective tool.</p>
