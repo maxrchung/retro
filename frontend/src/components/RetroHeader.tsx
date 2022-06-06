@@ -129,7 +129,7 @@ export default function Retro(): JSX.Element {
             <IconButton
               icon={<DocumentDuplicateIcon />}
               onClick={() => cloneRetro()}
-              title="Clone retro to new link"
+              title="Copy retro to new link"
             />
 
             <IconButton
