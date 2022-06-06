@@ -9,6 +9,8 @@ interface RetroState {
   connectionId: string
 }
 
+const defaultDateString = new Date().toISOString()
+
 const initialState: RetroState = {
   retro: {
     id: 'a',
@@ -38,10 +40,10 @@ const initialState: RetroState = {
       }
     ],
     showPosts: true,
-    createdAt: '0',
-    lastUpdated: '0',
-    lastViewed: '0',
-    timerEnd: '0'
+    createdAt: defaultDateString,
+    lastUpdated: defaultDateString,
+    lastViewed: defaultDateString,
+    timerEnd: defaultDateString
   },
   info: '',
   errors: [],
