@@ -13,7 +13,7 @@ export default function InfoBar(): JSX.Element {
   }
 
   return (
-    <div className="flex m-3 mb-0 p-3 rounded border-2 text-blue-500 border-blue-500 justify-between items-center gap-3">
+    <div className="flex m-3 mb-0 p-3 rounded border-2 border-gray-100 bg-gray-100 justify-between items-center gap-3">
       <div className="flex gap-2 items-center">
         <div>
           <ExclamationCircleIcon className="h-6 w-6" />

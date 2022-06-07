@@ -11,16 +11,17 @@ import { useAppDispatch } from 'state/hooks'
 export default function Home(): JSX.Element {
   const router = useRouter()
   const [createRetro, { loading, data }] = useCreateRetro()
-
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(actions.resetState())
   }, [])
 
-  if (data) {
-    router.push(`/${data.createRetro}`)
-  }
+  useEffect(() => {
+    if (data) {
+      router.push(`/${data.createRetro}`)
+    }
+  }, [data])
 
   return (
     <div className="relative flex flex-auto overflow-hidden">
@@ -30,7 +31,7 @@ export default function Home(): JSX.Element {
 
       <div className="absolute flex flex-col justify-center h-full w-full">
         <div className="flex flex-col items-center -translate-y-16">
-          <div className="flex flex-row items-center text-blue-500">
+          <div className="flex flex-row items-center">
             <div className="h-12 w-12">
               <RetroIcon />
             </div>
