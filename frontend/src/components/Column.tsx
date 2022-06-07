@@ -44,7 +44,7 @@ interface ColumnDragItem {
 }
 
 // Buffer space to fix flicker from column indicator to post indicator
-const selectionBuffer = 10
+const selectionBuffer = 24
 
 export default function Column({ column, index }: ColumnProps): JSX.Element {
   const { id: columnId, posts, name } = column
@@ -175,10 +175,10 @@ export default function Column({ column, index }: ColumnProps): JSX.Element {
           return
         }
 
-        setPostHoverState(getPostHoverState(monitor, columnRef))
+        setPostHoverState(getPostHoverState(monitor, postsRef))
       },
       drop: (item, monitor) => {
-        const postHoverState = getPostHoverState(monitor, columnRef)
+        const postHoverState = getPostHoverState(monitor, postsRef)
         if (postHoverState === PostHoverState.NONE) {
           return
         }

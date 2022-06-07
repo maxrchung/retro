@@ -90,7 +90,30 @@ export default function ApolloWrapper({
 
     return new ApolloClient({
       link: from([errorLink, splitLink]),
-      cache: new InMemoryCache()
+      cache: new InMemoryCache({
+        // Explicitly state that we are going to use incoming
+        // https://www.apollographql.com/docs/react/caching/cache-field-behavior/#merging-arrays
+        typePolicies: {
+          Retro: {
+            fields: {
+              columns: {
+                merge(_, incoming) {
+                  return incoming
+                }
+              }
+            }
+          },
+          Column: {
+            fields: {
+              posts: {
+                merge(_, incoming) {
+                  return incoming
+                }
+              }
+            }
+          }
+        }
+      })
     })
   }, [dispatch])
 
