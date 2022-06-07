@@ -17,8 +17,6 @@ export default function Id(): JSX.Element {
   const { id } = router.query
   const retroId = id as string
 
-  console.log('id render 1')
-
   const dispatch = useAppDispatch()
   // No point to fetch if retroId is not set
   const { data: dataGet } = useGetRetro({ retroId }, !retroId)
