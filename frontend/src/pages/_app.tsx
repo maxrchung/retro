@@ -10,6 +10,8 @@ import { Provider } from 'react-redux'
 import store from 'state/store'
 import ApolloWrapper from 'components/ApolloWrapper'
 import SiteHeader from 'components/SiteHeader'
+import ErrorBar from 'components/ErrorBar'
+import InfoBar from 'components/InfoBar'
 
 // https://nextjs.org/docs/advanced-features/custom-app
 export default function App(props: AppProps): JSX.Element {
@@ -45,6 +47,8 @@ export default function App(props: AppProps): JSX.Element {
         <div className="flex flex-col overflow-hidden flex-auto break-words text-gray-800 text-base">
           <SiteHeader />
           <main className="flex flex-col overflow-hidden flex-auto">
+            <InfoBar />
+            <ErrorBar />
             <ApolloWrapper {...props} />
           </main>
         </div>

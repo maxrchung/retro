@@ -17,17 +17,20 @@ export default function Id(): JSX.Element {
   const { id } = router.query
   const retroId = id as string
 
+  console.log('id render 1')
+
   const dispatch = useAppDispatch()
   // No point to fetch if retroId is not set
   const { data: dataGet } = useGetRetro({ retroId }, !retroId)
   const { data: dataColumns } = useColumnsUpdated({ retroId }, !retroId)
   const { data: dataOptions } = useOptionsUpdated({ retroId }, !retroId)
   const { data: dataRemoved } = useRetroRemoved({ retroId }, !retroId)
-
   const { name } = useAppSelector((state) => state.retro)
-
   const connectionId = getCookie('retro-connection-id') ?? ''
-  dispatch(actions.setConnectionId(connectionId.toString()))
+
+  useEffect(() => {
+    dispatch(actions.setConnectionId(connectionId.toString()))
+  }, [connectionId])
 
   useEffect(() => {
     if (dataGet) {

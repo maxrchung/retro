@@ -15,8 +15,6 @@ import { AppProps } from 'next/app'
 import React, { useMemo } from 'react'
 import { useAppDispatch } from 'state/hooks'
 import { actions } from 'state/retroSlice'
-import ErrorBar from './ErrorBar'
-import InfoBar from './InfoBar'
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_URI,
@@ -73,7 +71,13 @@ export default function ApolloWrapper({
       ? split(
           ({ query }) => {
             const definition = getMainDefinition(query)
-            dispatch(actions.clearErrors())
+
+            // These checks are necessary to address a state update issue:
+            // Warning: Cannot update a component (`ErrorBar`) while rendering a different component (`Id`)
+            definition.kind === 'OperationDefinition' &&
+              definition.operation === 'query' &&
+              dispatch(actions.clearErrors())
+
             return (
               definition.kind === 'OperationDefinition' &&
               definition.operation === 'subscription'
@@ -88,12 +92,10 @@ export default function ApolloWrapper({
       link: from([errorLink, splitLink]),
       cache: new InMemoryCache()
     })
-  }, [])
+  }, [dispatch])
 
   return (
     <ApolloProvider client={client}>
-      <InfoBar />
-      <ErrorBar />
       <Component {...pageProps} />
     </ApolloProvider>
   )
