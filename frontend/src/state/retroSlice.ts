@@ -56,6 +56,7 @@ export const retroSlice = createSlice({
   reducers: {
     updateRetro: (state, action: PayloadAction<Types.Retro>) => {
       state.retro = action.payload
+      console.log('retro', state.retro)
     },
     updateName: (state, action: PayloadAction<string>) => {
       state.retro.name = action.payload

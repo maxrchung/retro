@@ -90,6 +90,15 @@ export default function ApolloWrapper({
 
     return new ApolloClient({
       link: from([errorLink, splitLink]),
+      defaultOptions: {
+        // Fixes some cache issues found when cloning a retro and then going back to the previous page
+        query: {
+          fetchPolicy: 'network-only'
+        },
+        watchQuery: {
+          fetchPolicy: 'network-only'
+        }
+      },
       cache: new InMemoryCache({
         // Explicitly state that we are going to use incoming
         // https://www.apollographql.com/docs/react/caching/cache-field-behavior/#merging-arrays
@@ -97,7 +106,7 @@ export default function ApolloWrapper({
           Retro: {
             fields: {
               columns: {
-                merge(_, incoming) {
+                merge(current, incoming) {
                   return incoming
                 }
               }
@@ -106,7 +115,7 @@ export default function ApolloWrapper({
           Column: {
             fields: {
               posts: {
-                merge(_, incoming) {
+                merge(current, incoming) {
                   return incoming
                 }
               }
