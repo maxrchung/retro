@@ -63,7 +63,7 @@ export default function Retro(): JSX.Element {
 
   return (
     <div
-      className="flex items-center gap-2 w-full md:w-1/2 "
+      className="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-1/2"
       onMouseOver={() => setIsOver(true)}
       onMouseLeave={() => setIsOver(false)}
     >
@@ -95,11 +95,13 @@ export default function Retro(): JSX.Element {
           >
             {editName}
           </h1>
-          <IconButton
-            icon={canShowPosts ? <EyeIcon /> : <EyeOffIcon />}
-            onClick={() => (canShowPosts ? hidePosts() : showPosts())}
-            title={canShowPosts ? 'Blur other posts' : 'Show other posts'}
-          />
+          <div className="hidden md:flex">
+            <IconButton
+              icon={canShowPosts ? <EyeIcon /> : <EyeOffIcon />}
+              onClick={() => (canShowPosts ? hidePosts() : showPosts())}
+              title={canShowPosts ? 'Blur other posts' : 'Show other posts'}
+            />
+          </div>
         </div>
       )}
 
@@ -126,6 +128,14 @@ export default function Retro(): JSX.Element {
 
         {!isEditing && (
           <>
+            <div className="flex md:hidden">
+              <IconButton
+                icon={canShowPosts ? <EyeIcon /> : <EyeOffIcon />}
+                onClick={() => (canShowPosts ? hidePosts() : showPosts())}
+                title={canShowPosts ? 'Blur other posts' : 'Show other posts'}
+              />
+            </div>
+
             <IconButton
               icon={<DocumentDuplicateIcon />}
               onClick={() => cloneRetro()}
