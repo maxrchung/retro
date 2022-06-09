@@ -105,7 +105,7 @@ export default function Retro(): JSX.Element {
 
       <fieldset
         className={classNames('flex gap-2', {
-          invisible: !isOver
+          'md:invisible': !isOver
         })}
       >
         <IconButton

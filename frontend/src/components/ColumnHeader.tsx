@@ -20,7 +20,7 @@ export default function ColumnHeader({
     >
       <div
         className={classNames('flex justify-end gap-2', {
-          invisible: !showButtons
+          'md:invisible': !showButtons
         })}
       >
         {buttons}

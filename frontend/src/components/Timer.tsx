@@ -133,7 +133,7 @@ export default function Timer({ orientation }: TimerProps): JSX.Element {
       {orientation === TimerOrientation.LEFT && clock}
       <fieldset
         className={classNames('flex gap-2 items-center', {
-          invisible: !isOver
+          'md:invisible': !isOver
         })}
       >
         {buttons}

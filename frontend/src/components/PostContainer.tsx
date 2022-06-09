@@ -22,7 +22,7 @@ export default function PostContainer({
         className={classNames(
           'absolute right-0 flex gap-2 mr-3 -translate-y-6',
           {
-            invisible: !showButtons
+            'md:invisible': !showButtons
           }
         )}
       >
