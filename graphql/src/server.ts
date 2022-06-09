@@ -23,7 +23,7 @@ const server = new ApolloServer({
   },
   resolvers,
   cors: {
-    origin: ['http://localhost:3000', 'http://192.168.1.228:3000'],
+    origin: 'http://localhost:3000',
     credentials: true // <-- REQUIRED backend setting
   },
   context: ({ req, res }) => {
