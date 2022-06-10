@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import GitHubIcon from 'icons/GitHubIcon'
 import IconButton from 'components/IconButton'
 import TwitterIcon from 'icons/TwitterIcon'

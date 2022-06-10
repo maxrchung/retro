@@ -23,7 +23,7 @@ const server = new ApolloServer({
   },
   resolvers,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://retro.maxrchung.com'],
     credentials: true // <-- REQUIRED backend setting
   },
   context: ({ req, res }) => {
