@@ -35,7 +35,7 @@ export class RetroStack extends Stack {
           phases: {
             preBuild: {
               commands: [
-                'nvm use $VERSION_NODE_17',
+                // https://stackoverflow.com/a/69944063
                 'yarn install --immutable --immutable-cache --check-cache'
               ]
             },
