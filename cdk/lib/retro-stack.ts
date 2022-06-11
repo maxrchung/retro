@@ -2,6 +2,10 @@ import { Stack, StackProps } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
+import * as amplify from '@aws-cdk/aws-amplify-alpha'
+import * as core from 'aws-cdk-lib'
+import * as ssm from 'aws-cdk-lib/aws-ssm'
+import * as codebuild from 'aws-cdk-lib/aws-codebuild'
 
 export class RetroStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -13,11 +17,38 @@ export class RetroStack extends Stack {
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING }
     })
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const amplifyApp = new amplify.App(this, 'retro-amplify', {
+      sourceCodeProvider: new amplify.GitHubSourceCodeProvider({
+        owner: 'maxrchung',
+        repository: 'retro',
+        oauthToken: core.SecretValue.plainText(
+          ssm.StringParameter.valueForStringParameter(
+            this,
+            'github-personal-access-token'
+          )
+        )
+      }),
+      buildSpec: codebuild.BuildSpec.fromObjectToYaml({
+        version: '1.0',
+        appRoot: 'frontend',
+        frontend: {
+          phases: {
+            build: {
+              commands: ['npm install', 'npm run build']
+            }
+          },
+          artifacts: {
+            baseDirectory: 'out',
+            files: ['**/*']
+          },
+          cache: {
+            paths: ['node_modules/**/*']
+          }
+        }
+      })
+    })
+    const branch = amplifyApp.addBranch('master')
+    const domain = amplifyApp.addDomain('maxrchung.com')
+    domain.mapSubDomain(branch, 'retro')
   }
 }

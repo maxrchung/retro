@@ -10,6 +10,13 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@aws-cdk/aws-amplify-alpha@2.23.0-alpha.0":
+  version "2.23.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-amplify-alpha/-/aws-amplify-alpha-2.23.0-alpha.0.tgz#71898b4f69619993db6c1265a0e64296a5aab6d9"
+  integrity sha512-LV01+gcCIThPDi1tcy8CB7k2uPeNFGwOA8eM/4p6JNeoE1OkkpCeKK6COYfEku6alU9RN66W410nT9IHW9vViA==
+  dependencies:
+    yaml "1.10.2"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.7.tgz#44416b6bd7624b998f5b1af5d470856c40138789"
