@@ -34,10 +34,7 @@ export class RetroStack extends Stack {
         frontend: {
           phases: {
             preBuild: {
-              commands: [
-                // https://stackoverflow.com/a/69944063
-                'yarn install --immutable --immutable-cache --check-cache'
-              ]
+              commands: ['yarn']
             },
             build: {
               commands: ['yarn build']
@@ -48,7 +45,7 @@ export class RetroStack extends Stack {
             files: ['**/*']
           },
           cache: {
-            paths: ['node_modules/**/*']
+            paths: ['node_modules/**/*', '../node_modules/**/*']
           }
         }
       })
