@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as Types from 'graphql/types'
+import * as Types from 'backend/src/types'
 import {
   CheckIcon,
   ClipboardCopyIcon,
