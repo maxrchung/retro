@@ -20,7 +20,7 @@ import {
   useRemoveColumn,
   useUpdateColumnName
 } from 'graphql/client'
-import * as Types from 'graphql/types'
+import * as Types from 'backend/src/types'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
 import classNames from 'classnames'

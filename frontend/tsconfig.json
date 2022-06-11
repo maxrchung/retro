@@ -14,10 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": "src",
-    "paths": {
-      "graphql/types": ["../../graphql/src/types"],
-      "graphql/constants": ["../../graphql/src/constants"]
-    },
     "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

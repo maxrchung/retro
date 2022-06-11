@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import * as Types from 'graphql/types'
-import { OptionsUpdatedSubscription } from 'graphql/types'
+import * as Types from 'backend/src/types'
+import { OptionsUpdatedSubscription } from 'backend/src/types'
 
 interface RetroState {
   retro: Types.Retro

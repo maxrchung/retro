@@ -33,8 +33,14 @@ export class RetroStack extends Stack {
         appRoot: 'frontend',
         frontend: {
           phases: {
+            preBuild: {
+              commands: [
+                'nvm use $VERSION_NODE_17',
+                'yarn install --immutable --immutable-cache --check-cache'
+              ]
+            },
             build: {
-              commands: ['npm install', 'npm run build']
+              commands: ['yarn build']
             }
           },
           artifacts: {
@@ -47,7 +53,7 @@ export class RetroStack extends Stack {
         }
       })
     })
-    const branch = amplifyApp.addBranch('master')
+    const branch = amplifyApp.addBranch('main')
     const domain = amplifyApp.addDomain('maxrchung.com')
     domain.mapSubDomain(branch, 'retro')
   }

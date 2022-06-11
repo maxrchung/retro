@@ -70,7 +70,7 @@ import {
   UpdateRetroNameMutationVariables,
   UpdateTimerMutation,
   UpdateTimerMutationVariables
-} from 'graphql/types'
+} from 'backend/src/types'
 
 // Naming to differentiate subscriptions from queries/mutations
 const COLUMNS_UPDATED = gql`
