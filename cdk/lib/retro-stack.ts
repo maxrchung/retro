@@ -11,7 +11,7 @@ export class RetroStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props)
 
-    const table = new dynamodb.Table(this, 'retro-table', {
+    new dynamodb.Table(this, 'retro-table', {
       tableName: 'retro-table',
       pointInTimeRecovery: true,
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING }
