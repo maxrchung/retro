@@ -1,8 +1,13 @@
+import 'dotenv/config'
 import { ApolloServer } from 'apollo-server'
 import schema from './schema'
 import resolvers from './resolvers'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DYNAMODB_ENDPOINT, RETRO_CONNECTION_ID } from './constants'
+import {
+  DYNAMODB_CREDENTIALS,
+  DYNAMODB_ENDPOINT,
+  RETRO_CONNECTION_ID
+} from './constants'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 import { uid } from 'uid'
 
@@ -40,6 +45,7 @@ const server = new ApolloServer({
     return {
       client: DynamoDBDocument.from(
         new DynamoDBClient({
+          credentials: DYNAMODB_CREDENTIALS,
           endpoint: DYNAMODB_ENDPOINT
         })
       ),
@@ -87,7 +93,11 @@ const getConnectionId = (cookieString: string | undefined) => {
   return undefined
 }
 
-server.listen().then(({ url, subscriptionsUrl }) => {
-  console.log(`Server is running on ${url}`)
-  console.log(`Server is running on ${subscriptionsUrl}`)
-})
+server
+  .listen({
+    port: 5000
+  })
+  .then(({ url, subscriptionsUrl }) => {
+    console.log(`Server is running on ${url}`)
+    console.log(`Server is running on ${subscriptionsUrl}`)
+  })
