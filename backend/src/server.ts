@@ -56,12 +56,23 @@ const server = new ApolloServer({
   plugins: [
     {
       requestDidStart(requestContext) {
-        console.log('Request', JSON.stringify(requestContext.request, null, 2))
+        console.log(
+          'Request',
+          JSON.stringify(
+            requestContext.request,
+            null,
+            process.env.NODE_ENV === 'production' ? 0 : 2
+          )
+        )
         return {
           willSendResponse(requestContext) {
             console.log(
               'Response',
-              JSON.stringify(requestContext.response, null, 2)
+              JSON.stringify(
+                requestContext.request,
+                null,
+                process.env.NODE_ENV === 'production' ? 0 : 2
+              )
             )
           }
         }
