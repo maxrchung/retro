@@ -8,7 +8,7 @@
     "eslint": "eslint . --max-warnings 0",
     "dev": "next dev",
     "about:build": "See https://nextjs.org/docs/advanced-features/static-html-export",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
