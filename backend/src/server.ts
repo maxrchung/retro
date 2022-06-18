@@ -38,7 +38,11 @@ const server = new ApolloServer({
       // https://stackoverflow.com/a/53546237
       if (!connectionId) {
         connectionId = uid()
-        res.cookie(RETRO_CONNECTION_ID, connectionId)
+        res.cookie(RETRO_CONNECTION_ID, connectionId, {
+          // Not so sure about this...
+          domain:
+            process.env.NODE_ENV === 'production' ? '.maxrchung.com' : undefined
+        })
       }
     }
 
