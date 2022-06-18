@@ -41,4 +41,4 @@ USER nextjs
 EXPOSE 5001
 ENV PORT 5001
 
-CMD ["node", "server.js"]
+CMD ["node", "frontend/server.js"]
