@@ -225,21 +225,25 @@ export default function Post({ column, post, index }: PostProps): JSX.Element {
 
               {!isEditing && (
                 <>
-                  <IconButton
-                    icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
-                    onClick={() => (hasLiked ? unlikePost() : likePost())}
-                    title={hasLiked ? 'Unlike post' : 'Like post'}
-                  />
+                  {(showPosts || isAuthor) && (
+                    <IconButton
+                      icon={hasLiked ? <ThumbDownIcon /> : <ThumbUpIcon />}
+                      onClick={() => (hasLiked ? unlikePost() : likePost())}
+                      title={hasLiked ? 'Unlike post' : 'Like post'}
+                    />
+                  )}
 
-                  <IconButton
-                    icon={<ClipboardCopyIcon />}
-                    onClick={async () => {
-                      dispatch(actions.clearInfo())
-                      await navigator.clipboard.writeText(editContent)
-                      dispatch(actions.setInfo('Post copied to clipboard'))
-                    }}
-                    title="Copy post to clipboard"
-                  />
+                  {(showPosts || isAuthor) && (
+                    <IconButton
+                      icon={<ClipboardCopyIcon />}
+                      onClick={async () => {
+                        dispatch(actions.clearInfo())
+                        await navigator.clipboard.writeText(editContent)
+                        dispatch(actions.setInfo('Post copied to clipboard'))
+                      }}
+                      title="Copy post to clipboard"
+                    />
+                  )}
 
                   <IconButton
                     icon={<TrashIcon />}
