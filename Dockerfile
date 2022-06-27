@@ -1,3 +1,5 @@
+# Note that this Dockerizing NextJS is now obsolete. I was able to serve it on Amplify after configuring rewrites.
+
 # Referenced from: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 # But did not do a multi-stage build to have an easier time working with yarn workspaces
 
