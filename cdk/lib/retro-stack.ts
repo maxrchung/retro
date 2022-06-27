@@ -53,7 +53,8 @@ export class RetroStack extends Stack {
         {
           source: '/<*>',
           target: '/[id].html',
-          status: amplify.RedirectStatus.REWRITE
+          // I think this means if we hit a 404 because we can't find your file, serve [id].html without changing URL
+          status: amplify.RedirectStatus.NOT_FOUND_REWRITE
         }
       ]
     })
