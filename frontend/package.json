@@ -7,8 +7,8 @@
     "prettier": "prettier --write .",
     "eslint": "eslint . --max-warnings 0",
     "dev": "next dev",
-    "about:build": "See https://nextjs.org/docs/advanced-features/static-html-export",
-    "build": "next build",
+    "about:export": "See https://nextjs.org/docs/advanced-features/static-html-export",
+    "export": "next build && next export",
     "start": "next start"
   },
   "dependencies": {
