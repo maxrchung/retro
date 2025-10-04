@@ -64,7 +64,7 @@ export default function Id(): JSX.Element {
     <>
       <Head>
         <title>{name} - retro</title>
-        <meta name="description" content="A simple retrospective tool." />
+        <meta name="description" content="A simple retrospective tool" />
       </Head>
 
       <Retro />

@@ -38,7 +38,7 @@ export default function Home(): JSX.Element {
             <h1 className="text-4xl">retro</h1>
           </div>
 
-          <p className="mb-4">A simple retrospective tool.</p>
+          <p className="mb-4">A simple retrospective tool</p>
 
           <IconButton
             icon={<PlusSmIcon />}
