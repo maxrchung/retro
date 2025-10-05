@@ -135,8 +135,8 @@ const GET_RETRO = gql`
 `
 
 const CREATE_RETRO = gql`
-  mutation CreateRetro {
-    createRetro
+  mutation CreateRetro($columnNames: [String!]!) {
+    createRetro(columnNames: $columnNames)
   }
 `
 

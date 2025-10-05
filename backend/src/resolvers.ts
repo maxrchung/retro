@@ -8,6 +8,7 @@ import {
   MutationCloneRetroArgs,
   MutationCreateColumnArgs,
   MutationCreatePostArgs,
+  MutationCreateRetroArgs,
   MutationHidePostsArgs,
   MutationLikePostArgs,
   MutationMoveColumnArgs,
@@ -93,9 +94,9 @@ const getRetro = async (
 
 const createRetro = async (
   parent: unknown,
-  args: unknown,
+  args: MutationCreateRetroArgs,
   { client }: ServerContext
-) => await createDbRetro(client)
+) => await createDbRetro(client, args.columnNames)
 
 const createColumn = async (
   parent: unknown,

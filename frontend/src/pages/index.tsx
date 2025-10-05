@@ -7,6 +7,7 @@ import RetroIcon from 'icons/RetroIcon'
 import Retro from 'components/Retro'
 import { actions } from 'state/retroSlice'
 import { useAppDispatch } from 'state/hooks'
+import { TemplateSelect } from 'components/TemplateSelect'
 
 export default function Home(): JSX.Element {
   const router = useRouter()
@@ -40,11 +41,41 @@ export default function Home(): JSX.Element {
 
           <p className="mb-4">A simple retrospective tool</p>
 
-          <IconButton
-            icon={<PlusSmIcon />}
-            onClick={() => !loading && createRetro()}
-            title="Create retro"
-          />
+          <form
+            className="flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault()
+
+              if (loading) {
+                return
+              }
+
+              const formData = new FormData(e.target as HTMLFormElement)
+              const template = formData.get('template')?.toString()
+
+              if (!template) {
+                return
+              }
+
+              const columnNames =
+                template === 'Empty'
+                  ? []
+                  : template.split(',').map((column) => column.trim())
+              createRetro({
+                variables: {
+                  columnNames
+                }
+              })
+            }}
+          >
+            <TemplateSelect />
+
+            <IconButton
+              icon={<PlusSmIcon />}
+              // onClick={() => !loading && createRetro()}
+              title="Create retro"
+            />
+          </form>
         </div>
       </div>
     </div>

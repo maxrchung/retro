@@ -14,16 +14,16 @@ const defaultDateString = new Date().toISOString()
 const initialState: RetroState = {
   retro: {
     id: 'a',
-    name: 'My simple retro',
+    name: 'My retro',
     columns: [
       {
         id: 'b',
-        name: 'What went well',
+        name: 'Went well',
         posts: []
       },
       {
         id: 'c',
-        name: 'What to improve',
+        name: 'To improve',
         posts: []
       },
       {

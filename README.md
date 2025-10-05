@@ -2,12 +2,12 @@
 
 https://retro.maxrchung.com
 
-A simple retrospective tool to help teams collaborate, featuring:
+A free and simple retrospective tool to help teams collaborate, with the ability
+to:
 
-- Create retro
-- Create column
-- Create post
-- Drag post
-- Hide post
-- Upvote post
-- Set timer
+- Use retro templates to quickly get started
+- Create any number of retros, columns, and posts
+- Like posts to see the most popular
+- Drag and rearrange posts across columns
+- Blur other posts so you only see your own
+- Set timer in increments of 1, 5, and 10 minutes

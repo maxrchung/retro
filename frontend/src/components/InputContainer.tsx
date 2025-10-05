@@ -10,7 +10,7 @@ export default function InputContainer({
   button
 }: InputContentProps): JSX.Element {
   return (
-    <div className={'flex justify-between items-center gap-2'}>
+    <div className="flex justify-between items-center gap-2">
       <div className="flex-1">{content}</div>
       {button}
     </div>

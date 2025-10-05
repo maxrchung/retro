@@ -82,6 +82,11 @@ export type MutationCreatePostArgs = {
 };
 
 
+export type MutationCreateRetroArgs = {
+  columnNames: Array<Scalars['String']>;
+};
+
+
 export type MutationHidePostsArgs = {
   retroId: Scalars['ID'];
 };
@@ -333,7 +338,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   cloneRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationCloneRetroArgs, 'retroId'>>;
   createColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateColumnArgs, 'columnName' | 'retroId'>>;
   createPost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'columnId' | 'postContent' | 'retroId'>>;
-  createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createRetro?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationCreateRetroArgs, 'columnNames'>>;
   hidePosts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationHidePostsArgs, 'retroId'>>;
   likePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'columnId' | 'postId' | 'retroId'>>;
   moveColumn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationMoveColumnArgs, 'columnMoveDirection' | 'oldColumnId' | 'retroId' | 'targetColumnId'>>;
@@ -417,7 +422,9 @@ export type GetRetroQueryVariables = Exact<{
 
 export type GetRetroQuery = { __typename?: 'Query', getRetro: { __typename?: 'Retro', id: string, name: string, showPosts: boolean, createdAt: string, lastUpdated: string, lastViewed: string, timerEnd: string, columns: Array<{ __typename?: 'Column', id: string, name: string, posts: Array<{ __typename?: 'Post', id: string, content: string, author: string, likes: Array<string> }> }> } };
 
-export type CreateRetroMutationVariables = Exact<{ [key: string]: never; }>;
+export type CreateRetroMutationVariables = Exact<{
+  columnNames: Array<Scalars['String']> | Scalars['String'];
+}>;
 
 
 export type CreateRetroMutation = { __typename?: 'Mutation', createRetro: string };
@@ -730,8 +737,8 @@ export type GetRetroQueryHookResult = ReturnType<typeof useGetRetroQuery>;
 export type GetRetroLazyQueryHookResult = ReturnType<typeof useGetRetroLazyQuery>;
 export type GetRetroQueryResult = Apollo.QueryResult<GetRetroQuery, GetRetroQueryVariables>;
 export const CreateRetroDocument = gql`
-    mutation CreateRetro {
-  createRetro
+    mutation CreateRetro($columnNames: [String!]!) {
+  createRetro(columnNames: $columnNames)
 }
     `;
 export type CreateRetroMutationFn = Apollo.MutationFunction<CreateRetroMutation, CreateRetroMutationVariables>;
@@ -749,6 +756,7 @@ export type CreateRetroMutationFn = Apollo.MutationFunction<CreateRetroMutation,
  * @example
  * const [createRetroMutation, { data, loading, error }] = useCreateRetroMutation({
  *   variables: {
+ *      columnNames: // value for 'columnNames'
  *   },
  * });
  */
