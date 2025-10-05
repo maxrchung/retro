@@ -15,10 +15,10 @@ export const TemplateSelect = (): JSX.Element => {
         title="Select template"
       >
         <option>Went well, To improve, Action items</option>
-        <option>Start, Stop, Continue</option>
-        <option>Highlights, Lowlights, Kudos</option>
+        <option>Start, Stop, Continue, Kudos</option>
+        <option>Liked, Learned, Lacked, Laughed</option>
         <option>Yay, Nay</option>
-        <option>Who, What, When, Where, Why</option>
+        <option>Questions, Comments, Concerns</option>
         <option>😊, 🥳, 😎, 😡, 😢, 😨</option>
         <option>Empty</option>
       </select>
