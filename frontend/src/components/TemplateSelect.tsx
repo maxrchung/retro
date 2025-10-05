@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import ChevronIcon from 'icons/ChevronIcon'
 import React from 'react'
 
@@ -20,14 +19,12 @@ export const TemplateSelect = (): JSX.Element => {
       </select>
 
       <div
-        className={classNames(
-          // I would like to rotate chevron on select menu open, but it's too
-          // difficult to track with native select. Toggling on click isn't good
-          // enough because of keyboard controls like Enter, Space, and Escape.
-          // Escape is particularly problematic because select onKeyDown doesn't
-          // even get an event when Escape is used to close menu.
-          'absolute right-2 top-1.5 pointer-events-none text-blue-500 group-hover:text-blue-300 group-focus-within:text-blue-300'
-        )}
+        // I would like to rotate chevron on select menu open, but it's too
+        // difficult to track with native select. Toggling on click isn't good
+        // enough because of keyboard controls like Enter, Space, and Escape.
+        // Escape is particularly problematic because select onKeyDown doesn't
+        // even get an event when Escape is used to close menu.
+        className="absolute right-2 top-1.5 pointer-events-none text-blue-500 group-hover:text-blue-300 group-focus-within:text-blue-300"
       >
         <ChevronIcon />
       </div>
