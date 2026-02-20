@@ -5,15 +5,28 @@ import * as amplify from '@aws-cdk/aws-amplify-alpha'
 import * as core from 'aws-cdk-lib'
 import * as ssm from 'aws-cdk-lib/aws-ssm'
 import * as codebuild from 'aws-cdk-lib/aws-codebuild'
+import * as iam from 'aws-cdk-lib/aws-iam'
 
 export class RetroStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props)
 
-    new dynamodb.Table(this, 'retro-table', {
+    const table = new dynamodb.Table(this, 'retro-table', {
       tableName: 'retro-table',
       pointInTimeRecovery: true,
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING }
+    })
+
+    const user = new iam.User(this, 'retro-user', { userName: 'retro-user' })
+    table.grantReadWriteData(user)
+    const key = new iam.AccessKey(this, 'retro-access-key', { user })
+    new ssm.StringParameter(this, 'retro-key', {
+      parameterName: 'retro-key',
+      stringValue: key.accessKeyId
+    })
+    new ssm.StringParameter(this, 'retro-secret', {
+      parameterName: 'retro-secret',
+      stringValue: key.secretAccessKey.unsafeUnwrap()
     })
 
     const amplifyApp = new amplify.App(this, 'retro-amplify', {
