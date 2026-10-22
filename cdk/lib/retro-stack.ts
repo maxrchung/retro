@@ -19,15 +19,6 @@ export class RetroStack extends Stack {
 
     const user = new iam.User(this, 'retro-user', { userName: 'retro-user' })
     table.grantReadWriteData(user)
-    const key = new iam.AccessKey(this, 'retro-access-key', { user })
-    new ssm.StringParameter(this, 'retro-key', {
-      parameterName: 'retro-key',
-      stringValue: key.accessKeyId
-    })
-    new ssm.StringParameter(this, 'retro-secret', {
-      parameterName: 'retro-secret',
-      stringValue: key.secretAccessKey.unsafeUnwrap()
-    })
 
     const amplifyApp = new amplify.App(this, 'retro-amplify', {
       sourceCodeProvider: new amplify.GitHubSourceCodeProvider({
