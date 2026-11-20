@@ -1,6 +1,6 @@
 # retro
 
-https://retro.maxrchung.com
+https://retro.max.rodeo
 
 A free and simple retrospective tool to help teams collaborate, with the ability
 to:

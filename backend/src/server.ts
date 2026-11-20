@@ -28,7 +28,7 @@ const server = new ApolloServer({
   },
   resolvers,
   cors: {
-    origin: ['http://localhost:3000', 'https://retro.maxrchung.com'],
+    origin: ['http://localhost:3000', 'https://retro.max.rodeo'],
     credentials: true // <-- REQUIRED backend setting
   },
   context: ({ req, res }) => {
@@ -41,7 +41,7 @@ const server = new ApolloServer({
         res.cookie(RETRO_CONNECTION_ID, connectionId, {
           // Not so sure about this...
           domain:
-            process.env.NODE_ENV === 'production' ? '.maxrchung.com' : undefined
+            process.env.NODE_ENV === 'production' ? '.max.rodeo' : undefined
         })
       }
     }
