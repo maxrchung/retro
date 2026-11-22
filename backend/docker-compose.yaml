@@ -1,11 +1,13 @@
-version: '3.8'
 services:
-  dynamodb-local:
-    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
-    image: 'amazon/dynamodb-local:latest'
-    container_name: dynamodb-local
+  postgres:
+    image: postgres:18-alpine
+    container_name: retro-postgres
+    environment:
+      POSTGRES_USER: retro
+      POSTGRES_PASSWORD: retro
+      POSTGRES_DB: retro
     ports:
-      - '8000:8000'
+      - '5433:5432'
     volumes:
-      - './docker/dynamodb:/home/dynamodblocal/data'
-    working_dir: /home/dynamodblocal
+      - ./docker/postgres:/var/lib/postgresql
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro

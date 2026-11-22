@@ -26,6 +26,7 @@ const webSocketLink = process.browser
   ? new WebSocketLink({
       uri: GRAPHQL_WEB_SOCKET_URI,
       options: {
+        lazy: true,
         reconnect: true
       }
     })

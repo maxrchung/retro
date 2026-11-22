@@ -4,6 +4,10 @@ frontend/out
 # Local DynamoDB
 shared-local-instance.db
 
+# Local Postgres & migration scratch
+backend/docker/
+backend/tmp/
+
 # Logs
 logs
 *.log

@@ -34,7 +34,7 @@ import {
   removeDbRetro,
   updateDbRetro
 } from './db'
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
+import { Pool } from 'pg'
 import {
   COLUMNS_UPDATED_SUBSCRIPTION,
   OPTIONS_UPDATED_SUBSCRIPTION,
@@ -51,7 +51,7 @@ const subscribeColumns = withFilter(
   (payload, variables) => payload.columnsUpdated.id === variables.retroId
 ) as never
 
-const publishColumns = (client: DynamoDBDocument, retro: Retro): boolean => {
+const publishColumns = (client: Pool, retro: Retro): boolean => {
   updateDbRetro(client, retro, ['columns'])
   pubsub.publish(COLUMNS_UPDATED_SUBSCRIPTION, {
     // We have to include retro id so that filtering can send to the correct clients
@@ -65,7 +65,7 @@ const subscribeOptions = withFilter(
   (payload, variables) => payload.optionsUpdated.id === variables.retroId
 ) as never
 
-const publishOptions = (client: DynamoDBDocument, retro: Retro): boolean => {
+const publishOptions = (client: Pool, retro: Retro): boolean => {
   updateDbRetro(client, retro, ['name', 'timerEnd', 'showPosts'])
   pubsub.publish(OPTIONS_UPDATED_SUBSCRIPTION, {
     optionsUpdated: retro
@@ -78,7 +78,7 @@ const subscribeRemoved = withFilter(
   (payload, variables) => payload.retroRemoved.id === variables.retroId
 ) as never
 
-const publishRemoved = (client: DynamoDBDocument, retro: Retro): boolean => {
+const publishRemoved = (client: Pool, retro: Retro): boolean => {
   removeDbRetro(client, retro.id)
   pubsub.publish(RETRO_REMOVED_SUBSCRIPTION, {
     retroRemoved: retro

@@ -1,18 +1,16 @@
 import 'dotenv/config'
 import { ApolloServer } from 'apollo-server'
+import { Pool } from 'pg'
 import schema from './schema'
 import resolvers from './resolvers'
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import {
-  DYNAMODB_CREDENTIALS,
-  DYNAMODB_ENDPOINT,
-  RETRO_CONNECTION_ID
-} from './constants'
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
+import { DATABASE_URL, RETRO_CONNECTION_ID } from './constants'
 import { uid } from 'uid'
 
+const pool = new Pool({ connectionString: DATABASE_URL })
+pool.on('error', console.error)
+
 export interface ServerContext {
-  client: DynamoDBDocument
+  client: Pool
   connectionId: string
 }
 
@@ -47,12 +45,7 @@ const server = new ApolloServer({
     }
 
     return {
-      client: DynamoDBDocument.from(
-        new DynamoDBClient({
-          credentials: DYNAMODB_CREDENTIALS,
-          endpoint: DYNAMODB_ENDPOINT
-        })
-      ),
+      client: pool,
       connectionId
     }
   },

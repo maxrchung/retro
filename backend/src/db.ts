@@ -1,40 +1,41 @@
-import { uid } from 'uid'
-import { RETRO_TABLE } from './constants'
-import { Column, Retro } from './types'
-import { DynamoDBDocument, UpdateCommandOutput } from '@aws-sdk/lib-dynamodb'
+import { Pool } from 'pg'
 import { UserInputError } from 'apollo-server'
+import { uid } from 'uid'
+import { Column, Retro } from './types'
 
-export const getDbRetro = async (
-  client: DynamoDBDocument,
+interface DbRetro {
   id: string
-): Promise<Retro> => {
-  const response = await client.get({
-    TableName: RETRO_TABLE,
-    Key: {
-      id
-    }
-  })
+  name: string
+  columns: Column[]
+  show_posts: boolean
+  created_at: Date
+  last_updated: Date
+  last_viewed: Date
+  timer_end: Date
+}
 
-  if (!response.Item) {
+export const getDbRetro = async (client: Pool, id: string): Promise<Retro> => {
+  const result = await client.query<DbRetro>(
+    'UPDATE retros SET last_viewed = NOW() WHERE id = $1 RETURNING id, name, columns, show_posts, created_at, last_updated, last_viewed, timer_end',
+    [id]
+  )
+  if (result.rowCount === 0) {
     throw new UserInputError('Retro not found')
   }
-
-  client.update({
-    TableName: RETRO_TABLE,
-    Key: {
-      id
-    },
-    ConditionExpression: 'attribute_exists(id)',
-    UpdateExpression: 'SET #lastViewed = :lastViewed',
-    ExpressionAttributeNames: { '#lastViewed': 'lastViewed' },
-    ExpressionAttributeValues: { ':lastViewed': new Date().toISOString() }
-  })
-
-  return response.Item as Retro
+  const row = result.rows[0]
+  return {
+    id: row.id,
+    name: row.name,
+    columns: row.columns,
+    showPosts: row.show_posts,
+    createdAt: row.created_at.toISOString(),
+    lastUpdated: row.last_updated.toISOString(),
+    lastViewed: row.last_viewed.toISOString(),
+    timerEnd: row.timer_end.toISOString()
+  }
 }
 
 const createDefaultRetro = (columns: Column[]): Retro => {
-  // Per DDB docs they recommend storing strings in ISO format
   const isoDate = new Date().toISOString()
   return {
     id: uid(),
@@ -49,7 +50,7 @@ const createDefaultRetro = (columns: Column[]): Retro => {
 }
 
 export const createDbRetro = async (
-  client: DynamoDBDocument,
+  client: Pool,
   columnNames: string[]
 ): Promise<string> => {
   const columns: Column[] = columnNames.map((column) => ({
@@ -59,84 +60,115 @@ export const createDbRetro = async (
       // Lol this is probably not a good idea but it's current design
       column === 'Action items'
         ? [
-            {
-              id: 'Update the retro :)',
-              content: 'Update the retro :)',
-              author: 'retro',
-              likes: []
-            }
-          ]
+          {
+            id: 'Update the retro :)',
+            content: 'Update the retro :)',
+            author: 'retro',
+            likes: []
+          }
+        ]
         : []
   }))
   const retro = createDefaultRetro(columns)
-  await client.put({
-    TableName: RETRO_TABLE,
-    ConditionExpression: 'attribute_not_exists(id)',
-    Item: retro
-  })
+  await client.query(
+    `INSERT INTO retros (id, name, columns, show_posts, created_at, last_updated, last_viewed, timer_end)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [
+      retro.id,
+      retro.name,
+      JSON.stringify(retro.columns),
+      retro.showPosts,
+      retro.createdAt,
+      retro.lastUpdated,
+      retro.lastViewed,
+      retro.timerEnd
+    ]
+  )
   return retro.id
 }
 
-export const updateDbRetro = (
-  client: DynamoDBDocument,
+export type UpdatableRetroAttribute =
+  | 'columns'
+  | 'name'
+  | 'timerEnd'
+  | 'showPosts'
+
+export const updateDbRetro = async (
+  client: Pool,
   retro: Retro,
-  attributes: (keyof Retro)[]
-): Promise<UpdateCommandOutput> => {
+  attributes: UpdatableRetroAttribute[]
+): Promise<void> => {
   const isoDate = new Date().toISOString()
-  return client.update({
-    TableName: RETRO_TABLE,
-    Key: {
-      id: retro.id
-    },
-    ConditionExpression: 'attribute_exists(id)',
-    UpdateExpression: `SET ${attributes
-      .map((attribute) => `#${attribute} = :${attribute}`)
-      .join(', ')}, #lastUpdated = :lastUpdated, #lastViewed = :lastViewed`,
-    ExpressionAttributeNames: {
-      ...attributes.reduce<Record<string, string>>((accumulator, attribute) => {
-        accumulator[`#${attribute}`] = attribute
-        return accumulator
-      }, {}),
-      '#lastUpdated': 'lastUpdated',
-      '#lastViewed': 'lastViewed'
-    },
-    ExpressionAttributeValues: {
-      ...attributes.reduce<Record<string, Retro[keyof Retro]>>(
-        (accumulator, attribute) => {
-          accumulator[`:${attribute}`] = retro[attribute]
-          return accumulator
-        },
-        {}
-      ),
-      ':lastUpdated': isoDate,
-      ':lastViewed': isoDate
+  const assignments: string[] = []
+  const values: unknown[] = []
+
+  for (const attribute of attributes) {
+    switch (attribute) {
+      case 'columns':
+        values.push(JSON.stringify(retro.columns))
+        assignments.push(`columns = $${values.length}`)
+        break
+      case 'name':
+        values.push(retro.name)
+        assignments.push(`name = $${values.length}`)
+        break
+      case 'timerEnd':
+        values.push(retro.timerEnd)
+        assignments.push(`timer_end = $${values.length}`)
+        break
+      case 'showPosts':
+        values.push(retro.showPosts)
+        assignments.push(`show_posts = $${values.length}`)
+        break
     }
-  })
+  }
+
+  values.push(isoDate)
+  const updatedIndex = values.length
+  assignments.push(
+    `last_updated = $${updatedIndex}`,
+    `last_viewed = $${updatedIndex}`
+  )
+
+  values.push(retro.id)
+  const idIndex = values.length
+
+  const result = await client.query(
+    `UPDATE retros SET ${assignments.join(', ')} WHERE id = $${idIndex}`,
+    values
+  )
+  if (result.rowCount === 0) {
+    throw new UserInputError('Retro not found')
+  }
 }
 
 export const removeDbRetro = async (
-  client: DynamoDBDocument,
+  client: Pool,
   id: string
 ): Promise<boolean> => {
-  await client.delete({
-    TableName: RETRO_TABLE,
-    Key: {
-      id
-    }
-  })
+  await client.query('DELETE FROM retros WHERE id = $1', [id])
   return true
 }
 
 export const cloneDbRetro = async (
-  client: DynamoDBDocument,
+  client: Pool,
   oldRetro: Retro
 ): Promise<string> => {
   const newRetro = createDefaultRetro(oldRetro.columns)
   newRetro.name = oldRetro.name
-  await client.put({
-    TableName: RETRO_TABLE,
-    ConditionExpression: 'attribute_not_exists(id)',
-    Item: newRetro
-  })
+  await client.query(
+    `INSERT INTO retros (id, name, columns, show_posts, created_at, last_updated, last_viewed, timer_end)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [
+      newRetro.id,
+      newRetro.name,
+      JSON.stringify(newRetro.columns),
+      newRetro.showPosts,
+      newRetro.createdAt,
+      newRetro.lastUpdated,
+      newRetro.lastViewed,
+      newRetro.timerEnd
+    ]
+  )
   return newRetro.id
 }

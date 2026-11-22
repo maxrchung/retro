@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS retros (
+  id           TEXT PRIMARY KEY,
+  name         TEXT NOT NULL,
+  columns      JSONB NOT NULL DEFAULT '[]'::jsonb,
+  show_posts   BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_updated TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_viewed  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  timer_end    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
