@@ -1,0 +1,11 @@
+{
+	admin off
+	auto_https off
+}
+
+:{$PORT:8080} {
+	root * /app/frontend/out
+	encode zstd gzip
+	try_files {path} {path}/index.html /\[id\].html
+	file_server
+}
